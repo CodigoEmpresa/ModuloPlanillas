@@ -182,6 +182,7 @@ class PlanillasController extends Controller
 					'Medicina_Prepagada' => $temp->pivot['Medicina_Prepagada'],
 					'Hijos' => $temp->pivot['Hijos'],
 					'AFC' => $temp->pivot['AFC'],
+					'Ingreso_Base_Gravado_384' => $temp->pivot['Ingreso_Base_Gravado_384'],
 					'Ingreso_Base_Gravado_1607' => $temp->pivot['Ingreso_Base_Gravado_1607'],
 					'Ingreso_Base_Gravado_25' => $temp->pivot['Ingreso_Base_Gravado_25'],
 					'Base_UVR_Ley_1607' => $temp->pivot['Base_UVR_Ley_1607'],
