@@ -78,15 +78,17 @@
 							<th width="120">Ingreso base gravado 384</th>
 							<th width="120">Ingreso base gravado 1607</th>
 							<th width="120">Ingreso base gravado (-) 25%</th>
-							<th width="120">Base uvr ley 1607</th>
-							<th width="120">Base uvr art 384</th>
-							<th width="120">Base ica</th>
+							<th width="120">Base UVR ley 1607</th>
+							<th width="120">Base UVR art 384</th>
+							<th width="120">Base ICA</th>
 							<th width="120">Est. pcul. 0,5%</th>
 							<th width="120">Est. ppm. 0,5%</th>
-							<th width="120">Total ica 0.966%</th>
+							<th width="120">Total ICA 0.966%</th>
 							<th width="120">Ap. u.dist. 1%</th>
 							<th width="120">Retefuente</th>
-							<th width="120">Otros descuen.</th>
+							<th width="120">Otros descuentos</th>
+							<th width="120">Cod. retef.</th>
+							<th width="120">Cod. seven.</th>
 							<th width="120">Total deducciones</th>
 							<th width="120">Declarante</th>
 							<th width="120">Neto a pagar</th>
@@ -102,28 +104,44 @@
 								foreach ($contrato->recursos as $recurso) 
 								{
 									$recursos .= $recurso['Id'].',';
-									$con_vc_uvt += $recurso->planillado['UVT'] ? $recurso->planillado['UVT'] : 0;
+									$con_vc_uvt = $recurso->planillado['UVT'];
 									$pago_eps = $recurso->planillado['EPS'];
 									$pago_pension = $recurso->planillado['Pension'];
 									$pago_arl = $recurso->planillado['ARL'];
 									$medicina_prepagada = $recurso->planillado['Medicina_Prepagada'];
 									$hijos = $recurso->planillado['Hijos'];
 									$afc = $recurso->planillado['AFC'];
+									$ingreso_base_gravado_384 = $recurso->planillado['Ingreso_Base_Gravado_384'];
 									$ingreso_base_gravado_1607 = $recurso->planillado['Ingreso_Base_Gravado_1607'];
+									$ingreso_base_gravado_25 = $recurso->planillado['Ingreso_Base_Gravado_25'];
+									$base_uvr_ley_1607 = $recurso->planillado['Base_UVR_Ley_1607'];
+									$base_uvr_art_384 = $recurso->planillado['Base_UVR_Art_384'];
+									$base_ica = $recurso->planillado['Base_ICA'];
+									$pcul = $recurso->planillado['PCUL'];
+									$ppm = $recurso->planillado['PPM'];
+									$total_ica = $recurso->planillado['Total_ICA'];
+									$dist = $recurso->planillado['DIST'];
+									$retefuente = $recurso->planillado['Retefuente'];
+									$otros_descuentos = $recurso->planillado['Otros_Descuentos'];
+									$cod_retef = $recurso->planillado['Cod_Retef'];
+									$cod_seven = $recurso->planillado['Cod_Seven'];
+									$total_deducciones = $recurso->planillado['Total_Deducciones'];
+									$declarante = $recurso->planillado['Declarante'];
+									$neto_pagar = $recurso->planillado['Neto_Pagar'];
 								}
 								
 								$recursos = substr($recursos, 0, strlen($recursos)-1);
 							?>
 							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['AFC'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
-								<td class="fixed first" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
-								<td class="fixed" rowspan="{{ $rowspan }}"><a href="" target="_blank">{{ $contrato->contratista['Nombre'] }}</a></td>
-								<td class="fixed" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Cedula'] }}</td>
-								<td rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Numero_Cta'] }}</td>
-								<td rowspan="{{ $rowspan }}">{{ $contrato->contratista->banco['Nombre'] }}</td>
-								<td rowspan="{{ $rowspan }}">{{ $contrato['Objeto'] }}</td>
-								<td rowspan="{{ $rowspan }}">{{ $contrato['Numero'] }}</td>
-								<td rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Inicio'] }}</td>
-								<td rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Terminacion'] }}</td>
+								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
+								<td class="fixed vcenter" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
+								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Cedula'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Numero_Cta'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato->contratista->banco['Nombre'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Objeto'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Numero'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Inicio'] }}</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Terminacion'] }}</td>
 								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[0]->rubro['Codigo'], -3) }} </td>
 								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[0]['Numero_Registro'] }} </td>
 								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[0]['Valor_CRP'] }}" width="120" align="right"> 
@@ -135,50 +153,84 @@
 								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
-								<td rowspan="{{ $rowspan }}" class="input">
+								<td class="input" rowspan="{{ $rowspan }}">
    									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off">
    								</td>
 								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="UVT" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="UVT" align="right">
 									<span data-role="value">{{ $con_vc_uvt > 0 ? $con_vc_uvt : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="EPS" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="EPS" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $pago_eps > 0 ? $pago_eps : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="Pension" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Pension" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $pago_pension > 0 ? $pago_pension : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="ARL" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="ARL" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $pago_arl > 0 ? $pago_arl : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="Medicina_Prepagada" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Medicina_Prepagada" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $medicina_prepagada > 0 ? $medicina_prepagada : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="Hijos" align="right">
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Hijos" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? $hijos : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="AFC" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $afc > 0 ? $afc : '--' }}</span>
+								<td class="input" rowspan="{{ $rowspan }}" data-role="AFC" align="right">
+									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" data-currency>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_1607" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_1607 > 0 ? ingreso_base_gravado_1607 : '--' }}</span>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_384" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? $ingreso_base_gravado_384 : '--' }}</span>
 								</td>
-								<td rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_25"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Base_UVR_Ley_1607"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Base_UVR_Art_384"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Base_ICA"></td>
-								<td rowspan="{{ $rowspan }}" data-role="PCUL"></td>
-								<td rowspan="{{ $rowspan }}" data-role="PPM"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Total_ICA"></td>
-								<td rowspan="{{ $rowspan }}" data-role="DIST"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Retefuente"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Otros_Descuentos"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Otras_Bonificaciones"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Total_Deducciones"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Declarante"></td>
-								<td rowspan="{{ $rowspan }}" data-role="Neto_Pagar"></td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_1607" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_1607 > 0 ? $ingreso_base_gravado_1607 : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_25" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_25 > 0 ? $ingreso_base_gravado_25 : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Base_UVR_Ley_1607" align="right">
+									<span data-role="value">{{ $base_uvr_ley_1607 > 0 ? $base_uvr_ley_1607 : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Base_UVR_Art_384" align="right">
+									<span data-role="value">{{ $base_uvr_art_384 > 0 ? $base_uvr_art_384 : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Base_ICA" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $base_ica > 0 ? $base_ica : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="PCUL" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $pcul > 0 ? $pcul : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="PPM" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $ppm > 0 ? $ppm : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_ICA" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $total_ica > 0 ? $total_ica : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="DIST" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $dist > 0 ? $dist : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Retefuente" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? $retefuente : '--' }}</span>
+								</td>
+								<td class="input" rowspan="{{ $rowspan }}" data-role="Otros_Descuentos">
+									<input type="text" class="important currency readonly" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" data-currency>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Cod_Retef" align="right">
+									<span data-role="value">{{ $cod_retef > 0 ? $cod_retef : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Cod_Seven" align="right">
+									<span data-role="value">{{ $cod_seven > 0 ? $cod_seven : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_Deducciones" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? $total_deducciones : '--' }}</span>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Declarante" align="center">
+									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}" {{ $declarante ? 'checked' : '' }}>
+								</td>
+								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Neto_Pagar" align="right">
+									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? $neto_pagar : '--' }}</span>
+								</td>
 							</tr>
 							@if($rowspan > 1)
 								@for($j=1; $j<count($contrato->recursos); $j++)
@@ -203,7 +255,7 @@
 						<td>
 							<strong>Subtotal</strong>
 						</td>
-						<td colspan="23">
+						<td colspan="25">
 							
 						</td>
 					</tfoot>
@@ -214,12 +266,15 @@
 				<input type="hidden" name="Id_Planilla" value="{{ $planilla['Id_Planilla'] }}">
 				<input type="hidden" name="uvt" value="{{ $config['uvt'] }}">
 				<input type="hidden" name="sm" value="{{ $config['sm'] }}">
+				<input type="hidden" name="tabla_1607" value="{{ json_encode($config['tabla_1607']) }}">
+				<input type="hidden" name="tabla_384" value="{{ json_encode($config['tabla_384']) }}">
 			</div>
 			<div class="col-xs-12">
 				<br>
 			</div>
 			<div class="col-xs-12">
 				<input type="submit" class="btn btn-primary" value="Guardar">
+				<a href="#" class="btn btn-default close_tab" data-title="¿Realmente desea abandonar la edición de la planilla?">Cerrar</a>
 			</div>
 		</form>
 	</div>

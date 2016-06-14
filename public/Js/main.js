@@ -19,6 +19,25 @@ $(function(){
       }
   });
 
+  $('body').delegate('.close_tab', 'click', function(event) {
+      BootstrapDialog.confirm(
+          {
+              title: $('<h4 class="modal-title">Alerta</h4>'),
+              message: $(this).data('title'),
+              type: BootstrapDialog.TYPE_DEFAULT,
+              closable: true,
+              btnOKClass: 'btn-primary',
+              btnOKLabel: 'Aceptar',
+              btnCancelLabel: 'Cancelar',
+              callback: function(result){
+                  if(result) {
+                      close();
+                  }
+              }
+          }
+      );
+  });
+
   $('input[type="text"][data-currency]').inputmask({ alias: "currency", groupSeparator:".", radixPoint:",", removeMaskOnSubmit: true});
 
   $('select').each(function(i, e)
@@ -32,4 +51,15 @@ $(function(){
           }
       }
   });
+
+  $('input.readonly').prop('readonly', true)
+      .prop('tabindex', -1)
+      .on('click', function(i, e){
+          $(this).prop('readonly', false);
+          $(this).focus();
+      }).on('blur', function(i, e){
+          $(this).prop('readonly', true);
+      });
+  
+
 });

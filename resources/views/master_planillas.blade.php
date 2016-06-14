@@ -17,6 +17,7 @@
           <link rel="stylesheet" href="{{ asset('public/Css/jquery-ui.css') }}" media="screen">    
           <link rel="stylesheet" href="{{ asset('public/Css/bootstrap.min.css') }}" media="screen">    
           <link rel="stylesheet" href="{{ asset('public/Css/bootstrap-select.min.css') }}" media="screen">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css" media="screen">
           <link rel="stylesheet" href="{{ asset('public/Css/sticky-footer.css') }}" media="screen">
           <link rel="stylesheet" href="{{ asset('public/Css/app.css') }}" media="screen">
       @show
@@ -34,6 +35,7 @@
           <script src="{{ asset('public/Js/parser.js') }}"></script>
           <script src="{{ asset('public/Js/bootstrap.min.js') }}"></script>
           <script src="{{ asset('public/Js/bootstrap-select.min.js') }}"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
           <script src="{{ asset('public/Js/defaults-es_CL.min.js') }}"></script>
           <script src="{{ asset('public/Js/main.js') }}"></script>
       @show

@@ -153,7 +153,9 @@ class PlanillasController extends Controller
 		}
 
 		$contratos = Contrato::with('contratista', 'contratista.tipoDocumento', 'contratista.banco')
+							->join('Contratistas', 'Contratos.Id_Contratista', '=', 'Contratistas.Id_Contratista')
 							->whereIn('Id_Contrato', $contratos_en_recursos)
+							->orderBy('Contratistas.Id_Banco')
 							->get();
 
 		foreach ($contratos as $key => $contrato) 
@@ -193,8 +195,12 @@ class PlanillasController extends Controller
 					'Total_ICA' => $temp->pivot['Total_ICA'],
 					'DIST' => $temp->pivot['DIST'],
 					'Retefuente' => $temp->pivot['Retefuente'],
+					'Retefuente_1607' => $temp->pivot['Retefuente_1607'],
+					'Retefuente_384' => $temp->pivot['Retefuente_384'],
 					'Otros_Descuentos' => $temp->pivot['Otros_Descuentos'],
 					'Otras_Bonificaciones' => $temp->pivot['Otras_Bonificaciones'],
+					'Cod_Retef' => $temp->pivot['Cod_Retef'],
+					'Cod_Seven' => $temp->pivot['Cod_Seven'],
 					'Total_Deducciones' => $temp->pivot['Total_Deducciones'],
 					'Declarante' => $temp->pivot['Declarante'],
 					'Neto_Pagar' => $temp->pivot['Neto_Pagar']
@@ -241,35 +247,42 @@ class PlanillasController extends Controller
 		$planilla = Planilla::with('recursos')
 					->find($request->input('Id_Planilla'));
 
+		$recursos = json_decode($request->input('_planilla'));
+
 		$to_sync = [];
-		foreach ($planilla->recursos as $recurso) 
+		foreach ($recursos as $recurso)
 		{
-			$to_sync[$recurso['Id']] = [
-				'Dias_Trabajados' => $Dias_Trabajados,
-				'Total_Pagar' => $Total_Pagar,
-				'UVT' => round($Con_VC_UVT, 2),
-				/*'EPS' => ,
-				'Pension' => ,
-				'ARL' => ,
-				'Vivienda' => ,
-				'Hijos_U_Otros' => ,
-				'AFC' => ,
-				'Ingreso_Base_Gravado_1607' => ,
-				'Ingreso_Base_Gravado_25' => ,
-				'Base_UVR_Ley_1607' => ,
-				'Base_UVR_Art_384' => ,
-				'Base_ICA' => ,
-				'PCUL' => ,
-				'PPM' => ,
-				'Total_ICA' => ,
-				'DIST' => ,
-				'Retefuente' => ,
-				'Otros_Descuentos' => ,
-				'Otras_Bonificaciones' => ,
-				'Total_Deducciones' => ,
-				'Declarante' => ,
-				'Neto_Pagar' => ,
-				*/
+
+			$to_sync[$recurso->Id] = [
+				'Dias_Trabajados' => $recurso->Dias_Trabajados,
+				'Total_Pagar' => $recurso->Total_Pagar,
+				'UVT' => $recurso->Con_VC_UVT,
+				'EPS' => $recurso->EPS,
+				'Pension' => $recurso->Pension,
+				'ARL' => $recurso->ARL,
+				'Medicina_Prepagada' => $recurso->Medicina_Prepagada,
+				'Hijos' => $recurso->Hijos,
+				'AFC' => $recurso->AFC,
+				'Ingreso_Base_Gravado_384' => $recurso->Ingreso_Base_Gravado_384,
+				'Ingreso_Base_Gravado_1607' => $recurso->Ingreso_Base_Gravado_1607,
+				'Ingreso_Base_Gravado_25' => $recurso->Ingreso_Base_Gravado_25,
+				'Base_UVR_Ley_1607' => $recurso->Base_UVR_Ley_1607,
+				'Base_UVR_Art_384' => $recurso->Base_UVR_Art_384,
+				'Base_ICA' => $recurso->Base_ICA,
+				'PCUL' => $recurso->PCUL,
+				'PPM' => $recurso->PPM,
+				'Total_ICA' => $recurso->Total_ICA,
+				'DIST' => $recurso->DIST,
+				'Retefuente' => $recurso->Retefuente,
+				'Retefuente_1607' => $recurso->Retefuente_1607,
+				'Retefuente_384' => $recurso->Retefuente_384,
+				'Otros_Descuentos' => $recurso->Otros_Descuentos,
+				'Otras_Bonificaciones' => $recurso->Otras_Bonificaciones,
+				'Cod_Retef' => $recurso->Cod_Retef,
+				'Cod_Seven' => $recurso->Cod_Seven,
+				'Total_Deducciones' => $recurso->Total_Deducciones,
+				'Declarante' => $recurso->Declarante,
+				'Neto_Pagar' => $recurso->Neto_Pagar
 			];
 		}
 		
