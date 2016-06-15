@@ -109,8 +109,10 @@ class PlanillasController extends Controller
         	$planilla = Planilla::find($id);
 
 		$planilla['Id_Fuente'] = $request->input('Id_Fuente');
+		$planilla['Usuario'] = $this->Usuario[0]; 
        	$planilla['Numero'] = $request->input('Numero');
-       	$planilla['Usuario'] = $this->Usuario[0];
+       	$planilla['Titulo'] = $request->input('Titulo');
+       	$planilla['Colectiva'] = $request->input('Colectiva');
        	$planilla['Descripcion'] = $request->input('Descripcion');
 		$planilla['Desde'] = $request->input('Desde');
 		$planilla['Hasta'] = $request->input('Hasta');
@@ -285,8 +287,9 @@ class PlanillasController extends Controller
 				'Neto_Pagar' => $recurso->Neto_Pagar
 			];
 		}
-		
+
 		$planilla->recursos()->sync($to_sync);
+		$planilla->touch();		
 
 		return redirect()->to('planillas/'.$planilla['Id_Planilla'].'/recursos')
 						->with('status', 'success');

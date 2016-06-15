@@ -11,6 +11,7 @@ class Planilla extends Model
     
     protected $table = 'Planillas';
     protected $primaryKey = 'Id_Planilla';
+    protected $dates = ['Desde', 'Hasta', 'created_at', 'updated_at'];
 
     public function fuente()
     {

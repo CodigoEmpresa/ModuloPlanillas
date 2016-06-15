@@ -88,6 +88,10 @@ div.separador {
 	display: none;
 }
 
+.uppercase {
+	text-transform: uppercase;
+}
+
 .label-form-section {
 	margin-bottom: 10px;
 	

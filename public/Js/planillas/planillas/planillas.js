@@ -5,6 +5,8 @@ $(function(){
 	var popular_modal_principal = function(data)
 	{
 		$('input[name="Numero"]').val(data.Numero);
+		$('input[name="Titulo"]').val(data.Titulo);
+		$('input[name="Colectiva"]').val(data.Colectiva);
 		$('textarea[name="Descripcion"]').val(data.Descripcion);
 		$('input[name="Desde"]').val(data.Desde);
 		$('input[name="Hasta"]').val(data.Hasta);
@@ -123,6 +125,8 @@ $(function(){
 	{
 		var data = {
 			Numero: '',
+			Titulo: '',
+			Colectiva: '',
 			Descripcion: '',
 			Desde: '',
 			Hasta: '',

@@ -15,9 +15,11 @@ class CrearTablaPlanillas extends Migration
         Schema::create('Planillas', function($table)
         {
             $table->increments('Id_Planilla');
-            $table->integer('Numero')->unsigned();
-            $table->bigInteger('Usuario')->unsigned();
             $table->integer('Id_Fuente')->unsigned();
+            $table->bigInteger('Usuario')->unsigned();
+            $table->integer('Numero')->unsigned();
+            $table->string('Titulo')->nullable();
+            $table->string('Colectiva')->nullable();
             $table->text('Descripcion')->nullable();
             $table->date('Desde');
             $table->date('Hasta');

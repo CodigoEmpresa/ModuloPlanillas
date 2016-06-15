@@ -32,8 +32,11 @@
 		<ul class="list-group" id="lista">
 			@foreach($elementos as $planilla)
 				<li class="list-group-item">
-					<h5 class="list-group-item-heading">
-						Planilla N° {{ $planilla['Numero'].' '.$planilla->fuente['Nombre'].' - '.$planilla->fuente['Codigo'] }}
+					<h5 class="list-group-item-heading uppercase">
+						Planilla N° {{ $planilla['Numero'] }} elaborada el: {{ $planilla->created_at->format('d/m/Y') }}
+						<small class="text-muted">
+							Última modificación: {{ $planilla->updated_at->format('d/m/Y') }}
+						</small>
 						<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						</a>
@@ -42,13 +45,20 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<small>
-									<strong>Periodo: </strong> {{ $planilla['Desde'] }} hasta {{ $planilla['Hasta'] }} <br>
-									<strong>Rubro(s): </strong> @foreach($planilla->rubros as $rubro) {{ $rubro['Codigo'].' '}}  @endforeach <br>
-									<strong>Descripción: </strong> {{ $planilla['Descripcion'] }}
+									<strong>{{ $planilla['Titulo'] }}</strong><br>
+									{{ $planilla['Descripcion'] }}<br><br>
 								</small>
 							</div>
 							<div class="col-xs-12">
-								<br>
+								<small>
+									<strong>Fuente</strong>:
+									{{ $planilla->fuente['Codigo'].' '.$planilla->fuente['Nombre'] }} <br>
+									<strong>Rubros</strong>:
+									@foreach($planilla->rubros as $rubro) {{ $rubro['Codigo'].', '}}  @endforeach
+									<br><br>
+								</small>
+							</div>
+							<div class="col-xs-12">
 								<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>
 							</div>
 						</div>
@@ -80,9 +90,21 @@
 		      					</ul>
 		      				</div>
 		      			</div>
-		        		<div class="col-xs-12 col-md-4 form-group">
-	        				<label class="control-label" for="Numero">* Número</label>
-	        				<input type="text" name="Numero" class="form-control" data-number="true">
+		      			<div class="col-xs-12">
+		      				<div class="row">
+				        		<div class="col-xs-6 col-md-4 form-group">
+			        				<label class="control-label" for="Numero">* Número</label>
+			        				<input type="text" name="Numero" class="form-control" data-number="true">
+				        		</div>
+			        		</div>
+		        		</div>
+		        		<div class="col-xs-6 form-group">
+	        				<label for="Titulo" class="control-label">Titulo</label>
+	        				<input type="text" name="Titulo" class="form-control">
+		        		</div>
+		        		<div class="col-xs-6 form-group">
+	        				<label for="Colectiva" class="control-label">Colectiva</label>
+	        				<input type="text" name="Colectiva" class="form-control">
 		        		</div>
 		        		<div class="col-xs-12 form-group">
 	        				<label for="Descripcion" class="control-label">Descripción</label>

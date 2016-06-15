@@ -9,7 +9,12 @@
 @section('content')
 	<div id="main_list" class="row" data-url="{{ url('planillas') }}" data-url-contratistas="{{ url('contratistas') }}">
 		<div class="col-xs-12">
-			<h4>{{ $titulo }}</h4>
+			<h4 class="uppercase">
+				<span>Planilla N° {{ $planilla['Numero'] }} elaborada el: {{ $planilla->created_at->format('d/m/Y') }}</span>
+				<small class="text-muted">
+					Última modificación: {{ $planilla->updated_at->format('d/m/Y') }}
+				</small>
+			</h4>
 		</div>
 		@if($status == 'success')
 		<div id="alerta" class="col-xs-12">
@@ -32,14 +37,47 @@
 			</div>
 		@endif
 		<div class="col-xs-12">
-	    	<h5 class="list-group-item-heading">
-	            Planilla N° {{ strtoupper($planilla['Numero']) }}
-	        </h5>
-	    	<small>
-	    		<strong>Periodo: </strong> {{ $planilla['Desde'] }} hasta: {{ $planilla['Hasta'] }} <br>
-				<strong>Rubro(s): </strong> @foreach($planilla->rubros as $rubro) {{ $rubro['Codigo'].' '}}  @endforeach <br>
-				<strong>Descripción: </strong> {{ $planilla['Descripcion'] }}
-			</small>
+			<p class="list-group-item-text">
+				<div class="row">
+					<div class="col-xs-6">
+						<small>
+							<strong>{{ $planilla['Titulo'] }}</strong><br>
+							{{ $planilla['Descripcion'] }}<br><br>
+							<strong>Fuente</strong><br>
+							{{ $planilla->fuente['Codigo'].' '.$planilla->fuente['Nombre'] }} <br><br>
+							<strong>Rubros</strong><br>
+							@foreach($planilla->rubros as $rubro) {{ $rubro['Codigo'].', '}}  @endforeach
+						</small>
+					</div>
+					<div class="col-xs-6" style="padding-left:24px;">
+						<small>
+							<strong class="uppercase">Ordenación de pago colectiva {{ $planilla['Colectiva'] }} <br> subdirección técnica de recreación y deportes.</strong> <br><br>
+							<strong>Periodo de pago de cuenta</strong>
+							<table class="table table-bordered table-min" style="width: 202px;">
+								<thead>
+									<tr>
+										<th align="center">Dia</th>
+										<th align="center">Mes</th>
+										<th align="center">Año</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td align="center">{{ $planilla->Desde->format('d') }}</td>
+										<td align="center">{{ $planilla->Desde->format('m') }}</td>
+										<td align="center">{{ $planilla->Desde->format('Y') }}</td>
+									</tr>
+									<tr>
+										<td align="center">{{ $planilla->Hasta->format('d') }}</td>
+										<td align="center">{{ $planilla->Hasta->format('m') }}</td>
+										<td align="center">{{ $planilla->Hasta->format('Y') }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</small>
+					</div>
+				</div>
+			</p>
 		</div>
 		<div class="col-xs-12">
 			<br>
@@ -87,8 +125,6 @@
 							<th width="120">Ap. u.dist. 1%</th>
 							<th width="120">Retefuente</th>
 							<th width="120">Otros descuentos</th>
-							<th width="120">Cod. retef.</th>
-							<th width="120">Cod. seven.</th>
 							<th width="120">Total deducciones</th>
 							<th width="120">Declarante</th>
 							<th width="120">Neto a pagar</th>
@@ -123,8 +159,6 @@
 									$dist = $recurso->planillado['DIST'];
 									$retefuente = $recurso->planillado['Retefuente'];
 									$otros_descuentos = $recurso->planillado['Otros_Descuentos'];
-									$cod_retef = $recurso->planillado['Cod_Retef'];
-									$cod_seven = $recurso->planillado['Cod_Seven'];
 									$total_deducciones = $recurso->planillado['Total_Deducciones'];
 									$declarante = $recurso->planillado['Declarante'];
 									$neto_pagar = $recurso->planillado['Neto_Pagar'];
@@ -163,31 +197,31 @@
 									<span data-role="value">{{ $con_vc_uvt > 0 ? $con_vc_uvt : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="EPS" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $pago_eps > 0 ? $pago_eps : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $pago_eps > 0 ? number_format($pago_eps, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Pension" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $pago_pension > 0 ? $pago_pension : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $pago_pension > 0 ? number_format($pago_pension, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="ARL" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $pago_arl > 0 ? $pago_arl : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $pago_arl > 0 ? number_format($pago_arl, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Medicina_Prepagada" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $medicina_prepagada > 0 ? $medicina_prepagada : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $medicina_prepagada > 0 ? number_format($medicina_prepagada, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Hijos" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? $hijos : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? number_format($hijos, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="AFC" align="right">
 									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" data-currency>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_384" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? $ingreso_base_gravado_384 : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? number_format($ingreso_base_gravado_384, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_1607" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_1607 > 0 ? $ingreso_base_gravado_1607 : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_1607 > 0 ? number_format($ingreso_base_gravado_1607, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_25" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_25 > 0 ? $ingreso_base_gravado_25 : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_25 > 0 ? number_format($ingreso_base_gravado_25, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Base_UVR_Ley_1607" align="right">
 									<span data-role="value">{{ $base_uvr_ley_1607 > 0 ? $base_uvr_ley_1607 : '--' }}</span>
@@ -196,40 +230,34 @@
 									<span data-role="value">{{ $base_uvr_art_384 > 0 ? $base_uvr_art_384 : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Base_ICA" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $base_ica > 0 ? $base_ica : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $base_ica > 0 ? number_format($base_ica, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="PCUL" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $pcul > 0 ? $pcul : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $pcul > 0 ? number_format($pcul, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="PPM" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $ppm > 0 ? $ppm : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $ppm > 0 ? number_format($ppm, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_ICA" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $total_ica > 0 ? $total_ica : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $total_ica > 0 ? number_format($total_ica, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="DIST" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $dist > 0 ? $dist : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $dist > 0 ? number_format($dist, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Retefuente" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? $retefuente : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? number_format($retefuente, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="Otros_Descuentos">
 									<input type="text" class="important currency readonly" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" data-currency>
 								</td>
-								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Cod_Retef" align="right">
-									<span data-role="value">{{ $cod_retef > 0 ? $cod_retef : '--' }}</span>
-								</td>
-								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Cod_Seven" align="right">
-									<span data-role="value">{{ $cod_seven > 0 ? $cod_seven : '--' }}</span>
-								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_Deducciones" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? $total_deducciones : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? number_format($total_deducciones, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Declarante" align="center">
-									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}" {{ $declarante ? 'checked' : '' }}>
+									<input type="checkbox" class="readonly" name="declarante_{{ $contrato['Id_Contrato'] }}" {{ $declarante ? 'checked' : '' }}>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Neto_Pagar" align="right">
-									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? $neto_pagar : '--' }}</span>
+									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? number_format($neto_pagar, 0, '.', '.') : '--' }}</span>
 								</td>
 							</tr>
 							@if($rowspan > 1)
@@ -248,14 +276,14 @@
 					</tbody>
 					<tfoot>
 						<td class="fixed first"></td>
-						<td></td>
-						<td></td>
+						<td class="fixed first"></td>
+						<td class="fixed first"></td>
 						<td colspan="11">
 						</td>
 						<td>
 							<strong>Subtotal</strong>
 						</td>
-						<td colspan="25">
+						<td colspan="23">
 							
 						</td>
 					</tfoot>

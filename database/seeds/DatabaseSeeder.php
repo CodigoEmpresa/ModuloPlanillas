@@ -13,12 +13,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(Bancos::class);
         $this->command->info('Tabla de Bancos alimentada satisfactoriamente');
+        /*
         $this->call(Fuentes::class);
         $this->command->info('Tabla de Fuentes alimentada satisfactoriamente');
         $this->call(Rubros::class);
         $this->command->info('Tabla de Rubros alimentada satisfactoriamente');
         $this->call(Componentes::class);
         $this->command->info('Tabla de Componentes alimentada satisfactoriamente');
+        */
     }
 }
 
@@ -107,6 +109,9 @@ class Bancos extends Seeder
 		DB::table('Bancos')->delete();
 		DB::table('Bancos')->insert([
 			[
+				'Codigo' => '51',
+				'Nombre' => 'BANCO DAVIVIENDA S.A.'
+			],[
 				'Codigo' => '01',
 				'Nombre' => 'BANCO DE BOGOTÁ'
 			],[
@@ -148,9 +153,6 @@ class Bancos extends Seeder
 			],[
 				'Codigo' => '40',
 				'Nombre' => 'BANCO AGRARIO DE COLOMBIA S.A.'
-			],[
-				'Codigo' => '51',
-				'Nombre' => 'BANCO DAVIVIENDA S.A.'
 			],[
 				'Codigo' => '52',
 				'Nombre' => 'BANCO AV VILLAS'
