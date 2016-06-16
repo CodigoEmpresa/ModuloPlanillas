@@ -131,12 +131,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php $i=0 ?>
+						<?php 
+							$i=0;
+							$total_pagar = 0;
+							$total_pcul = 0;
+							$total_ppm = 0;
+							$total_general_ica = 0;
+							$total_dist = 0;
+							$total_retefuente = 0;
+							$total_general_deducciones = 0;
+							$total_neto_pagar = 0;
+						?>
 						@foreach($elementos as $contrato)
 							<?php 
 								$rowspan = count($contrato->recursos);
 								$recursos = '';
-								$con_vc_uvt = 0;
+
 								foreach ($contrato->recursos as $recurso) 
 								{
 									$recursos .= $recurso['Id'].',';
@@ -162,8 +172,17 @@
 									$total_deducciones = $recurso->planillado['Total_Deducciones'];
 									$declarante = $recurso->planillado['Declarante'];
 									$neto_pagar = $recurso->planillado['Neto_Pagar'];
+
+									$total_pagar += $recurso['Pago_Mensual'];
 								}
 								
+								$total_pcul += $pcul;
+								$total_ppm += $ppm;
+								$total_general_ica += $total_ica;
+								$total_dist += $dist;
+								$total_retefuente += $retefuente;
+								$total_general_deducciones += $total_deducciones;
+								$total_neto_pagar += $neto_pagar;
 								$recursos = substr($recursos, 0, strlen($recursos)-1);
 							?>
 							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['AFC'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
@@ -283,8 +302,34 @@
 						<td>
 							<strong>Subtotal</strong>
 						</td>
-						<td colspan="23">
+						<td align="right" data-role="total_pagar">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_pagar > 0 ? number_format($total_pagar, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td colspan="13">
 							
+						</td>
+						<td align="right" data-role="total_pcul">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_pcul > 0 ? number_format($total_pcul, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td align="right" data-role="total_ppm">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_ppm > 0 ? number_format($total_ppm, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td align="right" data-role="total_general_ica">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_general_ica > 0 ? number_format($total_general_ica, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td align="right" data-role="total_dist">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_dist > 0 ? number_format($total_dist, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td align="right" data-role="total_retefuente">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_retefuente > 0 ? number_format($total_retefuente, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td></td>
+						<td align="right" data-role="total_general_deducciones">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_general_deducciones > 0 ? number_format($total_general_deducciones, 0, '.', '.') : '--' }}</span>
+						</td>
+						<td></td>
+						<td align="right" data-role="total_neto_pagar">
+							<span class="pull-left">$</span><span data-role="value">{{ $total_neto_pagar > 0 ? number_format($total_neto_pagar, 0, '.', '.') : '--' }}</span>
 						</td>
 					</tfoot>
 				</table>
