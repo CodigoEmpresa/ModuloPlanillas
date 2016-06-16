@@ -53,7 +53,7 @@ class CrearTablasPresupuestos extends Migration
             $table->integer('Valor_CRP')->unsigned();
             $table->integer('Saldo_CRP')->unsigned();
             $table->string('Expresion')->nullable();
-            $table->integer('Pago_Mensual')->unsigned();
+            $table->bigInteger('Pago_Mensual')->unsigned();
 
             $table->foreign('Id_Fuente')->references('Id_Fuente')->on('Fuentes')->onDelete('cascade');
             $table->foreign('Id_Rubro')->references('Id_Rubro')->on('Rubros')->onDelete('cascade');
