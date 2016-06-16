@@ -102,7 +102,7 @@
 		        		</div>
 		        		<div class="col-xs-12">
 		        			<div class="form-group">
-		        				<label class="control-label" for="Nombre">* Nombre</label>
+		        				<label class="control-label" for="Nombre">* Nombre <small class="text-muted">(APELLIDOS y NOMBRES )</small></label>
 		        				<input type="text" name="Nombre" class="form-control">
 		        			</div>
 		        		</div>
@@ -122,6 +122,31 @@
 		        				<label class="control-label" for="Numero_Cta">* Cuenta </label>
 		        				<input type="text" name="Numero_Cta" class="form-control">
 		        			</div>
+		        		</div>
+		        		<div class="col-xs-12 col-md-6">
+		        			<div class="form-group">
+			        			<label class="control-label" for="Tipo_Cuenta">* Tipo de cuenta</label><br>
+				        		<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-default">
+										<input type="radio" name="Tipo_Cuenta" value="CA" autocomplete="off"> <span class="text-default">CA</span>
+									</label>
+									<label class="btn btn-default">
+										<input type="radio" name="Tipo_Cuenta" value="CC" autocomplete="off"> <span class="text-default">CC</span>
+									</label>
+								</div>
+							</div>
+		        		</div>
+		        		<div class="col-xs-12 col-md-6">
+		        			<div class="form-group">
+			        			<label class="control-label" for="Nivel_Riesgo_ARL">* Nivel de riesgo</label><br>
+				        		<select name="Nivel_Riesgo_ARL" id="Nivel_Riesgo_ARL" class="form-control selectpicker" data-live-search="true">
+				        			<option value="1">I</option>
+				        			<option value="2">II</option>
+				        			<option value="3">III</option>
+				        			<option value="4">IV</option>
+				        			<option value="5">V</option>
+				        		</select>
+							</div>
 		        		</div>
 		        		<div class="col-xs-12 col-md-6">
 		        			<div class="form-group">
@@ -163,13 +188,13 @@
 		        		</div>
 		        		<div class="col-xs-12 col-md-6">
 		        			<div class="form-group">
-			        			<label class="control-label" for="AFC">* AFC</label><br>
+			        			<label class="control-label" for="Declarante">* Declarante</label><br>
 				        		<div class="btn-group" data-toggle="buttons">
 									<label class="btn btn-default">
-										<input type="radio" name="AFC" value="1" autocomplete="off"> <span class="text-default">Si</span>
+										<input type="radio" name="Declarante" value="1" autocomplete="off"> <span class="text-default">Si</span>
 									</label>
 									<label class="btn btn-default">
-										<input type="radio" name="AFC" value="0" autocomplete="off"> <span class="text-default">No</span>
+										<input type="radio" name="Declarante" value="0" autocomplete="off"> <span class="text-default">No</span>
 									</label>
 								</div>
 							</div>

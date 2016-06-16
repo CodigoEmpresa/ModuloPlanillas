@@ -19,6 +19,13 @@ class TablaContratista extends Migration
             $table->string('Cedula')->unique();
             $table->string('Numero_Cta');
             $table->boolean('Activo')->default(1);
+            $table->boolean('Hijos')->default(1);
+            $table->boolean('Declarante')->default(1);
+            $table->boolean('Medicina_Prepagada')->default(1);
+            $table->tinyInteger('Hijos_Cantidad')->unsigned();
+            $table->tinyInteger('Medicina_Prepagada_Cantidad')->unsigned();
+            $table->enum('Tipo_Cuenta', ['CC', 'CA']);
+            $table->enum('Nivel_Riesgo_ARL', ['1', '2', '3', '4', '5']);
             $table->integer('Id_TipoDocumento')->unsigned();
             $table->integer('Id_Banco')->unsigned();
             $table->foreign('Id_Banco')->references('Id_Banco')->on('Bancos')->onDelete('cascade');

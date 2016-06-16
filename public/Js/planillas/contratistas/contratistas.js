@@ -67,7 +67,10 @@ $(function(){
 		$('input[name="Id_Contratista"]').val(data['Id_Contratista']);
 		$('input[name="Nombre"]').val(data['Nombre']);
 		$('input[name="Cedula"]').val(data['Cedula']);
+		
 		$('input[name="Numero_Cta"]').val(data['Numero_Cta']);
+		$('input[name="Tipo_Cuenta"]').removeAttr('checked').parent('.btn').removeClass('active');
+		$('input[name="Tipo_Cuenta"][value="'+data['Tipo_Cuenta']+'"]').trigger('click');
 
 		$('input[name="Activo"]').removeAttr('checked').parent('.btn').removeClass('active');
 		$('input[name="Activo"][value="'+data['Activo']+'"]').trigger('click');
@@ -76,12 +79,14 @@ $(function(){
 		$('input[name="Hijos"][value="'+data['Hijos']+'"]').trigger('click');
 		$('input[name="Hijos_Cantidad"]').val(data['Hijos_Cantidad']);
 
-		$('input[name="AFC"]').removeAttr('checked').parent('.btn').removeClass('active');
-		$('input[name="AFC"][value="'+data['AFC']+'"]').trigger('click');
+		$('input[name="Declarante"]').removeAttr('checked').parent('.btn').removeClass('active');
+		$('input[name="Declarante"][value="'+data['Declarante']+'"]').trigger('click');
 		
 		$('input[name="Medicina_Prepagada"]').removeAttr('checked').parent('.btn').removeClass('active');
 		$('input[name="Medicina_Prepagada"][value="'+data['Medicina_Prepagada']+'"]').trigger('click');
 		$('input[name="Medicina_Prepagada_Cantidad"]').val(data['Medicina_Prepagada_Cantidad']);
+		
+		$('select[name="Nivel_Riesgo_ARL"]').selectpicker('val', data['Nivel_Riesgo_ARL']);
 
 		$('#modal_main_form').modal('show');
 	};
@@ -97,16 +102,18 @@ $(function(){
 		        {
 		        	case 'Id_TipoDocumento':
 		        	case 'Id_Banco':
+		        	case 'Nivel_Riesgo_ARL':
 		        		selector = 'select';
 		        	break;
 
 		        	case 'Nombre':
 		        	case 'Cedula':
 		        	case 'Numero_Cta':
+		        	case 'Tipo_Cuenta':
 		        	case 'Activo':
 		        	case 'Hijos':
 		        	case 'Hijos_Cantidad':
-		        	case 'AFC':
+		        	case 'Declarante':
 		        	case 'Medicina_Prepagada':
 		        	case 'Medicina_Prepagada_Cantidad':
 		        		selector = 'input';
@@ -165,12 +172,15 @@ $(function(){
 			Id_Contratista: 0,
 			Nombre: '',
 			Cedula: '',
+			Numero_Cta: '',
+			Tipo_Cuenta: '',
         	Activo: '',
         	Hijos: '',
-        	Hijos_Cantidad: '',
-        	AFC: '',
+        	Declarante: '',
         	Medicina_Prepagada: '',
+        	Hijos_Cantidad: '',
         	Medicina_Prepagada_Cantidad: '',
+        	Nivel_Riesgo_ARL: '',
 			Id_TipoDocumento: '',
 			Id_Banco: ''
 		}
