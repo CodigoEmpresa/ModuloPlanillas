@@ -225,6 +225,7 @@ class ContratosController extends Controller{
         $contrato['Objeto'] = $request->input('Objeto');
         $contrato['Fecha_Inicio'] = $request->input('Fecha_Inicio');
         $contrato['Fecha_Terminacion'] = $request->input('Fecha_Terminacion');
+        $contrato['Fecha_Terminacion_Modificada'] = $request->input('Fecha_Terminacion');
         $contrato['Total_Contrato'] = $request->input('Total_Contrato');
         $contrato['Tipo_Pago'] = $request->input('Tipo_Pago');
         $contrato['Dias_Trabajados'] = 0;
@@ -307,7 +308,7 @@ class ContratosController extends Controller{
                 $contrato->suspenciones()->delete();
                 $contrato['Tipo_Modificacion'] = null;
                 $contrato['Terminado_Por'] = null;
-                $contrato['Fecha_Terminacion_Modificada'] = null;
+                $contrato['Fecha_Terminacion_Modificada'] = $contrato['Fecha_Terminacion'];
                 $contrato['Saldo_A_Favor'] = null;
             }
         }
