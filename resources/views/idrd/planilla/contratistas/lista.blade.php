@@ -33,7 +33,7 @@
 	</div>
 	<div class="col-xs-12">
 		@if(count($contratistas) == 0)
-			No se ha creado ningun contratista en el momento haga click en el + para crear uno.
+			No se ha creado ningun contratista en el momento haga click en el boton <strong>Crear contratista</strong> para crear uno.
 		@endif
 		<ul class="list-group" id="lista">
 			@foreach($contratistas as $contratista)
@@ -103,7 +103,7 @@
 		        		<div class="col-xs-12">
 		        			<div class="form-group">
 		        				<label class="control-label" for="Nombre">* Nombre <small class="text-muted">(APELLIDOS y NOMBRES )</small></label>
-		        				<input type="text" name="Nombre" class="form-control">
+		        				<input type="text" name="Nombre" class="form-control uppercase">
 		        			</div>
 		        		</div>
 						<div class="col-xs-12 col-md-6">
@@ -216,8 +216,8 @@
 		      	</div>
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id_Contratista" value="0">
-	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	        		<button type="submit" class="btn btn-primary">Guardar</button>
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	      		</div>
 	    	</div>
 		</form>

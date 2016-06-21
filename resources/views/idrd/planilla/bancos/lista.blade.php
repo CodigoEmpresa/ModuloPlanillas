@@ -91,9 +91,9 @@
 		      	</div>
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id_Banco" value="0">
-	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-	        		<button type="button" id="eliminar" class="btn btn-danger oculto" data-rel="">Eliminar</button>
 	        		<button type="submit" class="btn btn-primary">Guardar</button>
+	        		<button type="button" id="eliminar" class="btn btn-danger oculto" data-rel="">Eliminar</button>
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	      		</div>
 	    	</div>
 		</form>

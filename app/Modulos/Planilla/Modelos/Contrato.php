@@ -13,7 +13,7 @@ class Contrato extends Model
     protected $table = 'Contratos';
     protected $primaryKey = 'Id_Contrato';
     protected $dates = ['deleted_at'];
-    protected $cascadeDeletes = ['recursos'];
+    protected $cascadeDeletes = ['recursos', 'saldos'];
 
     public function contratista()
     {
@@ -23,5 +23,15 @@ class Contrato extends Model
     public function recursos()
     {
         return $this->hasMany('App\Modulos\Planilla\Modelos\Recurso', 'Id_Contrato');
+    }
+
+    public function saldos()
+    {
+        return $this->hasMany('App\Modulos\Planilla\Modelos\Saldo', 'Id_Contrato');
+    }
+
+    public function suspenciones()
+    {
+        return $this->hasMany('App\Modulos\Planilla\Modelos\Suspencion', 'Id_Contrato');
     }
 }

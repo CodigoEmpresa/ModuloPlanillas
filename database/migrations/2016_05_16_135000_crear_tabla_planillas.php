@@ -50,7 +50,7 @@ class CrearTablaPlanillas extends Migration
             $table->integer('Id_Planilla')->unsigned();
             $table->integer('Id_Recurso')->unsigned();
             $table->smallInteger('Dias_Trabajados')->unsigned()->nullable();
-            $table->integer('Total_Pagar')->unsigned()->nullable();
+            $table->bigInteger('Total_Pagar')->unsigned()->nullable();
             $table->float('UVT')->nullable();
             $table->integer('EPS')->unsigned()->nullable();
             $table->integer('Pension')->unsigned()->nullable();

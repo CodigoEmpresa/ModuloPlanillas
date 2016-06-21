@@ -6,6 +6,8 @@ $(function(){
       }
   });
 
+  $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+
   $('input[data-role="datepicker"]').datepicker({
       dateFormat: 'yy-mm-dd',
       yearRange: "-100:+100",

@@ -30,7 +30,7 @@
     </div>
 	<div class="col-xs-12">
 		@if(count($contratos) == 0)
-			No se ha asignado ningún contrato, para crear uno haga click en "Crear contrato".
+			No se ha registrado ningún contrato hasta el momento, haga click en <strong>Crear contrato</strong> para crear uno.
 		@endif
 		<ul class="list-group" id="lista">
 			@foreach($contratos as $contrato)
