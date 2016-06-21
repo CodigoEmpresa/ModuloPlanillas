@@ -236,7 +236,7 @@
 		    					$i = 0;
 		    				?>
 					    	<div class="col-xs-12">
-					    		<table id="suspenciones" class="table table-hover table-bordered table-min table-select" data-total="{{ count($contrato->suspenciones) }}">
+					    		<table id="suspenciones" class="table table-hover table-bordered table-min table-select" data-total="{{ $contrato ? count($contrato->suspenciones) : 0 }}">
 					    			<thead>
 					    				<tr>
 					    					<th width="10%" align="center">N°</th>

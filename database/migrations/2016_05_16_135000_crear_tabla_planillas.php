@@ -55,8 +55,8 @@ class CrearTablaPlanillas extends Migration
             $table->integer('EPS')->unsigned()->nullable();
             $table->integer('Pension')->unsigned()->nullable();
             $table->integer('ARL')->unsigned()->nullable();
-            $table->integer('Vivienda')->unsigned()->nullable();
-            $table->integer('Hijos_U_Otros')->unsigned()->nullable();
+            $table->integer('Medicina_Prepagada')->unsigned()->nullable();
+            $table->integer('Hijos')->unsigned()->nullable();
             $table->integer('AFC')->unsigned()->nullable();
             $table->integer('Ingreso_Base_Gravado_384')->unsigned()->nullable();
             $table->integer('Ingreso_Base_Gravado_1607')->unsigned()->nullable();

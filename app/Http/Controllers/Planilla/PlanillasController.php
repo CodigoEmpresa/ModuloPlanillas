@@ -133,6 +133,11 @@ class PlanillasController extends Controller
 			$to_sync = [];
 			foreach ($recursos as $recurso) {
 				$contrato = $recurso->contrato;
+				
+				//aqui validaciones de contrato
+				if($contrato->estado == 'finalizado')
+					continue;
+
 				$to_sync[] = $recurso['Id'];
 			}
 
