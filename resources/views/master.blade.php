@@ -24,6 +24,7 @@
       @section('script')
           <script src="{{ asset('public/Js/jquery.js') }}"></script>
           <script src="{{ asset('public/Js/jquery-ui.js') }}"></script>
+          <script src="{{ asset('public/Js/datepicker-es.js') }}"></script>
           <script src="{{ asset('public/Js/inputmask.js') }}"></script>
           <script src="{{ asset('public/Js/inputmask.extensions.js') }}"></script>
           <script src="{{ asset('public/Js/inputmask.numeric.extensions.js') }}"></script>

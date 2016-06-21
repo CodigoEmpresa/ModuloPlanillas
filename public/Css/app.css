@@ -105,6 +105,10 @@ div.separador {
 	background-color: #f5f5f5;
 }
 
+.label-form-section.label-form-section-alert {
+	background-color: rgba(185, 74, 72, 0.31);
+}
+
 /*Desarrollo*/
 
 .dev-bar {

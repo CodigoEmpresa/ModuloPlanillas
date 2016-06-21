@@ -1,99 +1,148 @@
 $(function()
 {
 	var rubros = [];
+	var suspenciones = [];
 	var duracion = 0;
 
+	// validacion modales 
 	var validarRubro = function(rubro)
 	{
 		$('#modal_form_rubro .form-group').removeClass('has-error');
-		$('#errores ul').html('');
+		$('#modal_form_rubro .errores ul').html('');
 		var errores = false;
 
 		if(rubro.Numero_Registro == '')
 		{
 			errores = true;
-			$('input[name="Numero_Registro"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo numero de registro es requerido</li>');
+			$('#modal_form_rubro input[name="Numero_Registro"]').closest('.form-group').addClass('has-error');
+			$('.errores ul').append('<li>El campo numero de registro es requerido</li>');
 		}
 
 		if(rubro.Valor_CRP == '')
 		{
 			errores = true;
-			$('input[name="Valor_CRP"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo valor crp es requerido</li>');
+			$('#modal_form_rubro input[name="Valor_CRP"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo valor crp es requerido</li>');
 		}
 
 		if(rubro.Saldo_CRP == '')
 		{
 			errores = true;
-			$('input[name="Saldo_CRP"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo saldo crp es requerido</li>');
+			$('#modal_form_rubro input[name="Saldo_CRP"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo saldo crp es requerido</li>');
 		}
 
 		if(rubro.Expresion == '')
 		{
 			errores = true;
-			$('input[name="Expresion"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo expresión es requerido</li>');
+			$('#modal_form_rubro input[name="Expresion"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo expresión es requerido</li>');
 		}
 
 		if(rubro.Pago_Mensual == '')
 		{
 			errores = true;
-			$('input[name="Pago_Mensual"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo pago mensual es requerido</li>');
+			$('#modal_form_rubro input[name="Pago_Mensual"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo pago mensual es requerido</li>');
 		}
 
 		if(rubro.Fuente.id == null)
 		{
 			errores = true;
-			$('select[name="Fuente"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo fuente es requerido</li>');
+			$('#modal_form_rubro select[name="Fuente"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo fuente es requerido</li>');
 		}
 
 		if(rubro.Rubro.id == null)
 		{
 			errores = true;
-			$('select[name="Rubro"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo rubro es requerido</li>');
+			$('#modal_form_rubro select[name="Rubro"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo rubro es requerido</li>');
 		}
 
 		if(rubro.Componente.id == null)
 		{
 			errores = true;
-			$('select[name="Componente"]').closest('.form-group').addClass('has-error');
-			$('#errores ul').append('<li>El campo componente es requerido</li>');
+			$('#modal_form_rubro select[name="Componente"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_rubro .errores ul').append('<li>El campo componente es requerido</li>');
 		}
 
 		if(errores)
-			$('#errores').fadeIn();
+			$('#modal_form_rubro .errores').fadeIn();
 		
 		return errores;
 	};
 
+	var validarSuspencion = function(suspencion)
+	{
+		$('#modal_form_suspencion .form-group').removeClass('has-error');
+		$('#modal_form_suspencion .errores ul').html('');
+		var errores = false;
+
+		if(suspencion.Fecha_Inicio == '')
+		{
+			errores = true;
+			$('#modal_form_suspencion input[name="Fecha_Inicio_Suspencion"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_suspencion .errores ul').append('<li>El campo fecha inicio es requerido</li>');
+		}
+
+		if(suspencion.Fecha_Terminacion == '')
+		{
+			errores = true;
+			$('#modal_form_suspencion input[name="Fecha_Fin_Suspencion"]').closest('.form-group').addClass('has-error');
+			$('#modal_form_suspencion .errores ul').append('<li>El campo fecha de terminación es requerido</li>');
+		}
+
+		if(errores)
+			$('#modal_form_suspencion .errores').fadeIn();
+		
+		return errores;
+	};
+
+	// carga de datos modales
 	function popularModal(rubro)
 	{
-		$('#errores').fadeOut();
+		$('#modal_form_rubro .errores').fadeOut();
 		$('#modal_form_rubro .form-group').removeClass('has-error');
-		$('input[name="Id"]').val(rubro.Id);
-		$('input[name="Unique"]').val(rubro.Unique);
-		$('input[name="Numero_Registro"]').val(rubro.Numero_Registro);
-		$('input[name="Valor_CRP"]').val(rubro.Valor_CRP);
-		$('input[name="Saldo_CRP"]').val(rubro.Saldo_CRP);
-		$('input[name="Expresion"]').val(rubro.Expresion);
-		$('input[name="Pago_Mensual"]').val(rubro.Pago_Mensual);
-		$('select[name="Fuente"]').selectpicker('val', rubro.Fuente.id);
-		$('select[name="Rubro"]').selectpicker('val', rubro.Rubro.id);
-		$('select[name="Componente"]').selectpicker('val', rubro.Componente.id);
+		$('#modal_form_rubro input[name="Id"]').val(rubro.Id);
+		$('#modal_form_rubro input[name="Unique"]').val(rubro.Unique);
+		$('#modal_form_rubro input[name="Numero_Registro"]').val(rubro.Numero_Registro);
+		$('#modal_form_rubro input[name="Valor_CRP"]').val(rubro.Valor_CRP);
+		$('#modal_form_rubro input[name="Saldo_CRP"]').val(rubro.Saldo_CRP);
+		$('#modal_form_rubro input[name="Expresion"]').val(rubro.Expresion);
+		$('#modal_form_rubro input[name="Pago_Mensual"]').val(rubro.Pago_Mensual);
+		$('#modal_form_rubro select[name="Fuente"]').selectpicker('val', rubro.Fuente.id);
+		$('#modal_form_rubro select[name="Rubro"]').selectpicker('val', rubro.Rubro.id);
+		$('#modal_form_rubro select[name="Componente"]').selectpicker('val', rubro.Componente.id);
 
 		if(rubro.Id != '')
-			$('#eliminar_rubro').fadeIn();
+			$('#modal_form_rubro #eliminar_rubro').fadeIn();
 		else 
-			$('#eliminar_rubro').fadeOut();
+			$('#modal_form_rubro #eliminar_rubro').fadeOut();
 
 		$('#modal_form_rubro').modal('show');
 	}
 
+	function popularModalSuspencion(suspencion)
+	{
+		console.log(suspencion);
+
+		$('#modal_form_suspencion .errores').fadeOut();
+		$('#modal_form_suspencion .form-group').removeClass('has-error');
+		$('#modal_form_suspencion input[name="Id"]').val(suspencion.Id);
+		$('#modal_form_suspencion input[name="Unique"]').val(suspencion.Unique);
+		$('#modal_form_suspencion input[name="Fecha_Inicio_Suspencion"]').val(suspencion.Fecha_Inicio);
+		$('#modal_form_suspencion input[name="Fecha_Fin_Suspencion"]').val(suspencion.Fecha_Terminacion);
+
+		if(suspencion.Id != '')
+			$('#modal_form_suspencion #eliminar_suspencion').fadeIn();
+		else 
+			$('#modal_form_suspencion #eliminar_suspencion').fadeOut();
+
+		$('#modal_form_suspencion').modal('show');
+	}
+
+	// pitar registros en tablas
 	function pintarRubros()
 	{
 		$('#rubros tbody').html('');	
@@ -113,6 +162,22 @@ $(function()
 			);
 		});
 	};
+
+	function pintarSuspeciones()
+	{
+		$('#suspenciones tbody').html('');	
+
+		$.each(suspenciones, function(i, e)
+		{
+			$('#suspenciones tbody').append(
+				'<tr data-temp-id="'+e.Id+'" data-unique="'+e.Unique+'">'+
+					'<td>'+(i+1)+'</td>'+
+					'<td data-rel="Fecha_Inicio" data-val="'+e.Fecha_Inicio+'">'+e.Fecha_Inicio+'</td>'+
+					'<td data-rel="Fecha_Terminacion" data-val="'+e.Fecha_Terminacion+'">'+e.Fecha_Terminacion+'</td>'+
+				'</tr>'
+			);
+		});
+	}
 
 	function popularRubros()
 	{
@@ -143,8 +208,27 @@ $(function()
 			};
 			rubros.push(rubro);
 		});
+
+		console.log(rubros);
 	}
 
+	function popularSuspenciones()
+	{
+		$('#suspenciones tbody tr').each(function(i, e){
+			var tr = $(e);
+			var suspencion = {
+				"Id": tr.data('temp-id'),
+				"Unique": tr.data('unique'),
+				"Fecha_Inicio": tr.find('td[data-rel="Fecha_Inicio"]').data('val'),
+				"Fecha_Terminacion": tr.find('td[data-rel="Fecha_Terminacion"]').data('val')
+			};
+			suspenciones.push(suspencion);
+		});
+
+		console.log(suspenciones);
+	}
+
+	// configuración de calendarios
 	$('input[name="Fecha_Inicio"]').datepicker({
 		defaultDate: '+1w',
       	yearRange: '-100:+100',
@@ -169,6 +253,31 @@ $(function()
 		}
     });
 
+	$('input[name="Fecha_Inicio_Suspencion"]').datepicker({
+		defaultDate: '+1w',
+      	yearRange: '-100:+100',
+      	dateFormat: 'yy-mm-dd',
+      	changeYear: true,
+		changeMonth: true,
+		numberOfMonths: 3,
+		onClose: function( selectedDate ) {
+			$('input[name="Fecha_Fin_Suspencion"]').datepicker( "option", "minDate", selectedDate );
+		}
+    });
+
+    $('input[name="Fecha_Fin_Suspencion"]').datepicker({
+		defaultDate: '+1w',
+      	yearRange: '-100:+100',
+      	dateFormat: 'yy-mm-dd',
+      	changeYear: true,
+		changeMonth: true,
+		numberOfMonths: 3,
+		onClose: function( selectedDate ) {
+			$('input[name="Fecha_Inicio_Suspencion"]').datepicker( "option", "maxDate", selectedDate );
+		}
+    });
+
+    //popular modales
     $('#rubros tbody').delegate('tr', 'click', function(e)
     {
     	var tr = $(this);
@@ -179,8 +288,21 @@ $(function()
 
     	if(rubro)
     		popularModal(rubro[0]);
+    });    
+
+    $('#suspenciones tbody').delegate('tr', 'click', function(e)
+    {
+    	var tr = $(this);
+    	var suspencion = $.grep(suspenciones, function(o, i)
+    	{
+    		return o.Id == tr.data('temp-id');
+    	});
+
+    	if(suspencion)
+    		popularModalSuspencion(suspencion[0]);
     });
 
+    //boton agregar nuevos elementos
     $('#agregar_rubro').on('click', function(e)
     {
     	var rubro = {
@@ -210,6 +332,18 @@ $(function()
     	popularModal(rubro);
     });
 
+    $('#agregar_suspencion').on('click', function(e)
+    {
+    	var suspencion = {
+    		"Id": '',
+    		"Unique": '',
+			"Fecha_Inicio": '',
+			"Fecha_Terminacion": ''
+    	};
+
+    	popularModalSuspencion(suspencion);
+    });
+
     $('#Expresion, input[name="Valor_CRP"]').on('blur', function(e)
     {
     	if($('#Expresion').val() != '')
@@ -230,36 +364,39 @@ $(function()
     	}
     });
 
+    //guardar nuevos elementos 
     $('#guardar_rubro').on('click', function(e)
     {
-    	var nuevo = $('input[name="Id"]').val() == '';
+    	var nuevo = $('#modal_form_rubro input[name="Id"]').val() == '';
 
     	var rubro = {
-    		"Id": nuevo ? '0' : $('input[name="Id"]').val(),
-    		"Unique": $('#rubros tbody tr').length + 1,
-    		"Numero_Registro": $('input[name="Numero_Registro"]').val(),
+    		"Id": nuevo ? '0' : $('#modal_form_rubro input[name="Id"]').val(),
+    		"Unique": parseInt($('#rubros').attr('data-total')) + 1,
+    		"Numero_Registro": $('#modal_form_rubro input[name="Numero_Registro"]').val(),
 			"Fuente": {
-				"id": $('select[name="Fuente"]').val(),
-				"valor": $('select[name="Fuente"] option:selected').text()
+				"id": $('#modal_form_rubro select[name="Fuente"]').val(),
+				"valor": $('#modal_form_rubro select[name="Fuente"] option:selected').text()
 			},
 			"Rubro": 
 			{
-				"id": $('select[name="Rubro"]').val(),
-				"valor": $('select[name="Rubro"] option:selected').text()
+				"id": $('#modal_form_rubro select[name="Rubro"]').val(),
+				"valor": $('#modal_form_rubro select[name="Rubro"] option:selected').text()
 			},
 			"Componente": 
 			{
-				"id": $('select[name="Componente"]').val(),
-				"valor": $('select[name="Componente"] option:selected').text()
+				"id": $('#modal_form_rubro select[name="Componente"]').val(),
+				"valor": $('#modal_form_rubro select[name="Componente"] option:selected').text()
 			},
-			"Valor_CRP": $('input[name="Valor_CRP"]').inputmask('unmaskedvalue'),
-			"Saldo_CRP": $('input[name="Saldo_CRP"]').inputmask('unmaskedvalue'),
-			"Expresion": $('input[name="Expresion"]').val(),
-			"Pago_Mensual": $('input[name="Pago_Mensual"]').inputmask('unmaskedvalue')
+			"Valor_CRP": $('#modal_form_rubro input[name="Valor_CRP"]').inputmask('unmaskedvalue'),
+			"Saldo_CRP": $('#modal_form_rubro input[name="Saldo_CRP"]').inputmask('unmaskedvalue'),
+			"Expresion": $('#modal_form_rubro input[name="Expresion"]').val(),
+			"Pago_Mensual": $('#modal_form_rubro input[name="Pago_Mensual"]').inputmask('unmaskedvalue')
     	};
+
     	
     	if(!validarRubro(rubro))
     	{
+    		$('#rubros').attr('data-total', rubro.Unique);
 	    	if (nuevo)
 	    	{
 	    		rubros.push(rubro);
@@ -277,9 +414,41 @@ $(function()
     	}
     });
 
+    $('#guardar_suspencion').on('click', function(e)
+    {
+    	var nuevo = $('#modal_form_suspencion input[name="Id"]').val() == '';
+
+    	var suspencion = {
+    		"Id": nuevo ? '0' : $('#modal_form_suspencion input[name="Id"]').val(),
+    		"Unique": parseInt($('#suspenciones').attr('data-total')) + 1,
+			"Fecha_Inicio": $('#modal_form_suspencion input[name="Fecha_Inicio_Suspencion"]').val(),
+			"Fecha_Terminacion": $('#modal_form_suspencion input[name="Fecha_Fin_Suspencion"]').val()
+    	};
+    	
+    	if(!validarSuspencion(suspencion))
+    	{
+    		$('#suspenciones').attr('data-total', suspencion.Unique);
+	    	if (nuevo)
+	    	{
+	    		suspenciones.push(suspencion);
+	    	} else {
+	    		$.each(suspenciones, function(i, e) {
+	    			if (e.Id == suspencion.Id)
+	    			{
+	    				suspenciones[i] = suspencion;
+	    			}
+	    		});
+	    	}
+
+			pintarSuspeciones();
+			$('#modal_form_suspencion').modal('hide');
+    	}
+    });
+
+    //eliminar elementos modales
     $('#eliminar_rubro').on('click', function(e)
     {
-    	var unique = $('input[name="Unique"]').val();
+    	var unique = $('#modal_form_rubro input[name="Unique"]').val();
     	var temp = $.grep(rubros, function(o, i)
     	{
     		return o.Unique == unique;
@@ -289,13 +458,29 @@ $(function()
 
 		pintarRubros();
 		$('#modal_form_rubro').modal('hide');
+    });    
+
+    $('#eliminar_suspencion').on('click', function(e)
+    {
+    	var unique = $('#modal_form_suspencion input[name="Unique"]').val();
+    	var temp = $.grep(suspenciones, function(o, i)
+    	{
+    		return o.Unique == unique;
+    	}, true);
+
+    	suspenciones = temp;
+
+		pintarSuspeciones();
+		$('#modal_form_suspencion').modal('hide');
     });
 
     $('#form-contrato').on('submit', function(e)
     {
     	$('input[name="_recursos"]').val(JSON.stringify(rubros));
+    	$('input[name="_suspenciones"]').val(JSON.stringify(suspenciones));
     });
 
     popularRubros();
+    popularSuspenciones();
 
 });

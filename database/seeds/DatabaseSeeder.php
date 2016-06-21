@@ -31,20 +31,11 @@ class Fuentes extends Seeder
 		DB::table('Fuentes')->delete();
 		DB::table('Fuentes')->insert([
 			[
-				'Nombre' => 'Fuente 1',
-				'Codigo' => '10000001'
+				'Nombre' => 'Otros distritos',
+				'Codigo' => '1101012'
 			],[
-				'Nombre' => 'Fuente 2',
-				'Codigo' => '10000002'
-			],[
-				'Nombre' => 'Fuente 3',
-				'Codigo' => '10000003'
-			],[
-				'Nombre' => 'Fuente 4',
-				'Codigo' => '10000004'
-			],[
-				'Nombre' => 'Fuente 5',
-				'Codigo' => '10000005'
+				'Nombre' => 'Recursos administrativos',
+				'Codigo' => '11030201'
 			]
 		]);
 	}
@@ -57,20 +48,14 @@ class Rubros extends Seeder
 		DB::table('Rubros')->delete();
 		DB::table('Rubros')->insert([
 			[
-				'Nombre' => 'Rubro 1',
-				'Codigo' => '20000001'
+				'Nombre' => 'Bogotá es mi parche',
+				'Codigo' => '3311401080862'
 			],[
-				'Nombre' => 'Rubro 2',
-				'Codigo' => '20000002'
+				'Nombre' => 'Corredores vitales',
+				'Codigo' => '3311401080867'
 			],[
-				'Nombre' => 'Rubro 3',
-				'Codigo' => '20000003'
-			],[
-				'Nombre' => 'Rubro 4',
-				'Codigo' => '20000004'
-			],[
-				'Nombre' => 'Rubro 5',
-				'Codigo' => '20000005'
+				'Nombre' => 'Pedalea por Bogotá',
+				'Codigo' => '3311402190845'
 			]
 		]);
 	}
@@ -83,20 +68,14 @@ class Componentes extends Seeder
 		DB::table('Componentes')->delete();
 		DB::table('Componentes')->insert([
 			[
-				'Nombre' => 'Componente 1',
-				'Codigo' => '30000001'
+				'Nombre' => 'Honorarios',
+				'Codigo' => '3110203'
 			],[
-				'Nombre' => 'Componente 2',
-				'Codigo' => '30000002'
+				'Nombre' => 'Remuneración Servicios Técnicos',
+				'Codigo' => '3110204'
 			],[
-				'Nombre' => 'Componente 3',
-				'Codigo' => '30000003'
-			],[
-				'Nombre' => 'Componente 4',
-				'Codigo' => '30000004'
-			],[
-				'Nombre' => 'Componente 5',
-				'Codigo' => '30000005'
+				'Nombre' => 'Dotación',
+				'Codigo' => '3120101'
 			]
 		]);
 	}

@@ -118,6 +118,7 @@ $(function(){
 			},
 			'json'
 		);
+		
 		e.preventDefault();
 	});
 
