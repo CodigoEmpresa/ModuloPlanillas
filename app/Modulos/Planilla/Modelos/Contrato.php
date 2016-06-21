@@ -13,7 +13,7 @@ class Contrato extends Model
     protected $table = 'Contratos';
     protected $primaryKey = 'Id_Contrato';
     protected $dates = ['deleted_at'];
-    protected $cascadeDeletes = ['recursos', 'saldos'];
+    protected $cascadeDeletes = ['recursos', 'saldos', 'suspenciones'];
 
     public function contratista()
     {
