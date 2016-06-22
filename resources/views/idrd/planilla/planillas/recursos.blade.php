@@ -63,14 +63,14 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td align="center">{{ $planilla->Desde->format('d') }}</td>
-										<td align="center">{{ $planilla->Desde->format('m') }}</td>
-										<td align="center">{{ $planilla->Desde->format('Y') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Desde)->format('d') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Desde)->format('m') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Desde)->format('Y') }}</td>
 									</tr>
 									<tr>
-										<td align="center">{{ $planilla->Hasta->format('d') }}</td>
-										<td align="center">{{ $planilla->Hasta->format('m') }}</td>
-										<td align="center">{{ $planilla->Hasta->format('Y') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('d') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('m') }}</td>
+										<td align="center">{{ Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('Y') }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -187,7 +187,7 @@
 							?>
 							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['AFC'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
 								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
-								<td class="fixed vcenter" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
+								<td class="fixed vcenter uppercase" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
 								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Cedula'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Numero_Cta'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato->contratista->banco['Nombre'] }}</td>
@@ -273,7 +273,7 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? number_format($total_deducciones, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Declarante" align="center">
-									<input type="checkbox" class="readonly" name="declarante_{{ $contrato['Id_Contrato'] }}" {{ $declarante ? 'checked' : '' }}>
+									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}"  onclick="return false;" onkeydown="return false;" {{ $contrato->contratista['Declarante'] ? 'checked' : '' }}>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Neto_Pagar" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? number_format($neto_pagar, 0, '.', '.') : '--' }}</span>
@@ -295,8 +295,8 @@
 					</tbody>
 					<tfoot>
 						<td class="fixed first"></td>
-						<td class="fixed first"></td>
-						<td class="fixed first"></td>
+						<td class="fixed"></td>
+						<td class="fixed"></td>
 						<td colspan="11">
 						</td>
 						<td>
