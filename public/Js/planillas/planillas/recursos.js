@@ -6,6 +6,7 @@ $(function(){
 	var TABLA_1607 =  $.makeArray($.parseJSON($('input[name="tabla_1607"]').val()));
 	var TABLA_384 =  $.makeArray($.parseJSON($('input[name="tabla_384"]').val()));
 	var BASE = SM * 100 / 40;
+	var URL_CONTRATOs = $('#main_list').data('url-contratos');
 
 	$('#recursos tbody tr').each(function(i, e)
 	{
@@ -60,7 +61,7 @@ $(function(){
 		var $input_declarante = tr.find('input[name^="declarante_"]');
 		var recursos = (tr.data('recursos')+'').split(',');
 		var variables = (tr.data('variables')+'').split(',');
-		var total_medicina_prepagada = variables[3];
+		var total_medicina_prepagada = variables[2];
 		var dias = parseInt($input_dias.val());
 
 		if($.isNumeric(dias))
@@ -226,8 +227,8 @@ $(function(){
 				recurso[0].Ingreso_Base_Gravado_384 = Math.round(Ingreso_Base_Gravado_384);
 				recurso[0].Ingreso_Base_Gravado_1607 = Math.round(Ingreso_Base_Gravado_1607);
 				recurso[0].Ingreso_Base_Gravado_25 = Math.round(Ingreso_Base_Gravado_25);
-				recurso[0].Base_UVR_Ley_1607 =  parseFloat(Base_UVR_Ley_1607).toFixed(2);
-				recurso[0].Base_UVR_Art_384 =  parseFloat(Base_UVR_Art_384).toFixed(2);
+				recurso[0].Base_UVR_Ley_1607 = parseFloat(Base_UVR_Ley_1607).toFixed(2);
+				recurso[0].Base_UVR_Art_384 = parseFloat(Base_UVR_Art_384).toFixed(2);
 				recurso[0].Base_ICA = Math.round(Base_ICA);
 				recurso[0].PCUL = Math.round(PCUL);
 				recurso[0].PPM = Math.round(PPM);
@@ -275,6 +276,63 @@ $(function(){
 		$('input[name="_planilla"]').val(JSON.stringify(to_sync));
 	});
 
-	$("#recursos").tableHeadFixer({"head" : true, "left" : 3}); 
+	$("#recursos").tableHeadFixer({"head" : true, "left" : 4});
 
+	$('a[data-role="detail"]').on('click', function(e){
+		var tr = $(this).closest('tr');
+		var id = tr.data('contrato');
+
+		$.get(
+			URL_CONTRATOs+'/'+id+'/serviceObtener',
+			{},
+			function(data)
+			{
+				var html = 	'<div class="row">'+
+								'<div class="col-xs-12 col-md-6 form-group">'+
+									'<label for="">Estado</label>'+
+									'<p class="form-control-static first-uppercase">'+(data.Estado ? data.Estado : 'en proceso')+'</p>'+
+								'</div>'+
+								'<div class="col-xs-12 col-md-6 form-group">'+
+									'<label for="">Eventualidades</label>'+
+									'<p class="form-control-static first-uppercase">'+(data.Tipo_Modificacion ? '<span class="glyphicon glyphicon-alert"></span> '+data.Tipo_Modificacion : 'ninguna')+'</p>'+
+								'</div>'+
+								'<div class="col-xs-12 form-group">'+
+									'<label for="">Historial de pagos ('+data.saldos.length+')</label><br>'+
+									'<table class="table table-min table-bordered">'+
+										'<thead>'+
+											'<tr>'+
+												'<th width="7%">N°</th>'+
+												'<th width="30%">Fecha</th>'+
+												'<th width="30%">Planilla</th>'+
+												'<th width="33%">Valor</th>'+
+											'</tr>'+
+										'</thead>'+
+									'</table>'+
+								'</div>'+
+								'<div class="col-xs-12 form-group">'+
+									'<label for="">Historial de suspenciones ('+data.suspenciones.length+')</label><br>'+
+									'<table class="table table-min table-bordered">'+
+										'<thead>'+
+											'<tr>'+
+												'<th width="7%">N°</th>'+
+												'<th width="30%">Fecha inicio</th>'+
+												'<th width="30%">Fecha fin</th>'+
+												'<th width="33%">Dias</th>'+
+											'</tr>'+
+										'</thead>'+
+									'</table>'+
+								'</div>'+
+							'</div>';
+
+				$('#modal_form_contrato').find('.modal-body').html(html);
+			},
+			'json'
+		).done(function()
+			{
+				$('#modal_form_contrato').modal('show');
+			}
+		);
+
+		e.preventDefault();
+	});
 });

@@ -216,6 +216,14 @@ class ContratosController extends Controller{
         return redirect()->away(Session::get('back'));
     }
 
+    public function serviceObtener(Request $request, $Id_Contrato)
+    {
+        $contrato = Contrato::with('saldos', 'suspenciones')
+                        ->find($Id_Contrato);
+
+        return response()->json($contrato);
+    }
+
     protected function procesar($contrato, $request)
     {
         $recursos = json_decode($request->input('_recursos'));

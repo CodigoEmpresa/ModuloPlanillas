@@ -265,7 +265,7 @@
 			    	<div id="finalizar-contrato" style="{{ $contrato ? '' : 'display: none' }}">
 						<div class="row">
 					    	<div class="col-xs-12">
-					    		<span class="label-form-section label-form-section-alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Terminar contrato: <br></span>
+					    		<span class="label-form-section label-form-section-alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> Terminar contrato: <br></span>
 					    	</div>
 				    	</div>
 				    	<div class="row">

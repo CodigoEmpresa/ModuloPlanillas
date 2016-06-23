@@ -23,7 +23,7 @@ class TablaContratista extends Migration
             $table->boolean('Declarante')->default(1);
             $table->boolean('Medicina_Prepagada')->default(1);
             $table->tinyInteger('Hijos_Cantidad')->unsigned();
-            $table->tinyInteger('Medicina_Prepagada_Cantidad')->unsigned();
+            $table->integer('Medicina_Prepagada_Cantidad')->unsigned();
             $table->enum('Tipo_Cuenta', ['CC', 'CA']);
             $table->enum('Nivel_Riesgo_ARL', ['1', '2', '3', '4', '5']);
             $table->integer('Id_TipoDocumento')->unsigned();

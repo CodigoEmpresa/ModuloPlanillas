@@ -1,5 +1,11 @@
 $(function(){
-  
+
+  $('#loading-image').bind('ajaxStart', function(){
+      $(this).show();
+  }).bind('ajaxStop', function(){
+      $(this).hide();
+  });
+
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

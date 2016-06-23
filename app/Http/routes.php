@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contratos/{Id_Contratista}/crear', 'Planilla\ContratosController@crear');
 	Route::get('/contratos/{Id_Contratista}/editar/{Id_Contrato}', 'Planilla\ContratosController@editar');
 	Route::get('/contratos/{Id_Contrato}/eliminar', 'Planilla\ContratosController@eliminar');
+	Route::get('/contratos/{Id_Contrato}/serviceObtener', 'Planilla\ContratosController@serviceObtener');
 	Route::post('/contratos', 'Planilla\ContratosController@guardar');
 	Route::put('/contratos', 'Planilla\ContratosController@actualizar');
 

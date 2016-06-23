@@ -7,7 +7,7 @@
 	<script src="{{ asset('public/Js/planillas/planillas/recursos.js') }}"></script>
 @stop
 @section('content')
-	<div id="main_list" class="row" data-url="{{ url('planillas') }}" data-url-contratistas="{{ url('contratistas') }}">
+	<div id="main_list" class="row" data-url="{{ url('planillas') }}" data-url-contratistas="{{ url('contratistas') }}" data-url-contratos="{{ url('contratos') }}">
 		<div class="col-xs-12">
 			<h4 class="uppercase">
 				<span>Planilla N° {{ $planilla['Numero'] }} elaborada el: {{ $planilla->created_at->format('d/m/Y') }}</span>
@@ -90,7 +90,8 @@
 				<table id="recursos" class="table table-min table-bordered table-planilla">
 					<thead>
 						<tr>
-							<th class="fixed first" width="30">N°</th>
+							<th class="fixed first" width="30"></th>
+							<th class="fixed" width="30">N°</th>
 							<th class="fixed" width="210">Nombre contratista</th>
 							<th class="fixed" width="120">Número cedula</th>
 							<th width="100">Número cuenta</th>
@@ -185,8 +186,11 @@
 								$total_neto_pagar += $neto_pagar;
 								$recursos = substr($recursos, 0, strlen($recursos)-1);
 							?>
-							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['AFC'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
-								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
+							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
+								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">
+									<a href="" data-role="detail"><span class="glyphicon glyphicon-info-sign"></span></a>
+								</td>
+								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
 								<td class="fixed vcenter uppercase" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
 								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Cedula'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Numero_Cta'] }}</td>
@@ -195,21 +199,21 @@
 								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Numero'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Inicio'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}">{{ $contrato['Fecha_Terminacion'] }}</td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[0]->rubro['Codigo'], -3) }} </td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[0]['Numero_Registro'] }} </td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[0]['Valor_CRP'] }}" width="120" align="right"> 
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[0]->rubro['Codigo'], -3) }} </td>
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[0]['Numero_Registro'] }} </td>
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[0]['Valor_CRP'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Valor_CRP'], 0, '.', '.') }}
 								</td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[0]['Saldo_CRP'] }}" width="120" align="right"> 
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[0]['Saldo_CRP'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Saldo_CRP'], 0, '.', '.') }}
 								</td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
+								<td class="vcenter"  data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
    									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off">
    								</td>
-								<td data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="UVT" align="right">
@@ -281,13 +285,13 @@
 							</tr>
 							@if($rowspan > 1)
 								@for($j=1; $j<count($contrato->recursos); $j++)
-									<tr>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[$j]->rubro['Codigo'], -3) }} </td>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[$j]['Numero_Registro'] }} </td>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[$j]['Valor_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Valor_CRP'], 0, '.', '.') }} </td>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[$j]['Saldo_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Saldo_CRP'], 0, '.', '.') }} </td>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[$j]['Pago_Mensual'] }}" width="120" align="right"> <span class="pull-left">$</span>{{ number_format($contrato->recursos[$j]['Pago_Mensual'], 0, '.', '.') }}</td>
-										<td data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right"><span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[$j]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span></td>
+									<tr data-contrato="{{ $contrato['Id_Contrato'] }}">
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[$j]->rubro['Codigo'], -3) }} </td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[$j]['Numero_Registro'] }} </td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[$j]['Valor_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Valor_CRP'], 0, '.', '.') }} </td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[$j]['Saldo_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Saldo_CRP'], 0, '.', '.') }} </td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[$j]['Pago_Mensual'] }}" width="120" align="right"> <span class="pull-left">$</span>{{ number_format($contrato->recursos[$j]['Pago_Mensual'], 0, '.', '.') }}</td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right"><span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[$j]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span></td>
 									</tr>
 								@endfor
 							@endif
@@ -295,6 +299,7 @@
 					</tbody>
 					<tfoot>
 						<td class="fixed first"></td>
+						<td class="fixed"></td>
 						<td class="fixed"></td>
 						<td class="fixed"></td>
 						<td colspan="11">
@@ -350,5 +355,20 @@
 				<a href="#" class="btn btn-default close_tab" data-title="¿Realmente desea abandonar la edición de la planilla?">Cerrar</a>
 			</div>
 		</form>
+	</div>
+	<div class="modal fade" id="modal_form_contrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Detalle contrato</h4>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 @stop
