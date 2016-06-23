@@ -18,4 +18,9 @@ class Saldo extends Model
     {
         return $this->balongsTo('App\Modulos\Planilla\Modelos\Contrato', 'Id_Contrato');
     }
+
+    public function planilla()
+    {
+    	return $this->belongsTo('App\Modulos\Planilla\Modelos\Planilla', 'Id_Planilla');
+    }
 }
