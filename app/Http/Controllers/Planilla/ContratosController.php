@@ -218,7 +218,7 @@ class ContratosController extends Controller{
 
     public function serviceObtener(Request $request, $Id_Contrato)
     {
-        $contrato = Contrato::with('saldos', 'suspenciones')
+        $contrato = Contrato::with('saldos', 'saldos.planilla', 'suspenciones')
                         ->find($Id_Contrato);
 
         return response()->json($contrato);
