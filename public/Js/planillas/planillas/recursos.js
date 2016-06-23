@@ -325,6 +325,7 @@ $(function(){
 							'</div>';
 
 				$('#modal_form_contrato').find('.modal-body').html(html);
+				$('#modal_form_contrato').attr('data-contrato', data.Id_Contrato);
 			},
 			'json'
 		).done(function()
@@ -334,5 +335,22 @@ $(function(){
 		);
 
 		e.preventDefault();
+	});
+
+	$('#remover_contrato').on('click', function(e)
+	{
+		var id = $('#modal_form_contrato').attr('data-contrato');
+		var recursos_char = $('#recursos tr[data-role="contenedor_contrato"][data-contrato="'+id+'"]').data('recursos');
+		var recursos = recursos_char.toString().split(',');
+
+		var temp = $.grep(to_sync, function(o, i)
+		{
+			return $.inArray(o.Id, recursos) > -1;
+		}, true);
+
+		to_sync = temp;
+		$('#recursos tr[data-contrato="'+id+'"]').remove();
+
+		$('#modal_form_contrato').modal('hide');
 	});
 });

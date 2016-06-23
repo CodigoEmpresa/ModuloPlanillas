@@ -458,7 +458,7 @@ $(function()
 
 		pintarRubros();
 		$('#modal_form_rubro').modal('hide');
-    });    
+    });
 
     $('#eliminar_suspencion').on('click', function(e)
     {

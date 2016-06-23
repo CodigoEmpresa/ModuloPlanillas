@@ -42,6 +42,11 @@ class PlanillasController extends Controller
 		if ($_SESSION['Usuario'] == '')
 			return redirect()->away('http://www.idrd.gov.co/SIM/Presentacion/');
 
+		return redirect('/planillas');
+	}
+
+	public function planillas()
+	{
 		$perPage = 10;
 
 		$elementos = Planilla::with('recursos', 'fuente', 'rubros')

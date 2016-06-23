@@ -186,7 +186,7 @@
 								$total_neto_pagar += $neto_pagar;
 								$recursos = substr($recursos, 0, strlen($recursos)-1);
 							?>
-							<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
+							<tr data-role="contenedor_contrato" data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
 								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">
 									<a href="" data-role="detail"><span class="glyphicon glyphicon-info-sign"></span></a>
 								</td>
@@ -356,7 +356,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="modal fade" id="modal_form_contrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal fade" id="modal_form_contrato" data-contrato="0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -366,6 +366,7 @@
 					
 				</div>
 	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-danger" id="remover_contrato">Remover</button>
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				</div>
 			</div>
