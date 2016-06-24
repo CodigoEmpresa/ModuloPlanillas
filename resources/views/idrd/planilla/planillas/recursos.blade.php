@@ -177,6 +177,14 @@
 									$total_pagar += $recurso->planillado['Total_Pagar'];
 								}
 								
+
+								$terminado = false;
+								if ($contrato->Tipo_Modificacion == 'terminado')
+								{
+									$terminado = true;
+									$saldo_a_favor = $contrato->Saldo_A_Favor;
+								}
+
 								$total_pcul += $pcul;
 								$total_ppm += $ppm;
 								$total_general_ica += $total_ica;
@@ -211,7 +219,7 @@
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
-   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off">
+   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado ? 'readonly' : '' }} >
    								</td>
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
