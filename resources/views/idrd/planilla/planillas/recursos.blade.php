@@ -174,7 +174,7 @@
 									$declarante = $recurso->planillado['Declarante'];
 									$neto_pagar = $recurso->planillado['Neto_Pagar'];
 
-									$total_pagar += $recurso['Pago_Mensual'];
+									$total_pagar += $recurso->planillado['Total_Pagar'];
 								}
 								
 								$total_pcul += $pcul;

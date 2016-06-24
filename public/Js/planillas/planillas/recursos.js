@@ -8,6 +8,40 @@ $(function(){
 	var BASE = SM * 100 / 40;
 	var URL_CONTRATOs = $('#main_list').data('url-contratos');
 
+	var actualizar_totales = function()
+	{
+		var total_pagar = 0;
+		var total_pcul = 0;
+		var total_ppm = 0;
+		var total_general_ica = 0;
+		var total_dist = 0;
+		var total_retefuente = 0;
+		var total_general_deducciones = 0;
+		var total_neto_pagar = 0;
+
+		$.each(to_sync, function(i, e){
+			total_pagar += e.Total_Pagar;
+			total_pcul += e.PCUL;
+			total_ppm += e.PPM;
+			total_general_ica += e.Total_ICA;
+			total_dist += e.DIST;
+			total_retefuente += e.Retefuente;
+			total_general_deducciones += e.Total_Deducciones;
+			total_neto_pagar += e.Neto_Pagar;
+		});
+
+		$('td[data-role="total_pagar"] span[data-role="value"]').text(total_pagar == 0 ? '--' : accounting.formatNumber(total_pagar, 0, '.'));
+
+		$('td[data-role="total_pagar"] span[data-role="value"]').text(total_pagar == 0 ? '--' : accounting.formatNumber(total_pagar, 0, '.'));
+		$('td[data-role="total_pcul"] span[data-role="value"]').text(total_pcul == 0 ? '--' : accounting.formatNumber(total_pcul, 0, '.'));
+		$('td[data-role="total_ppm"] span[data-role="value"]').text(total_ppm == 0 ? '--' : accounting.formatNumber(total_ppm, 0, '.'));
+		$('td[data-role="total_general_ica"] span[data-role="value"]').text(total_general_ica == 0 ? '--' : accounting.formatNumber(total_general_ica, 0, '.'));
+		$('td[data-role="total_dist"] span[data-role="value"]').text(total_dist == 0 ? '--' : accounting.formatNumber(total_dist, 0, '.'));
+		$('td[data-role="total_retefuente"] span[data-role="value"]').text(total_retefuente == 0 ? '--' : accounting.formatNumber(total_retefuente, 0, '.'));
+		$('td[data-role="total_general_deducciones"] span[data-role="value"]').text(total_general_deducciones == 0 ? '--' : accounting.formatNumber(total_general_deducciones, 0, '.'));
+		$('td[data-role="total_neto_pagar"] span[data-role="value"]').text(total_neto_pagar == 0 ? '--' : accounting.formatNumber(total_neto_pagar, 0, '.'));
+	}
+
 	$('#recursos tbody tr').each(function(i, e)
 	{
 		var recursos = ($(e).data('recursos')+'').split(',');
@@ -91,7 +125,7 @@ $(function(){
 			var Retefuente = 0;
 			var Retefuente_1607 = 0;
 			var Retefuente_384 = 0;
-			var Otros_Descuentos = $input_otros_descuentos.inputmask('unmaskedvalue');;
+			var Otros_Descuentos = $input_otros_descuentos.inputmask('unmaskedvalue');
 			var Cod_Retef = 0;
 			var Cod_Seven = 0;
 			var Total_Deducciones = 0;
@@ -266,9 +300,14 @@ $(function(){
 			tr.find('td[data-role="Cod_Seven"] span[data-role="value"]').text(Cod_Seven == 0 ? '--' : Cod_Seven);
 			tr.find('td[data-role="Total_Deducciones"] span[data-role="value"]').text(Total_Deducciones == 0 ? '--' : accounting.formatNumber(Total_Deducciones, 0, '.'));
 			tr.find('td[data-role="Neto_Pagar"] span[data-role="value"]').text(Neto_Pagar == 0 ? '--' : accounting.formatNumber(Neto_Pagar, 0, '.'));
+
+			actualizar_totales();
 		}
+
+
 	});
 
+	$("#recursos").tableHeadFixer({"head" : true, "left" : 4});
 
 	$('#formulario').on('submit', function(e)
 	{
@@ -276,7 +315,6 @@ $(function(){
 		$('input[name="_planilla"]').val(JSON.stringify(to_sync));
 	});
 
-	$("#recursos").tableHeadFixer({"head" : true, "left" : 4});
 
 	$('a[data-role="detail"]').on('click', function(e){
 		var tr = $(this).closest('tr');
@@ -289,6 +327,10 @@ $(function(){
 			{
 				var html = 	'<div class="row">'+
 								'<div class="col-xs-12 col-md-6 form-group">'+
+									'<label for="">N°</label>'+
+									'<p class="form-control-static first-uppercase">'+data.Numero+'</p>'+
+								'</div>'+
+								'<div class="col-xs-12 col-md-6 form-group">'+
 									'<label for="">Estado</label>'+
 									'<p class="form-control-static first-uppercase">'+(data.Estado ? data.Estado : 'en proceso')+'</p>'+
 								'</div>'+
@@ -296,7 +338,7 @@ $(function(){
 									'<label for="">Eventualidades</label>'+
 									'<p class="form-control-static first-uppercase">'+(data.Tipo_Modificacion ? '<span class="glyphicon glyphicon-alert"></span> '+data.Tipo_Modificacion : 'ninguna')+'</p>'+
 								'</div>'+
-								'<div class="col-xs-12 form-group">'+
+								'<div class="col-xs-12 form-group">'+ //pendiente cargar saldos
 									'<label for="">Historial de pagos ('+data.saldos.length+')</label><br>'+
 									'<table class="table table-min table-bordered">'+
 										'<thead>'+
@@ -309,7 +351,7 @@ $(function(){
 										'</thead>'+
 									'</table>'+
 								'</div>'+
-								'<div class="col-xs-12 form-group">'+
+								'<div class="col-xs-12 form-group">'+ //pendiente cargar suspenciones
 									'<label for="">Historial de suspenciones ('+data.suspenciones.length+')</label><br>'+
 									'<table class="table table-min table-bordered">'+
 										'<thead>'+
@@ -352,5 +394,8 @@ $(function(){
 		$('#recursos tr[data-contrato="'+id+'"]').remove();
 
 		$('#modal_form_contrato').modal('hide');
+		actualizar_totales();
 	});
+
+	$('input[name^="dias_"]').trigger('keyup');
 });
