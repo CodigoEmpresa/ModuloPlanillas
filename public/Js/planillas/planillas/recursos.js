@@ -325,46 +325,76 @@ $(function(){
 			{},
 			function(data)
 			{
-				var html = 	'<div class="row">'+
-								'<div class="col-xs-12 col-md-6 form-group">'+
-									'<label for="">N°</label>'+
-									'<p class="form-control-static first-uppercase">'+data.Numero+'</p>'+
-								'</div>'+
-								'<div class="col-xs-12 col-md-6 form-group">'+
-									'<label for="">Estado</label>'+
-									'<p class="form-control-static first-uppercase">'+(data.Estado ? data.Estado : 'en proceso')+'</p>'+
-								'</div>'+
+				var html = 	'<div class="row">';
+
 								'<div class="col-xs-12 col-md-6 form-group">'+
 									'<label for="">Eventualidades</label>'+
-									'<p class="form-control-static first-uppercase">'+(data.Tipo_Modificacion ? '<span class="glyphicon glyphicon-alert"></span> '+data.Tipo_Modificacion : 'ninguna')+'</p>'+
-								'</div>'+
-								'<div class="col-xs-12 form-group">'+ //pendiente cargar saldos
-									'<label for="">Historial de pagos ('+data.saldos.length+')</label><br>'+
-									'<table class="table table-min table-bordered">'+
-										'<thead>'+
-											'<tr>'+
-												'<th width="7%">N°</th>'+
-												'<th width="30%">Fecha</th>'+
-												'<th width="30%">Planilla</th>'+
-												'<th width="33%">Valor</th>'+
-											'</tr>'+
-										'</thead>'+
-									'</table>'+
-								'</div>'+
-								'<div class="col-xs-12 form-group">'+ //pendiente cargar suspenciones
-									'<label for="">Historial de suspenciones ('+data.suspenciones.length+')</label><br>'+
-									'<table class="table table-min table-bordered">'+
-										'<thead>'+
-											'<tr>'+
-												'<th width="7%">N°</th>'+
-												'<th width="30%">Fecha inicio</th>'+
-												'<th width="30%">Fecha fin</th>'+
-												'<th width="33%">Dias</th>'+
-											'</tr>'+
-										'</thead>'+
-									'</table>'+
-								'</div>'+
+									'<p class="form-control-static first-uppercase">'+(data.Tipo_Modificacion ? ' '+data.Tipo_Modificacion : 'ninguna')+'</p>'+
+								'</div>';
+
+				if(data.Tipo_Modificacion)
+				{
+					html += '<div class="col-xs-12">'+
+								'<div class="alert '+(data.Tipo_Modificacion == 'terminado' ? 'alert-danger' : 'alert-warning')+' alert-dismissible" role="alert">'+
+									'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+									'<strong><span class="glyphicon glyphicon-alert"></span> Atención!</strong> <br /><br />'+
+										(data.Tipo_Modificacion == 'terminado' ? 
+											'Este contrato sera finalizado el dia <strong>'+data.Fecha_Terminacion_Modificada+'</strong> y tiene un saldo vigente por: <strong>'+data.Saldo_A_Favor+(data.Tipo_Pago != 'Mes' ? data.Tipo_Pago+' (s)' : ' Dia(s)')+'</strong>'
+											: 
+											'A este contrato se le han realizado suspenciones'
+										)+
+								'.</div>'+
 							'</div>';
+				}
+
+				html += '<div class="col-xs-12 col-md-6 form-group">'+
+							'<label for="">N°</label>'+
+							'<p class="form-control-static first-uppercase">'+data.Numero+'</p>'+
+						'</div>'+
+						'<div class="col-xs-12 col-md-6 form-group">'+
+							'<label for="">Estado</label>'+
+							'<p class="form-control-static first-uppercase">'+(data.Estado ? data.Estado : 'en proceso')+'</p>'+
+						'</div>'+
+						'<div class="col-xs-12 form-group">'+ //pendiente cargar saldos
+							'<label for="">Historial de pagos ('+data.saldos.length+')</label><br>'+
+							'<table class="table table-min table-bordered">'+
+								'<thead>'+
+									'<tr>'+
+										'<th width="7%">N°</th>'+
+										'<th width="30%">Fecha</th>'+
+										'<th width="30%">Planilla</th>'+
+										'<th width="33%">Valor</th>'+
+									'</tr>'+
+								'</thead>'+
+								'<tbody>';
+
+						html += '</tbody>'+
+							'</table>'+
+						'</div>'+
+						'<div class="col-xs-12 form-group">'+ //pendiente cargar suspenciones
+							'<label for="">Historial de suspenciones ('+data.suspenciones.length+')</label><br>'+
+							'<table class="table table-min table-bordered">'+
+								'<thead>'+
+									'<tr>'+
+										'<th width="7%">N°</th>'+
+										'<th width="30%">Fecha inicio</th>'+
+										'<th width="30%">Fecha fin</th>'+
+										'<th width="33%">Dias</th>'+
+									'</tr>'+
+								'</thead>'+
+								'<tbody>';
+								$.each(data.suspenciones, function(i, e){
+									html += '<tr>'+
+												'<td>'+(i+1)+'</td>'+
+												'<td>'+e.Fecha_Inicio+'</td>'+
+												'<td>'+e.Fecha_Terminacion+'</td>'+
+												'<td></td>'+
+											'</tr>';
+								});
+						html += '</tbody>'+
+							'</table>'+
+						'</div>'+
+					'</div>';
 
 				$('#modal_form_contrato').find('.modal-body').html(html);
 				$('#modal_form_contrato').attr('data-contrato', data.Id_Contrato);
