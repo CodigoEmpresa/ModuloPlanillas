@@ -23,7 +23,7 @@ class CrearTablaContratos extends Migration
             $table->date('Fecha_Terminacion_Modificada')->nullable();
             $table->enum('Tipo_Modificacion', ['terminado', 'suspendido'])->nullable();
             $table->enum('Terminado_Por', ['contratista', 'entidad', 'mutuo'])->nullable();
-            $table->bigInteger('Saldo_A_Favor')->nullable()->unsigned();
+            $table->integer('Saldo_A_Favor')->nullable()->unsigned();
             $table->bigInteger('Total_Contrato')->unsigned();
             $table->integer('Dias_Trabajados')->unsigned()->default(0);
             $table->enum('Tipo_Pago', ['Dia', 'Fecha', 'Mes']);

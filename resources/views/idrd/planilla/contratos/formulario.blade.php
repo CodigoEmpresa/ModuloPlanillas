@@ -291,8 +291,8 @@
 				    			<input type="text" class="form-control" name="Fecha_Terminacion_Modificada" data-role="datepicker" value="{{ $contrato && $contrato['Tipo_Modificacion']  == 'terminado' ? $contrato['Fecha_Terminacion_Modificada'] : old('Fecha_Terminacion_Modificada') }}">
 				    		</div>
 				    		<div class="col-xs-6 form-group">
-				    			<label for="Saldo_A_Favor">Saldo a favor</label>
-				    			<input type="text" name="Saldo_A_Favor" class="form-control" value="{{ $contrato ? $contrato['Saldo_A_Favor'] : old('Saldo_A_Favor') }}" placeholder="$" data-currency>
+				    			<label for="Saldo_A_Favor">Saldo a favor (dias ó fechas)</label>
+				    			<input type="text" name="Saldo_A_Favor" class="form-control" value="{{ $contrato ? $contrato['Saldo_A_Favor'] : old('Saldo_A_Favor') }}" data-number>
 				    		</div>
 				    	</div>
 				    </div>
