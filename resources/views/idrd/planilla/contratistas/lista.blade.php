@@ -216,8 +216,8 @@
 		      	</div>
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id_Contratista" value="0">
-	        		<button type="submit" class="btn btn-primary">Guardar</button>
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		<button type="submit" class="btn btn-primary">Guardar</button>
 	      		</div>
 	    	</div>
 		</form>

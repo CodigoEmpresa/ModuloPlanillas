@@ -315,7 +315,7 @@
 					@if($contrato)
 						<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
 					@endif
-					<a href="{{ Session::has('back') ? Session::get('back') : url('contratistas/'.$contratista['Id_Contratista'].'/contratos') }}" class="btn btn-default">Volver</a>
+					<a href="{{ Session::has('back') ? Session::get('back') : url('contratistas/'.$contratista['Id_Contratista'].'/contratos') }}" class="btn btn-default">Cerrar</a>
 				</div>
 			</div>
 			<div class="row">
@@ -414,9 +414,9 @@
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id" value="0">
 	      			<input type="hidden" name="Unique" value="">
-	        		<button type="button" id="guardar_rubro" class="btn btn-primary">Guardar</button>
-	        		<button type="button" id="eliminar_rubro" class="btn btn-danger oculto">Eliminar</button>
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		<button type="button" id="eliminar_rubro" class="btn btn-danger oculto">Eliminar</button>
+	        		<button type="button" id="guardar_rubro" class="btn btn-primary">Guardar</button>
 	      		</div>
 	    	</div>
     	</form>
@@ -454,9 +454,9 @@
 	  			<div class="modal-footer">
 	      			<input type="hidden" name="Id" value="0">
 	      			<input type="hidden" name="Unique" value="">
-					<button type="button" id="guardar_suspencion" class="btn btn-primary">Guardar</button>
-	        		<button type="button" id="eliminar_suspencion" class="btn btn-danger oculto">Eliminar</button>
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		<button type="button" id="eliminar_suspencion" class="btn btn-danger oculto">Eliminar</button>
+					<button type="button" id="guardar_suspencion" class="btn btn-primary">Guardar</button>
 	      		</div>
 	  		</div>
 		</form>

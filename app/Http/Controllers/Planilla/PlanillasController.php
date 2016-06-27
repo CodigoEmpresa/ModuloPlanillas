@@ -14,16 +14,20 @@ use App\Modulos\Planilla\Modelos\Rubro;
 use Illuminate\Http\Request;
 use Session;
 use Validator;
+use Idrd\Usuarios\Repo\PersonaInterface;
 
 class PlanillasController extends Controller
 {
 
 	protected $Usuario;
+	protected $repositorio_personas;
 
-	public function __construct()
+	public function __construct(PersonaInterface $repositorio_personas)
 	{
 		if (isset($_SESSION['Usuario']))
 			$this->Usuario = $_SESSION['Usuario'];
+
+		$this->repositorio_personas = $repositorio_personas;
 	}
 
     public function index(Request $request)
@@ -33,7 +37,11 @@ class PlanillasController extends Controller
 			$vector = urldecode($request->input('vector_modulo'));
 			$user_array = unserialize($vector);
 			$_SESSION['Usuario'] = $user_array;
-			$this->Usuario = $_SESSION['Usuario']; // [0]=> string(5) "71766" [1]=> string(1) "1" 
+
+			$persona = $this->repositorio_personas->obtener($_SESSION['Usuario'][0]);
+			$_SESSION['Usuario']['Persona'] = $persona;
+
+			$this->Usuario = $_SESSION['Usuario']; // [0]=> string(5) "71766" [1]=> string(1) "1"
 		} else {
 			if(!isset($_SESSION['Usuario']))
 				$_SESSION['Usuario'] = '';

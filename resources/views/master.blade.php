@@ -44,7 +44,6 @@
   </head>
 
   <body>
-      
        <!-- Menu Módulo -->
        <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -84,7 +83,14 @@
             
             <ul class="nav navbar-nav navbar-right">
               <li><a href="http://www.idrd.gov.co/sitio/idrd/" target="_blank">I.D.R.D</a></li>
-              <li><a href="{{ url('logout') }}">Cerrar Sesión</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $_SESSION['Usuario']['Persona']['Primer_Apellido'].' '.$_SESSION['Usuario']['Persona']['Primer_Nombre'] }}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                      <a href="{{ url('logout') }}">Cerrar sesión</a>
+                    </li>
+                </ul>
+              </li>
             </ul>
 
           </div>
