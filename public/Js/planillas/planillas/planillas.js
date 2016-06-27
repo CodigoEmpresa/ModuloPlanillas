@@ -22,6 +22,13 @@ $(function(){
 		$('select[name="Rubros[]"]').data('value', rubros);
 		$('input[name="Id_Planilla"]').val(data.Id_Planilla);
 		$('select[name="Id_Fuente"]').trigger('changed.bs.select');
+
+		if (data.Id_Planilla == 0)
+		{
+			$('#agregar_contratos_eliminados').hide();
+		} else {
+			$('#agregar_contratos_eliminados').show();
+		}
 	};
 
 	$('input[name="Desde"]').datepicker({

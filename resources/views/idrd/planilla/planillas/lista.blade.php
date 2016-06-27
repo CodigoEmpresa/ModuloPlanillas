@@ -132,6 +132,12 @@
 			    				
 			    			</select>
 			    		</div>
+			    		<div id="agregar_contratos_eliminados" class="col-xs-12 checkbox oculto">
+			    			<label class="text-muted">
+							    <input type="checkbox" name="agregar_contratos_eliminados" value="">
+							    Agregar contratos eliminados previamente.
+							</label>
+			    		</div>
 		      		</fieldset>
 		      	</div>
 	      		<div class="modal-footer">

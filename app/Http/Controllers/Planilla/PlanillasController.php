@@ -125,8 +125,9 @@ class PlanillasController extends Controller
 
 		$planilla->save();
 
-		// iniciar sincronizacion de rubros
-		$planilla->rubros()->sync($request->input('Rubros'));
+		// iniciar sincronizacion de rubros solo si es nuevo o se quiere editar una planilla y selecciona reindexar contratos
+		if ($id == 0 || $request->input('agregar_contratos_eliminados') !== null)
+			$planilla->rubros()->sync($request->input('Rubros'));
 
 		// iniciar sincronizacion de recursos
 		$recursos = Recurso::where('Id_Fuente', $request->input('Id_Fuente'))
