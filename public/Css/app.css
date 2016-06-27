@@ -31,13 +31,13 @@ table.table-planilla tr td.fixed
 
 table.table-planilla tr th.fixed.first:before,
 table.table-planilla tr td.fixed.first:before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 30px;
-    left: -30px;
-    top: 0;
-    background-color: #fff;
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 30px;
+  left: -30px;
+  top: 0;
+  background-color: #fff;
 }
 
 table.table-select tbody tr:hover {
@@ -54,11 +54,11 @@ td.input input {;
     		box-sizing: border-box;
 
 	width: 100%;
-    height: 100%;
-    line-height: 100%;
-    background-color: transparent;
-    border: none;
-    text-align: center;
+  height: 100%;
+  line-height: 100%;
+  background-color: transparent;
+  border: none;
+  text-align: center;
 }
 
 td.input input.currency {
@@ -82,6 +82,10 @@ div.separador {
 .important:read-only
 {
 	background-color: rgba(250,250,250,0.94) !important;
+}
+
+.expresion {
+  text-align: right !important;
 }
 
 .oculto {

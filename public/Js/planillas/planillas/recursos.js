@@ -74,6 +74,7 @@ $(function(){
 					'Retefuente': '',
 					'Retefuente_1607': '',
 					'Retefuente_384': '',
+					'Otros_Descuentos_Expresion': '',
 					'Otros_Descuentos': '',
 					'Otras_Bonificaciones': '',
 					'Cod_Retef': '',
@@ -125,7 +126,8 @@ $(function(){
 			var Retefuente = 0;
 			var Retefuente_1607 = 0;
 			var Retefuente_384 = 0;
-			var Otros_Descuentos = $input_otros_descuentos.inputmask('unmaskedvalue');
+			var Otros_Descuentos_Expresion = $input_otros_descuentos.data('expresion');
+			var Otros_Descuentos = $input_otros_descuentos.val();
 			var Cod_Retef = 0;
 			var Cod_Seven = 0;
 			var Total_Deducciones = 0;
@@ -271,6 +273,7 @@ $(function(){
 				recurso[0].Retefuente = Math.round(Retefuente);
 				recurso[0].Retefuente_1607 = Retefuente_1607;
 				recurso[0].Retefuente_384 = Retefuente_384;
+				recurso[0].Otros_Descuentos_Expresion = Otros_Descuentos_Expresion;
 				recurso[0].Otros_Descuentos = Otros_Descuentos;
 				recurso[0].Cod_Retef = Cod_Retef;
 				recurso[0].Cod_Seven = Cod_Seven;
@@ -303,18 +306,53 @@ $(function(){
 
 			actualizar_totales();
 		}
-
-
 	});
 
-	$("#recursos").tableHeadFixer({"head" : true, "left" : 4});
+	/*Otros descuentos formulación*/
+	$('input[name^="otros_descuentos_"]').on('blur', function(e)
+	{
+		var expresion = $(this).val();
+		var tr = $(this).closest('tr');
+
+		if (expresion != '')		
+		{
+			$(this).attr('data-expresion', expresion);
+			var scope = {
+	    		
+	    	}
+	    	try{
+	    		var expr = Parser.parse(expresion);
+	    		var ress = expr.evaluate(scope);
+	    		$(this).val(parseFloat(ress).toFixed(0));
+	    	} catch(err) {
+	    		$(this).val(0);
+	    	}
+		} else {
+			$(this).val(0);
+		}
+	}).on('focus', function(e)
+	{
+		var expresion = $(this).attr('data-expresion');
+
+		$(this).val(expresion);
+	}).on('keydown', function(e)
+	{
+		if(e.which === 13)
+		{
+			$(this).blur();
+			e.preventDefault();
+			return false;
+		}
+		
+	});
+
+	$('#recursos').tableHeadFixer({"head" : true, "left" : 4});
 
 	$('#formulario').on('submit', function(e)
 	{
 		$('input[name^="dias_"]').trigger('keyup');
 		$('input[name="_planilla"]').val(JSON.stringify(to_sync));
 	});
-
 
 	$('a[data-role="detail"]').on('click', function(e){
 		var tr = $(this).closest('tr');
@@ -428,4 +466,36 @@ $(function(){
 	});
 
 	$('input[name^="dias_"]').trigger('keyup');
+});
+
+//http://stackoverflow.com/questions/1009808/enter-key-press-behaves-like-a-tab-in-javascript}
+
+$(document).keydown(function(e) {
+
+  // Set self as the current item in focus
+  var self = $(':focus'),
+      // Set the form by the current item in focus
+      form = self.parents('form:eq(0)'),
+      focusable;
+
+  // Array of Indexable/Tab-able items
+  focusable = form.find('input,a,select,button,textarea,div[contenteditable=true]').filter(':visible').filter(':tabbable');
+
+  function enterKey(){
+    if (e.which === 13 && !self.is('textarea,div[contenteditable=true]')) { // [Enter] key
+
+      // If not a regular hyperlink/button/textarea
+      if ($.inArray(self, focusable) && (!self.is('a,button'))){
+        // Then prevent the default [Enter] key behaviour from submitting the form
+        e.preventDefault();
+      } // Otherwise follow the link/button as by design, or put new line in textarea
+
+      // Focus on the next item (either previous or next depending on shift)
+      focusable.eq(focusable.index(self) + (e.shiftKey ? -1 : 1)).focus();
+
+      return false;
+    }
+  }
+  // We need to capture the [Shift] key and check the [Enter] key either way.
+  if (e.shiftKey) { enterKey() } else { enterKey() }
 });

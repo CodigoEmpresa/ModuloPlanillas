@@ -71,6 +71,7 @@ class CrearTablaPlanillas extends Migration
             $table->integer('Retefuente')->unsigned()->nullable();
             $table->integer('Retefuente_1607')->unsigned()->nullable();
             $table->integer('Retefuente_384')->unsigned()->nullable();
+            $table->string('Otros_Descuentos_Expresion')->nullable();
             $table->integer('Otros_Descuentos')->unsigned()->nullable();
             $table->integer('Otras_Bonificaciones')->unsigned()->nullable();
             $table->integer('Cod_Retef')->unsigned()->nullable();

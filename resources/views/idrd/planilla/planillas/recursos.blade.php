@@ -169,6 +169,7 @@
 									$total_ica = $recurso->planillado['Total_ICA'];
 									$dist = $recurso->planillado['DIST'];
 									$retefuente = $recurso->planillado['Retefuente'];
+									$otros_descuentos_expresion = $recurso->planillado['Otros_Descuentos_Expresion'];
 									$otros_descuentos = $recurso->planillado['Otros_Descuentos'];
 									$total_deducciones = $recurso->planillado['Total_Deducciones'];
 									$declarante = $recurso->planillado['Declarante'];
@@ -196,7 +197,7 @@
 							?>
 							<tr data-role="contenedor_contrato" data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
 								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">
-									<a href="" data-role="detail"><span class="glyphicon glyphicon-info-sign"></span></a>
+									<a href="" data-role="detail" tabindex="-1"><span class="glyphicon glyphicon-info-sign"></span></a>
 								</td>
 								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
 								<td class="fixed vcenter uppercase" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
@@ -243,7 +244,7 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? number_format($hijos, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="AFC" align="right">
-									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" data-currency>
+									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" tabindex="-1" data-currency>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_384" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? number_format($ingreso_base_gravado_384, 0, '.', '.') : '--' }}</span>
@@ -279,13 +280,13 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? number_format($retefuente, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="Otros_Descuentos">
-									<input type="text" class="important currency readonly" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" data-currency>
+									<input type="text" class="important readonly expresion" data-expresion="{{ $otros_descuentos_expresion }}" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" tabindex="-1">
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_Deducciones" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? number_format($total_deducciones, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Declarante" align="center">
-									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}"  onclick="return false;" onkeydown="return false;" {{ $contrato->contratista['Declarante'] ? 'checked' : '' }}>
+									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}"  onclick="return false;" onkeydown="return false;" {{ $contrato->contratista['Declarante'] ? 'checked' : '' }} tabindex="-1">
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Neto_Pagar" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? number_format($neto_pagar, 0, '.', '.') : '--' }}</span>
