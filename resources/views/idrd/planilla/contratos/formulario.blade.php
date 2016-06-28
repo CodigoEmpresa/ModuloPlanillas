@@ -78,7 +78,7 @@
 				</div>
 				<div class="col-md-3 form-group">
 					<label for="Total_Ejecutado"> Total ejecutado</label>
-					<input type="text" name="Total_Ejecutado" value="{{ 0 }}" class="form-control" placeholder="$" data-currency readonly>
+					<input type="text" name="Total_Ejecutado" value="{{ $contrato ? $contrato->saldos()->sum('Total_Pagado') : 0 }}" class="form-control" placeholder="$" data-currency readonly>
 				</div>
 				<div class="col-md-3 form-group {{ $errors->has('Tipo_Pago') ? 'has-error' : '' }}">
 					<label for="Tipo_Pago">* Tipo de pago</label>
