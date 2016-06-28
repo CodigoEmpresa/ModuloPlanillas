@@ -21,9 +21,10 @@ class CrearTablaPlanillas extends Migration
             $table->string('Titulo')->nullable();
             $table->string('Colectiva')->nullable();
             $table->text('Descripcion')->nullable();
+            $table->text('Observaciones')->nullable();
             $table->date('Desde');
             $table->date('Hasta');
-            $table->enum('Estado', ['Pendiente', 'Procesada', 'Revisada', 'Reversada']);
+            $table->enum('Estado', ['1', '2', '3', '4']);
 
             $table->foreign('Id_Fuente')->references('Id_Fuente')->on('Fuentes')->onDelete('cascade');
 

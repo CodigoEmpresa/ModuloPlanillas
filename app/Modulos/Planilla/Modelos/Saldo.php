@@ -13,6 +13,7 @@ class Saldo extends Model
     protected $table = 'Saldos';
     protected $primaryKey = 'Id';
     protected $dates = ['deleted_at'];
+    protected $fillable = ['Id_Contrato', 'Fecha_Registro', 'Total_Pagado', 'operacion'];
 
     public function contrato()
     {

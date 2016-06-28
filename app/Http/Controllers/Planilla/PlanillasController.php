@@ -11,6 +11,7 @@ use App\Modulos\Planilla\Modelos\Contrato;
 use App\Modulos\Planilla\Modelos\Recurso;
 use App\Modulos\Planilla\Modelos\Fuente;
 use App\Modulos\Planilla\Modelos\Rubro;
+use App\Modulos\Planilla\Modelos\Saldo;
 use Illuminate\Http\Request;
 use Session;
 use Validator;
@@ -129,13 +130,15 @@ class PlanillasController extends Controller
        	$planilla['Descripcion'] = $request->input('Descripcion');
 		$planilla['Desde'] = $request->input('Desde');
 		$planilla['Hasta'] = $request->input('Hasta');
-		$planilla['Estado'] = 'Pendiente';
 
 		$planilla->save();
 
 		// iniciar sincronizacion de rubros solo si es nuevo o se quiere editar una planilla y selecciona reindexar contratos
 		if ($id == 0 || $request->input('agregar_contratos_eliminados') !== null)
+		{
+			$planilla['Estado'] = '1';
 			$planilla->rubros()->sync($request->input('Rubros'));
+		}
 
 		// iniciar sincronizacion de recursos
 		$recursos = Recurso::where('Id_Fuente', $request->input('Id_Fuente'))
@@ -267,7 +270,10 @@ class PlanillasController extends Controller
 	{
 		$config = config('planillas.'.date('Y'));
 		$planilla = Planilla::with('recursos')
-					->find($request->input('Id_Planilla'));
+						->find($request->input('Id_Planilla'));
+
+		$planilla->Estado = $request->input('Estado') != '' ? $request->input('Estado') : '1';
+		$planilla->save();
 
 		$recursos = json_decode($request->input('_planilla'));
 
@@ -310,7 +316,49 @@ class PlanillasController extends Controller
 		}
 
 		$planilla->recursos()->sync($to_sync);
-		$planilla->touch();		
+		$planilla->touch();
+
+		//obetener contratos para afectar saldos si es necesario
+		$recursos_actualizados = $planilla->recursos;
+		$contratos_en_recursos = [];
+		foreach ($recursos_actualizados as $recurso) 
+		{
+			if (!in_array($recurso['Id_Contrato'], $contratos_en_recursos))
+				$contratos_en_recursos[] = $recurso['Id_Contrato'];
+		}
+
+		switch ($planilla->Estado) {
+			case '1': //Edición
+			case '2': //Verificación
+					$planilla->saldos()->delete();
+				break;
+			case '3': //En ejecución
+					$saldos = [];
+					foreach ($contratos_en_recursos as $contrato) 
+					{
+						$Fecha_Registro = date('Y-m-d');
+						$Total_Pagado = 0;
+						$operacion = 'sumar';
+
+						foreach ($recursos_actualizados as $recurso)
+						{
+							if ($recurso['Id_Contrato'] == $contrato)
+								$Total_Pagado += $recurso->pivot['Total_Pagar'];
+						}
+
+						$saldo = new Saldo([
+							'Id_Contrato' => $contrato,
+							'Fecha_Registro' => $Fecha_Registro,
+							'Total_Pagado' => $Total_Pagado,
+							'operacion' => $operacion
+						]);
+
+						$planilla->saldos()->save($saldo);
+					}
+				break;
+			default:
+				break;
+		}
 
 		return redirect()->to('planillas/'.$planilla['Id_Planilla'].'/recursos')
 						->with('status', 'success');

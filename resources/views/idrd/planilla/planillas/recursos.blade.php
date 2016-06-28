@@ -14,6 +14,23 @@
 				<small class="text-muted">
 					Última modificación: {{ $planilla->updated_at->format('d/m/Y') }}
 				</small>
+				<?php
+					switch ($planilla->Estado) 
+					{
+						case '1':
+							echo '<small class="text-muted"> (En proceso de edición) </small>';
+							break;
+						case '2':
+							echo '<small class="text-warning"> (Pendiente de verificación) </small>';
+							break;
+						case '3':
+							echo '<small class="text-success"> (Lista para ejecución) </small>';
+							break;
+						default:
+							# code...
+							break;
+					}
+				?>
 			</h4>
 		</div>
 		@if($status == 'success')
@@ -358,6 +375,18 @@
 			</div>
 			<div class="col-xs-12">
 				<br>
+			</div>
+			<div class="col-xs-12 col-md-2 form-group">
+				<label for="estado">Estado</label>
+				<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+					<option value="">Seleccionar</option>
+					<option value="1">Edición</option>
+					<option value="2">Validación</option>
+					<option value="3">Ejecución</option>
+				</select>
+			</div>
+			<div class="col-xs-12">
+				<hr>
 			</div>
 			<div class="col-xs-12">
 				<input type="submit" class="btn btn-primary" value="Guardar">
