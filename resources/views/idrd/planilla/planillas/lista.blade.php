@@ -37,6 +37,23 @@
 						<small class="text-muted">
 							Última modificación: {{ $planilla->updated_at->format('d/m/Y') }}
 						</small>
+						<?php
+							switch ($planilla->Estado) 
+							{
+								case '1':
+									echo '<small class="text-muted"> (En proceso de edición) </small>';
+									break;
+								case '2':
+									echo '<small class="text-warning"> (En proceso de validación) </small>';
+									break;
+								case '3':
+									echo '<small class="text-success"> (Aprobada) </small>';
+									break;
+								default:
+									# code...
+									break;
+							}
+						?>
 						<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						</a>

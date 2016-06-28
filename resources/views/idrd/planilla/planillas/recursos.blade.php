@@ -21,10 +21,10 @@
 							echo '<small class="text-muted"> (En proceso de edición) </small>';
 							break;
 						case '2':
-							echo '<small class="text-warning"> (Pendiente de verificación) </small>';
+							echo '<small class="text-warning"> (En proceso de Validación) </small>';
 							break;
 						case '3':
-							echo '<small class="text-success"> (Lista para ejecución) </small>';
+							echo '<small class="text-success"> (Aprobada) </small>';
 							break;
 						default:
 							# code...
@@ -377,12 +377,12 @@
 				<br>
 			</div>
 			<div class="col-xs-12 col-md-2 form-group">
-				<label for="estado">Estado</label>
+				<label for="estado">Estado de la planilla: </label>
 				<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
 					<option value="">Seleccionar</option>
 					<option value="1">Edición</option>
 					<option value="2">Validación</option>
-					<option value="3">Ejecución</option>
+					<option value="3">Aprobada</option>
 				</select>
 			</div>
 			<div class="col-xs-12">
