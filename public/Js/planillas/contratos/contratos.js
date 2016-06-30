@@ -4,6 +4,24 @@ $(function()
 	var suspenciones = [];
 	var duracion = 0;
 
+	// actualizar totales
+	var actualizarTotales = function()
+	{
+		var total_valor_crp = 0;
+		var total_saldo_crp = 0;
+		var total_pago_mensual = 0;
+		$.each(rubros, function(i, e)
+		{
+			total_valor_crp += parseInt(e.Valor_CRP);
+			total_saldo_crp += parseInt(e.Saldo_CRP);
+			total_pago_mensual += parseInt(e.Pago_Mensual);
+		});
+
+		$('td[data-rel="total_valor_crp"] span[data-role="value"]').text(total_valor_crp == 0 ? '--' : accounting.formatNumber(total_valor_crp, 0, '.'));
+		$('td[data-rel="total_saldo_crp"] span[data-role="value"]').text(total_saldo_crp == 0 ? '--' : accounting.formatNumber(total_saldo_crp, 0, '.'));
+		$('td[data-rel="total_pago_mensual"] span[data-role="value"]').text(total_pago_mensual == 0 ? '--' : accounting.formatNumber(total_pago_mensual, 0, '.'));
+	}
+
 	// validacion modales 
 	var validarRubro = function(rubro)
 	{
@@ -125,8 +143,6 @@ $(function()
 
 	function popularModalSuspencion(suspencion)
 	{
-		console.log(suspencion);
-
 		$('#modal_form_suspencion .errores').fadeOut();
 		$('#modal_form_suspencion .form-group').removeClass('has-error');
 		$('#modal_form_suspencion input[name="Id"]').val(suspencion.Id);
@@ -208,8 +224,6 @@ $(function()
 			};
 			rubros.push(rubro);
 		});
-
-		console.log(rubros);
 	}
 
 	function popularSuspenciones()
@@ -224,8 +238,6 @@ $(function()
 			};
 			suspenciones.push(suspencion);
 		});
-
-		console.log(suspenciones);
 	}
 
 	// configuración de calendarios
@@ -410,6 +422,7 @@ $(function()
 	    	}
 
 			pintarRubros();
+			actualizarTotales();
 			$('#modal_form_rubro').modal('hide');
     	}
     });
@@ -482,5 +495,6 @@ $(function()
 
     popularRubros();
     popularSuspenciones();
+    actualizarTotales();
 
 });

@@ -23,6 +23,11 @@ class Recurso extends Model
     	return $this->belongsTo('App\Modulos\Planilla\Modelos\Rubro', 'Id_Rubro');
     }
 
+    public function saldos()
+    {
+        return $this->hasMany('App\Modulos\Planilla\Modelos\Saldo', 'Id_Recurso');
+    }
+
     public function fuente()
     {
     	return $this->belongsTo('App\Modulos\Planilla\Modelos\Fuente', 'Id_Fuente');

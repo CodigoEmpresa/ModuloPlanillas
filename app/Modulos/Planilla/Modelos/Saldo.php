@@ -13,11 +13,16 @@ class Saldo extends Model
     protected $table = 'Saldos';
     protected $primaryKey = 'Id';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['Id_Contrato', 'Fecha_Registro', 'Total_Pagado', 'operacion'];
+    protected $fillable = ['Id_Contrato', 'Id_Recurso', 'Fecha_Registro', 'Total_Pagado', 'operacion'];
 
     public function contrato()
     {
         return $this->balongsTo('App\Modulos\Planilla\Modelos\Contrato', 'Id_Contrato');
+    }
+
+    public function recurso()
+    {
+        return $this->belongsTo('App\Modulos\Planilla\Modelos\Recurso', 'Id_Recurso');
     }
 
     public function planilla()

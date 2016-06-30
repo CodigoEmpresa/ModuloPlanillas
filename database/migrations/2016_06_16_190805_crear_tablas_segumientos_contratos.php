@@ -27,14 +27,16 @@ class CrearTablasSegumientosContratos extends Migration
         Schema::create('Saldos', function($table)
         {
             $table->increments('Id');            
-            $table->integer('Id_Contrato')->unsigned();
             $table->integer('Id_Planilla')->unsigned();
+            $table->integer('Id_Contrato')->unsigned();
+            $table->integer('Id_Recurso')->unsigned();
             $table->date('Fecha_Registro')->nullable();
             $table->bigInteger('Total_Pagado')->unsigned();
             $table->enum('operacion', ['sumar', 'restar'])->nullable();
 
-            $table->foreign('Id_Contrato')->references('Id_Contrato')->on('Contratos')->onDelete('cascade');
             $table->foreign('Id_Planilla')->references('Id_Planilla')->on('Planillas')->onDelete('cascade');
+            $table->foreign('Id_Contrato')->references('Id_Contrato')->on('Contratos')->onDelete('cascade');
+            $table->foreign('Id_Recurso')->references('Id')->on('Recursos')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -49,8 +51,9 @@ class CrearTablasSegumientosContratos extends Migration
     {
         Schema::table('Saldos', function(Blueprint $table)
         {
-            $table->dropForeign(['Id_Planilla']);
+            $table->dropForeign(['Id_Recurso']);
             $table->dropForeign(['Id_Contrato']);
+            $table->dropForeign(['Id_Planilla']);
         });
 
         Schema::table('Suspenciones', function(Blueprint $table)

@@ -113,11 +113,16 @@
     					{
     						foreach ($temp as $r) 
     						{
+    							$saldos = 0;
+
+    							if($r->saldos)
+    								$saldos = $r->saldos()->sum('Total_Pagado');
+    							
     							$r_temp = [];
     							$r_temp['Id'] = $r['Id'];
     							$r_temp['Numero_Registro'] = $r['Numero_Registro'];
     							$r_temp['Valor_CRP'] = $r['Valor_CRP'];
-    							$r_temp['Saldo_CRP'] = $r['Saldo_CRP'];
+    							$r_temp['Saldo_CRP'] = $r['Saldo_CRP'] - $saldos;
     							$r_temp['Expresion'] = $r['Expresion'];
     							$r_temp['Pago_Mensual'] = $r['Pago_Mensual'];
     							$r_temp['Fuente'] = [
@@ -175,8 +180,14 @@
 		    			</thead>
 		    			<tbody>
 		    				@if(is_array($recursos_contrato))
+		    					<?php $total_valor_crp = $total_saldo_crp = $total_pago_mensual = 0 ?>
 		    					@foreach($recursos_contrato as $recurso)
-		    						<?php $i++; ?>
+		    						<?php 
+		    							$total_valor_crp += $recurso['Valor_CRP'];
+		    							$total_saldo_crp += $recurso['Saldo_CRP'];
+		    							$total_pago_mensual += $recurso['Pago_Mensual'];
+		    							$i++; 
+		    						?>
 		    						<tr data-temp-id="{{ $recurso['Id'] }}" data-expresion="{{ $recurso['Expresion'] }}" data-unique="{{ $i }}">
 										<td data-rel="Numero_Registro" data-val="{{ $recurso['Numero_Registro'] }}">{{ $recurso['Numero_Registro'] }}</td>
 										<td data-rel="Id_Fuente" data-val="{{ $recurso['Fuente']['Id_Fuente'] }}">{{ $recurso['Fuente']['Nombre'] }}</td>
@@ -189,6 +200,25 @@
 		    					@endforeach
 		    				@endif
 		    			</tbody>
+		    			<tfoot>
+		    				<tr>
+		    					<td colspan="4" align="right">
+		    						<strong>Total</strong>
+		    					</td>
+		    					<td data-rel="total_valor_crp" align="right">
+		    						<span class="pull-left">$</span>
+		    						<span data-role="value"></span>
+		    					</td>
+		    					<td data-rel="total_saldo_crp" align="right">
+		    						<span class="pull-left">$</span>
+		    						<span data-role="value"></span>
+		    					</td>
+		    					<td data-rel="total_pago_mensual" align="right">
+		    						<span class="pull-left">$</span>
+		    						<span data-role="value"></span>
+		    					</td>
+		    				</tr>
+		    			</tfoot>
 		    		</table>
 	    		</div>
 	    	</div>

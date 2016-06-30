@@ -272,6 +272,8 @@ class PlanillasController extends Controller
 		$planilla = Planilla::with('recursos')
 						->find($request->input('Id_Planilla'));
 
+		$estado_anterior = $planilla->Estado;
+
 		$planilla->Estado = $request->input('Estado') != '' ? $request->input('Estado') : '1';
 		$planilla->save();
 
@@ -337,23 +339,24 @@ class PlanillasController extends Controller
 					foreach ($contratos_en_recursos as $contrato) 
 					{
 						$Fecha_Registro = date('Y-m-d');
-						$Total_Pagado = 0;
 						$operacion = 'sumar';
 
 						foreach ($recursos_actualizados as $recurso)
 						{
 							if ($recurso['Id_Contrato'] == $contrato)
-								$Total_Pagado += $recurso->pivot['Total_Pagar'];
+							{
+								$saldo = new Saldo([
+									'Id_Contrato' => $contrato,
+									'Id_Recurso' => $recurso['Id'],
+									'Fecha_Registro' => $Fecha_Registro,
+									'Total_Pagado' => $recurso->pivot['Total_Pagar'],
+									'operacion' => $operacion
+								]);
+
+								$planilla->saldos()->save($saldo);
+							}
 						}
 
-						$saldo = new Saldo([
-							'Id_Contrato' => $contrato,
-							'Fecha_Registro' => $Fecha_Registro,
-							'Total_Pagado' => $Total_Pagado,
-							'operacion' => $operacion
-						]);
-
-						$planilla->saldos()->save($saldo);
 					}
 				break;
 			default:

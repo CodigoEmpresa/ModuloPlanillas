@@ -146,7 +146,7 @@ class ContratosController extends Controller{
     {
         $contratista = Contratista::with('tipoDocumento')->find($Id_Contratista);
         $contrato = Contrato::find($Id_Contrato);
-        $recursos = Recurso::with('rubro', 'fuente', 'componente')->where('Id_Contrato', $Id_Contrato)->get();
+        $recursos = Recurso::with('rubro', 'fuente', 'saldos', 'componente')->where('Id_Contrato', $Id_Contrato)->get();
         $fuentes = Fuente::all();
         $rubros = Rubro::all();
         $componentes = Componente::all();
