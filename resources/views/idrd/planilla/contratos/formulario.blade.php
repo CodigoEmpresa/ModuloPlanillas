@@ -122,7 +122,8 @@
     							$r_temp['Id'] = $r['Id'];
     							$r_temp['Numero_Registro'] = $r['Numero_Registro'];
     							$r_temp['Valor_CRP'] = $r['Valor_CRP'];
-    							$r_temp['Saldo_CRP'] = $r['Saldo_CRP'] - $saldos;
+    							$r_temp['Saldo_CRP'] = $r['Saldo_CRP'];
+    							$r_temp['Saldo_Acumulado'] = $saldos;
     							$r_temp['Expresion'] = $r['Expresion'];
     							$r_temp['Pago_Mensual'] = $r['Pago_Mensual'];
     							$r_temp['Fuente'] = [
@@ -147,6 +148,7 @@
     							$r_temp['Numero_Registro'] = $r->Numero_Registro;
     							$r_temp['Valor_CRP'] = $r->Valor_CRP;
     							$r_temp['Saldo_CRP'] = $r->Saldo_CRP;
+    							$r_temp['Saldo_Acumulado'] = 0;
     							$r_temp['Expresion'] = $r->Expresion;
     							$r_temp['Pago_Mensual'] = $r->Pago_Mensual;
     							$r_temp['Fuente'] = [
@@ -194,7 +196,7 @@
 										<td data-rel="Id_Rubro" data-val="{{ $recurso['Rubro']['Id_Rubro'] }}">{{ $recurso['Rubro']['Nombre'] }}</td>
 										<td data-rel="Id_Componente" data-val="{{ $recurso['Componente']['Id_Componente'] }}">{{ $recurso['Componente']['Nombre'] }}</td>
 										<td data-rel="Valor_CRP" data-val="{{ $recurso['Valor_CRP'] }}" align="right"><span class="pull-left">$</span>{{ number_format($recurso['Valor_CRP'], 0, '', '.') }}</td>
-										<td data-rel="Saldo_CRP" data-val="{{ $recurso['Saldo_CRP'] }}" align="right"><span class="pull-left">$</span>{{ number_format($recurso['Saldo_CRP'], 0, '', '.') }}</td>
+										<td data-rel="Saldo_CRP" data-val="{{ $recurso['Saldo_CRP'] }}" data-acumulado={{ $recurso['Saldo_Acumulado'] }} align="right"><span class="pull-left">$</span>{{ number_format($recurso['Saldo_CRP'] - $recurso['Saldo_Acumulado'], 0, '', '.') }}</td>
 										<td data-rel="Pago_Mensual" data-val="{{ $recurso['Pago_Mensual'] }}" align="right"><span class="pull-left">$</span>{{ number_format($recurso['Pago_Mensual'], 0, '', '.') }}</td>
 									</tr>
 		    					@endforeach
@@ -428,12 +430,17 @@
 			    			<input type="text" class="form-control" value="" name="Valor_CRP" placeholder="$" data-number data-currency>
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
+			    			<label for="Expresion">Expresión (ej crp/12)</label>
+			    			<input type="text" class="form-control" value="" id="Expresion" name="Expresion" placeholder="=">
+			    		</div>
+			    		<div class="col-xs-12 col-md-6 form-group">
 			    			<label for="Saldo_CRP">Saldo CRP</label>
 			    			<input type="text" class="form-control" value="" name="Saldo_CRP" placeholder="$" data-number data-currency>
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
-			    			<label for="Expresion">Expresión (ej crp/12)</label>
-			    			<input type="text" class="form-control" value="" id="Expresion" name="Expresion" placeholder="=">
+			    			<label for="Saldo_Calculado">Saldo calculado:</label>
+			    			<br>
+			    			<p class="form-control-static" data-role="Saldo_Calculado"><span>$</span><span data-role="value"></span></p>
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
 			    			<label for="Pago_Mensual">Pago mensual</label>

@@ -13,7 +13,7 @@ $(function()
 		$.each(rubros, function(i, e)
 		{
 			total_valor_crp += parseInt(e.Valor_CRP);
-			total_saldo_crp += parseInt(e.Saldo_CRP);
+			total_saldo_crp += parseInt(e.Saldo_CRP - e.Saldo_Acumulado);
 			total_pago_mensual += parseInt(e.Pago_Mensual);
 		});
 
@@ -127,6 +127,7 @@ $(function()
 		$('#modal_form_rubro input[name="Numero_Registro"]').val(rubro.Numero_Registro);
 		$('#modal_form_rubro input[name="Valor_CRP"]').val(rubro.Valor_CRP);
 		$('#modal_form_rubro input[name="Saldo_CRP"]').val(rubro.Saldo_CRP);
+		$('#modal_form_rubro p[data-role="Saldo_Calculado"] span[data-role="value"]').text(accounting.formatNumber(rubro.Saldo_CRP - rubro.Saldo_Acumulado, 0, '.'));
 		$('#modal_form_rubro input[name="Expresion"]').val(rubro.Expresion);
 		$('#modal_form_rubro input[name="Pago_Mensual"]').val(rubro.Pago_Mensual);
 		$('#modal_form_rubro select[name="Fuente"]').selectpicker('val', rubro.Fuente.id);
@@ -172,7 +173,7 @@ $(function()
 					'<td data-rel="Id_Rubro" data-val="'+e.Rubro.id+'">'+e.Rubro.valor+'</td>'+
 					'<td data-rel="Id_Componente" data-val="'+e.Componente.id+'">'+e.Componente.valor+'</td>'+
 					'<td data-rel="Valor_CRP" data-val="'+e.Valor_CRP+'" align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Valor_CRP, 0, '.')+'</td>'+
-					'<td data-rel="Saldo_CRP" data-val="'+e.Saldo_CRP+'" align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Saldo_CRP, 0, '.')+'</td>'+
+					'<td data-rel="Saldo_CRP" data-val="'+e.Saldo_CRP+'" data-acumulado="'+e.Saldo_Acumulado+'" align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Saldo_CRP - e.Saldo_Acumulado, 0, '.')+'</td>'+
 					'<td data-rel="Pago_Mensual" data-val="'+e.Pago_Mensual+'" align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Pago_Mensual, 0, '.')+'</td>'+
 				'</tr>'
 			);
@@ -219,6 +220,7 @@ $(function()
 				},
 				"Valor_CRP": tr.find('td[data-rel="Valor_CRP"]').data('val'),
 				"Saldo_CRP": tr.find('td[data-rel="Saldo_CRP"]').data('val'),
+				"Saldo_Acumulado": tr.find('td[data-rel="Saldo_CRP"]').data('acumulado'),
 				"Expresion": tr.data('expresion'),
 				"Pago_Mensual": tr.find('td[data-rel="Pago_Mensual"]').data('val')
 			};
@@ -337,6 +339,7 @@ $(function()
 			},
 			"Valor_CRP": '',
 			"Saldo_CRP": '',
+			"Saldo_Acumulado": 0,
 			"Expresion": '',
 			"Pago_Mensual": ''
     	};
@@ -401,6 +404,7 @@ $(function()
 			},
 			"Valor_CRP": $('#modal_form_rubro input[name="Valor_CRP"]').inputmask('unmaskedvalue'),
 			"Saldo_CRP": $('#modal_form_rubro input[name="Saldo_CRP"]').inputmask('unmaskedvalue'),
+			"Saldo_Acumulado": 0,
 			"Expresion": $('#modal_form_rubro input[name="Expresion"]').val(),
 			"Pago_Mensual": $('#modal_form_rubro input[name="Pago_Mensual"]').inputmask('unmaskedvalue')
     	};
@@ -470,6 +474,7 @@ $(function()
     	rubros = temp;
 
 		pintarRubros();
+		actualizarTotales();
 		$('#modal_form_rubro').modal('hide');
     });
 
