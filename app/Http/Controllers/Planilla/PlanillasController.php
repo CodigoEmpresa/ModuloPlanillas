@@ -184,7 +184,7 @@ class PlanillasController extends Controller
 
 		foreach ($contratos as $key => $contrato) 
 		{
-			$recursos_contratos = Recurso::with('rubro', 'fuente', 'componente')
+			$recursos_contratos = Recurso::with('rubro', 'saldos', 'fuente', 'componente')
 										->whereIn('Id', $recursos->lists('Id'))
 										->where('Id_Contrato', $contrato['Id_Contrato'])
 										->get();
@@ -230,6 +230,8 @@ class PlanillasController extends Controller
 					'Declarante' => $temp->pivot['Declarante'],
 					'Neto_Pagar' => $temp->pivot['Neto_Pagar']
 				];
+
+				$recursos_contratos[$key_2]['saldo'] = $recurso_2->saldos()->sum('Total_Pagado');
 			}
 
 			$contratos[$key]['recursos'] = $recursos_contratos;
