@@ -405,8 +405,24 @@ $(function(){
 									'</tr>'+
 								'</thead>'+
 								'<tbody>';
-
+								var total_saldos = 0;
+								$.each(data.saldos, function(i, e)
+								{
+									total_saldos += e.Total_Pagado;
+									html += '<tr>'+
+												'<td>'+(i+1)+'</td>'+
+												'<td>'+e.Fecha_Registro+'</td>'+
+												'<td>'+e.planilla['Titulo']+'</td>'+
+												'<td align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Total_Pagado, 0, '.')+'</td>'+
+											'</tr>';
+								});
 						html += '</tbody>'+
+								'<tfoot>'+
+									'<tr>'+
+										'<td colspan="3">Total</td>'+
+										'<td align="right"><span class="pull-left">$</span>'+accounting.formatNumber(total_saldos, 0, '.')+'</td>'+
+									'</tr>'+
+								'</tfoot>'+
 							'</table>'+
 						'</div>'+
 						'<div class="col-xs-12 form-group">'+ //pendiente cargar suspenciones
@@ -421,15 +437,26 @@ $(function(){
 									'</tr>'+
 								'</thead>'+
 								'<tbody>';
-								$.each(data.suspenciones, function(i, e){
+								var total_dias = 0;
+								$.each(data.suspenciones, function(i, e)
+								{
+									var Fecha_Inicio = moment(e.Fecha_Inicio);
+									var Fecha_Terminacion = moment(e.Fecha_Terminacion);
+									total_dias += Fecha_Terminacion.diff(Fecha_Inicio, 'days');
 									html += '<tr>'+
 												'<td>'+(i+1)+'</td>'+
 												'<td>'+e.Fecha_Inicio+'</td>'+
 												'<td>'+e.Fecha_Terminacion+'</td>'+
-												'<td></td>'+
+												'<td align="right">'+Fecha_Terminacion.diff(Fecha_Inicio, 'days')+'</td>'+
 											'</tr>';
 								});
 						html += '</tbody>'+
+								'<tfoot>'+
+									'<tr>'+
+										'<td colspan="3">Total</td>'+
+										'<td align="right">'+total_dias+'</td>'+
+									'</tr>'+
+								'</tfoot>'+
 							'</table>'+
 						'</div>'+
 					'</div>';
