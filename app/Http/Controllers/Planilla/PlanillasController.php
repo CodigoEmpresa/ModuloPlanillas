@@ -331,24 +331,26 @@ class PlanillasController extends Controller
 				$contratos_en_recursos[] = $recurso['Id_Contrato'];
 		}
 
-		switch ($planilla->Estado) {
+		switch ($planilla->Estado) 
+		{
 			case '1': //Edición
 			case '2': //Verificación
 					$planilla->saldos()->delete();
 				break;
 			case '3': //En ejecución
 					$saldos = [];
-					foreach ($contratos_en_recursos as $contrato) 
+					$planilla->saldos()->delete();
+					foreach ($contratos_en_recursos as $id_contrato) 
 					{
 						$Fecha_Registro = date('Y-m-d');
 						$operacion = 'sumar';
 
 						foreach ($recursos_actualizados as $recurso)
 						{
-							if ($recurso['Id_Contrato'] == $contrato)
+							if ($recurso['Id_Contrato'] == $id_contrato)
 							{
 								$saldo = new Saldo([
-									'Id_Contrato' => $contrato,
+									'Id_Contrato' => $id_contrato,
 									'Id_Recurso' => $recurso['Id'],
 									'Fecha_Registro' => $Fecha_Registro,
 									'Total_Pagado' => $recurso->pivot['Total_Pagar'],
@@ -358,11 +360,37 @@ class PlanillasController extends Controller
 								$planilla->saldos()->save($saldo);
 							}
 						}
-
 					}
 				break;
 			default:
 				break;
+		}
+
+		//finalizar contratos ejecutados...
+		foreach ($contratos_en_recursos as $id_contrato) 
+		{
+			$contrato = Contrato::with('saldos')->find($id_contrato);
+			$total_saldo = $contrato->saldos()->sum('Total_Pagado');
+			echo $contrato->Tipo_Modificacion.' '.$contrato->saldos()->sum('Total_Pagado').' '.$planilla->Estado.' '.$contrato->Total_Contrato.'<br>';
+			switch ($planilla->Estado) {
+				case '1': //Edición
+				case '2': //Verificación
+						$contrato->Estado = 'pendiente';
+					break;
+				case '3': //En ejecución
+						if ($contrato->Tipo_Modificacion == 'terminado')
+						$contrato->Estado = 'finalizado';
+					break;
+				default:
+					break;
+			}
+
+			if ($total_saldo >= $contrato->Total_Contrato)
+			{
+				$contrato->Estado = 'finalizado';
+			}
+
+			$contrato->save();
 		}
 
 		return redirect()->to('planillas/'.$planilla['Id_Planilla'].'/recursos')
