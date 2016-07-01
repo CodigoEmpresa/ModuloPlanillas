@@ -343,9 +343,11 @@
 					<input type="hidden" name="_suspenciones" value="{{ old('_suspenciones') }}">
 					<input type="hidden" name="Id_Contrato" value="{{ $contrato ? $contrato['Id_Contrato'] : 0 }}">
 					<input type="hidden" name="Id_Contratista" value="{{ $contratista['Id_Contratista'] }}">
-					<input type="submit" class="btn btn-primary" value="Guardar">
-					@if($contrato)
-						<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
+					@if(!$contrato || ($contrato && $contrato->Estado != 'finalizado'))
+						<input type="submit" class="btn btn-primary" value="Guardar">
+						@if($contrato)
+							<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
+						@endif
 					@endif
 					<a href="{{ Session::has('back') ? Session::get('back') : url('contratistas/'.$contratista['Id_Contratista'].'/contratos') }}" class="btn btn-default">Cerrar</a>
 				</div>
