@@ -371,7 +371,6 @@ class PlanillasController extends Controller
 		{
 			$contrato = Contrato::with('saldos')->find($id_contrato);
 			$total_saldo = $contrato->saldos()->sum('Total_Pagado');
-			echo $contrato->Tipo_Modificacion.' '.$contrato->saldos()->sum('Total_Pagado').' '.$planilla->Estado.' '.$contrato->Total_Contrato.'<br>';
 			switch ($planilla->Estado) {
 				case '1': //Edición
 				case '2': //Verificación
