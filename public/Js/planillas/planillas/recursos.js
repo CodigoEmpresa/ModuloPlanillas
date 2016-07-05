@@ -6,6 +6,7 @@ $(function(){
 	var TABLA_1607 =  $.makeArray($.parseJSON($('input[name="tabla_1607"]').val()));
 	var TABLA_384 =  $.makeArray($.parseJSON($('input[name="tabla_384"]').val()));
 	var BASE = SM * 100 / 40;
+	var URL = $('#main_list').data('url');
 	var URL_CONTRATOs = $('#main_list').data('url-contratos');
 
 	var actualizar_resumenes = function()
@@ -508,7 +509,7 @@ $(function(){
 									html += '<tr>'+
 												'<td>'+(i+1)+'</td>'+
 												'<td>'+e.Fecha_Registro+'</td>'+
-												'<td>'+e.planilla['Titulo']+'</td>'+
+												'<td> <a href="'+URL+'/'+e.planilla['Id_Planilla']+'/recursos">'+e.planilla['Titulo']+'</a></td>'+
 												'<td align="right"><span class="pull-left">$</span>'+accounting.formatNumber(e.Total_Pagado, 0, '.')+'</td>'+
 											'</tr>';
 								});

@@ -246,8 +246,7 @@
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
-   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado ? 'readonly' : '' }} >
-   								</td>
+   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado ? 'readonly' : '' }} ></td>
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
 								</td>
@@ -270,8 +269,7 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? number_format($hijos, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="AFC" align="right">
-									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" tabindex="-1" data-currency>
-								</td>
+									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" tabindex="-1" data-currency></td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_384" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? number_format($ingreso_base_gravado_384, 0, '.', '.') : '--' }}</span>
 								</td>
@@ -306,8 +304,7 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? number_format($retefuente, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="Otros_Descuentos">
-									<input type="text" class="important readonly expresion" data-expresion="{{ $otros_descuentos_expresion }}" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" tabindex="-1">
-								</td>
+									<input type="text" class="important readonly expresion" data-expresion="{{ $otros_descuentos_expresion }}" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" tabindex="-1"></td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_Deducciones" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? number_format($total_deducciones, 0, '.', '.') : '--' }}</span>
 								</td>
