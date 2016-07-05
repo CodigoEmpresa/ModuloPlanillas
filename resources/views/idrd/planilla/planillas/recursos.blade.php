@@ -53,6 +53,15 @@
 			    </div>
 			</div>
 		@endif
+		<?php
+			$rubros = '';
+			foreach ($planilla->rubros as $rubro) 
+			{
+				$rubros .= $rubro['Codigo'].',';
+			}
+
+			$rubros = substr($rubros, 0, -1);
+		?>
 		<div class="col-xs-12">
 			<p class="list-group-item-text">
 				<div class="row">
@@ -63,7 +72,7 @@
 							<strong>Fuente</strong><br>
 							{{ $planilla->fuente['Codigo'].' '.$planilla->fuente['Nombre'] }} <br><br>
 							<strong>Rubros</strong><br>
-							@foreach($planilla->rubros as $rubro) {{ $rubro['Codigo'].', '}}  @endforeach
+							<span id="rubros">{{ $rubros }}</span>
 						</small>
 					</div>
 					<div class="col-xs-6" style="padding-left:24px;">
@@ -122,7 +131,7 @@
 							<th width="120">Valor CRP</th>
 							<th width="120">Saldo CRP</th>
 							<th width="120">Pago Mensual</th>
-							<th width="120">Dias trabajados</th>
+							<th width="190">Dias trabajados</th>
 							<th width="120">Total a pagar</th>
 							<th width="120">CON. V.C. A UVT</th>
 							<th width="120">Pago EPS</th>
@@ -210,9 +219,9 @@
 								$total_retefuente += $retefuente;
 								$total_general_deducciones += $total_deducciones;
 								$total_neto_pagar += $neto_pagar;
-								$recursos = substr($recursos, 0, strlen($recursos)-1);
+								$recursos = substr($recursos, 0, -1);
 							?>
-							<tr data-role="contenedor_contrato" data-contrato="{{ $contrato['Id_Contrato'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
+							<tr data-role="contenedor_contrato" data-contrato="{{ $contrato['Id_Contrato'] }}" data-banco="{{ $contrato->contratista->banco['Codigo'] }}" data-recursos="{{ $recursos }}" data-variables="{{ $contrato->contratista['Medicina_Prepagada'].','.$contrato->contratista['Hijos'].','.$contrato->contratista['Medicina_Prepagada_Cantidad'] }}">
 								<td class="fixed first vcenter" rowspan="{{ $rowspan }}" align="center">
 									<a href="" data-role="detail" tabindex="-1"><span class="glyphicon glyphicon-info-sign"></span></a>
 								</td>
@@ -233,7 +242,7 @@
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[0]['Saldo_CRP'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Saldo_CRP'] - $contrato->recursos[0]['saldo'], 0, '.', '.') }}
 								</td>
-								<td class="vcenter"  data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
@@ -311,57 +320,139 @@
 							</tr>
 							@if($rowspan > 1)
 								@for($j=1; $j<count($contrato->recursos); $j++)
-									<tr data-contrato="{{ $contrato['Id_Contrato'] }}">
+									<tr data-contrato="{{ $contrato['Id_Contrato'] }}" data-banco="{{ $contrato->contratista->banco['Codigo'] }}">
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[$j]->rubro['Codigo'], -3) }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[$j]['Numero_Registro'] }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[$j]['Valor_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Valor_CRP'], 0, '.', '.') }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[$j]['Saldo_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Saldo_CRP'] - $contrato->recursos[$j]['saldo'], 0, '.', '.') }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[$j]['Pago_Mensual'] }}" width="120" align="right"> <span class="pull-left">$</span>{{ number_format($contrato->recursos[$j]['Pago_Mensual'], 0, '.', '.') }}</td>
-										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right"><span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[$j]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span></td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-rubro="{{ $contrato->recursos[$j]->rubro['Codigo'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right"><span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[$j]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span></td>
 									</tr>
 								@endfor
 							@endif
 						@endforeach
 					</tbody>
 					<tfoot>
-						<td class="fixed first"></td>
-						<td class="fixed"></td>
-						<td class="fixed"></td>
-						<td class="fixed"></td>
-						<td colspan="11">
-						</td>
-						<td>
-							<strong>Subtotal</strong>
-						</td>
-						<td align="right" data-role="total_pagar">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_pagar > 0 ? number_format($total_pagar, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td colspan="13">
-							
-						</td>
-						<td align="right" data-role="total_pcul">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_pcul > 0 ? number_format($total_pcul, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td align="right" data-role="total_ppm">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_ppm > 0 ? number_format($total_ppm, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td align="right" data-role="total_general_ica">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_general_ica > 0 ? number_format($total_general_ica, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td align="right" data-role="total_dist">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_dist > 0 ? number_format($total_dist, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td align="right" data-role="total_retefuente">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_retefuente > 0 ? number_format($total_retefuente, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td></td>
-						<td align="right" data-role="total_general_deducciones">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_general_deducciones > 0 ? number_format($total_general_deducciones, 0, '.', '.') : '--' }}</span>
-						</td>
-						<td></td>
-						<td align="right" data-role="total_neto_pagar">
-							<span class="pull-left">$</span><span data-role="value">{{ $total_neto_pagar > 0 ? number_format($total_neto_pagar, 0, '.', '.') : '--' }}</span>
-						</td>
+						<tr>
+							<td class="fixed first"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td colspan="11">
+							</td>
+							<td>
+								<strong>SUB TOTAL OTROS BANCOS</strong>
+							</td>
+							<td align="right" data-role="otr_total_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td colspan="13">
+								
+							</td>
+							<td align="right" data-role="otr_total_pcul">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="otr_total_ppm">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="otr_total_general_ica">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="otr_total_dist">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="otr_total_retefuente">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="otr_total_general_deducciones">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="otr_total_neto_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="fixed first"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td colspan="11">
+							</td>
+							<td>
+								<strong>SUB TOTAL DAVIVIENDA</strong>
+							</td>
+							<td align="right" data-role="dav_total_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td colspan="13">
+								
+							</td>
+							<td align="right" data-role="dav_total_pcul">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="dav_total_ppm">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="dav_total_general_ica">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="dav_total_dist">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="dav_total_retefuente">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="dav_total_general_deducciones">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="dav_total_neto_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="fixed first"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td colspan="11">
+							</td>
+							<td>
+								<strong>TOTAL F.F.</strong>
+							</td>
+							<td align="right" data-role="total_pagar">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_pagar > 0 ? number_format($total_pagar, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td colspan="13">
+								
+							</td>
+							<td align="right" data-role="total_pcul">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_pcul > 0 ? number_format($total_pcul, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td align="right" data-role="total_ppm">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_ppm > 0 ? number_format($total_ppm, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td align="right" data-role="total_general_ica">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_general_ica > 0 ? number_format($total_general_ica, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td align="right" data-role="total_dist">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_dist > 0 ? number_format($total_dist, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td align="right" data-role="total_retefuente">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_retefuente > 0 ? number_format($total_retefuente, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="total_general_deducciones">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_general_deducciones > 0 ? number_format($total_general_deducciones, 0, '.', '.') : '--' }}</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="total_neto_pagar">
+								<span class="pull-left">$</span><span data-role="value">{{ $total_neto_pagar > 0 ? number_format($total_neto_pagar, 0, '.', '.') : '--' }}</span>
+							</td>
+						</tr>
 					</tfoot>
 				</table>
 				<input type="hidden" name="_method" value="POST">
@@ -372,6 +463,120 @@
 				<input type="hidden" name="sm" value="{{ $config['sm'] }}">
 				<input type="hidden" name="tabla_1607" value="{{ json_encode($config['tabla_1607']) }}">
 				<input type="hidden" name="tabla_384" value="{{ json_encode($config['tabla_384']) }}">
+			</div>
+			<div class="col-xs-12">
+				<br>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<table id="resumen_1" class="table table-min table-bordered" style="width: 392px">
+					<thead>
+						<tr>
+							<th width="50%">RUBRO</th>
+							<th>TOTAL</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($planilla->rubros as $rubro) 
+							<tr data-rubro="{{ $rubro['Codigo'] }}">
+								<td>{{ $rubro['Codigo'] }}</td>
+								<td align="right">
+									<span class="pull-left">$</span>
+									<span data-role="value">0</span>
+								</td>
+							</tr>
+						@endforeach
+						<tr>
+							<td><strong>TOTAL RUBROS</strong></td>
+							<td align="right">
+								<span class="pull-left">$</span>
+								<span data-role="total_rubros">0</span>
+							</td>
+						</tr>
+					</tbody>
+					<thead>
+						<tr>
+							<th>FUENTE</th>
+							<th>TOTAL</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ $planilla->fuente['Codigo'] }}</td>
+							<td align="right">
+								<span class="pull-left">$</span>
+								<span data-role="total_rubros">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>TOTAL FUENTES</strong></td>
+							<td align="right">
+								<span class="pull-left">$</span>
+								<span data-role="total_rubros">0</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<table id="resumen_2" class="table table-min table-bordered" style="width: 392px">
+					<thead>
+						<tr>
+							<th width="50%">DESCUENTOS</th>
+							<th>VALOR</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>EST. PROCULTURA 0,5%</td>
+							<td align="right" data-role="total_pcul">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td>ESTIM. PRO PERS. MAY. 0,5%</td>
+							<td align="right" data-role="total_ppm">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td>0.966% ICA</td>
+							<td align="right" data-role="total_general_ica">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td>1% APORTE DISTRITAL</td>
+							<td align="right" data-role="total_dist">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td>RETEFUENTE</td>
+							<td align="right" data-role="total_retefuente">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td>OTROS DESCUENTOS</td>
+							<td align="right" data-role="total_general_deducciones">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>TOTAL</strong></td>
+							<td align="right" data-role="total_descuentos">
+								<span class="pull-left">$</span>
+								<span data-role="value">0</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<div class="col-xs-12">
 				<br>

@@ -46,6 +46,11 @@ $(function(){
       );
   });
 
+  $('td.input').each(function(i, e){
+    var parentHeight = $(this).height();
+    $(e).find('input').height(parentHeight);
+  });
+
   $('input[type="text"][data-currency]').inputmask({ alias: "currency", groupSeparator:".", radixPoint:",", removeMaskOnSubmit: true});
 
   $('select').each(function(i, e)

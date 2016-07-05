@@ -284,7 +284,6 @@ class PlanillasController extends Controller
 		$to_sync = [];
 		foreach ($recursos as $recurso)
 		{
-
 			$to_sync[$recurso->Id] = [
 				'Dias_Trabajados' => $recurso->Dias_Trabajados,
 				'Total_Pagar' => $recurso->Total_Pagar,

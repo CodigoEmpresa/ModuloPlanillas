@@ -8,6 +8,28 @@ $(function(){
 	var BASE = SM * 100 / 40;
 	var URL_CONTRATOs = $('#main_list').data('url-contratos');
 
+	var actualizar_resumenes = function()
+	{
+		var temp = $('#rubros').text();
+		var rubros = temp.split(',');
+		var total = 0;
+
+		//total rubros
+		$.each(rubros, function(i, e)
+		{
+			var sub_total = 0;
+			$('#recursos tbody td[data-role="Total_Pagar"][data-rubro="'+e+'"]').each(function(ir, er)
+			{
+				sub_total += parseInt($(er).attr('data-value'));
+			});
+
+			total += sub_total;
+			$('#resumen_1 tr[data-rubro="'+e+'"] span[data-role="value"]').text(sub_total == 0 ? '--' : accounting.formatNumber(sub_total, 0, '.'));
+		});
+
+		$('#resumen_1 span[data-role="total_rubros"]').text(total == 0 ? '--' : accounting.formatNumber(total, 0, '.'));
+	}
+
 	var actualizar_totales = function()
 	{
 		var total_pagar = 0;
@@ -18,19 +40,87 @@ $(function(){
 		var total_retefuente = 0;
 		var total_general_deducciones = 0;
 		var total_neto_pagar = 0;
+		var total_descuentos = 0;
 
-		$.each(to_sync, function(i, e){
-			total_pagar += e.Total_Pagar;
-			total_pcul += e.PCUL;
-			total_ppm += e.PPM;
-			total_general_ica += e.Total_ICA;
-			total_dist += e.DIST;
-			total_retefuente += e.Retefuente;
-			total_general_deducciones += e.Total_Deducciones;
-			total_neto_pagar += e.Neto_Pagar;
+		var totales = {
+			'otros_bancos': {
+				'total_pagar': 0,
+				'total_pcul': 0,
+				'total_ppm': 0,
+				'total_general_ica': 0,
+				'total_dist': 0,
+				'total_retefuente': 0,
+				'total_general_deducciones': 0,
+				'total_neto_pagar': 0,
+				'total_descuentos': 0
+			},
+			'davivienda': {
+				'total_pagar': 0,
+				'total_pcul': 0,
+				'total_ppm': 0,
+				'total_general_ica': 0,
+				'total_dist': 0,
+				'total_retefuente': 0,
+				'total_general_deducciones': 0,
+				'total_neto_pagar': 0,
+				'total_descuentos': 0
+			}
+		};
+
+		$.each(to_sync, function(i, e)
+		{
+			if(e.Banco == '51')
+			{
+				totales.davivienda.total_pagar += e.Total_Pagar;
+				totales.davivienda.total_pcul += e.PCUL;
+				totales.davivienda.total_ppm += e.PPM;
+				totales.davivienda.total_general_ica += e.Total_ICA;
+				totales.davivienda.total_dist += e.DIST;
+				totales.davivienda.total_retefuente += e.Retefuente;
+				totales.davivienda.total_general_deducciones += e.Total_Deducciones;
+				totales.davivienda.total_neto_pagar += e.Neto_Pagar;
+			} else {
+				totales.otros_bancos.total_pagar += e.Total_Pagar;
+				totales.otros_bancos.total_pcul += e.PCUL;
+				totales.otros_bancos.total_ppm += e.PPM;
+				totales.otros_bancos.total_general_ica += e.Total_ICA;
+				totales.otros_bancos.total_dist += e.DIST;
+				totales.otros_bancos.total_retefuente += e.Retefuente;
+				totales.otros_bancos.total_general_deducciones += e.Total_Deducciones;
+				totales.otros_bancos.total_neto_pagar += e.Neto_Pagar;
+			}
 		});
 
-		$('td[data-role="total_pagar"] span[data-role="value"]').text(total_pagar == 0 ? '--' : accounting.formatNumber(total_pagar, 0, '.'));
+		total_pagar = totales.davivienda.total_pagar + totales.otros_bancos.total_pagar;
+		total_pcul = totales.davivienda.total_pcul + totales.otros_bancos.total_pcul;
+		total_ppm = totales.davivienda.total_ppm + totales.otros_bancos.total_ppm;
+		total_general_ica = totales.davivienda.total_general_ica + totales.otros_bancos.total_general_ica;
+		total_dist = totales.davivienda.total_dist + totales.otros_bancos.total_dist;
+		total_retefuente = totales.davivienda.total_retefuente + totales.otros_bancos.total_retefuente;
+		total_general_deducciones = totales.davivienda.total_general_deducciones + totales.otros_bancos.total_general_deducciones;
+		total_neto_pagar = totales.davivienda.total_neto_pagar + totales.otros_bancos.total_neto_pagar;
+
+		total_descuentos = total_pcul + total_ppm + total_general_ica + total_dist + total_retefuente + total_general_deducciones;
+
+		$('td[data-role="otr_total_pagar"] span[data-role="value"]').text(totales.otros_bancos.total_pagar == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_pagar, 0, '.'));
+		$('td[data-role="otr_total_pcul"] span[data-role="value"]').text(totales.otros_bancos.total_pcul == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_pcul, 0, '.'));
+		$('td[data-role="otr_total_ppm"] span[data-role="value"]').text(totales.otros_bancos.total_ppm == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_ppm, 0, '.'));
+		$('td[data-role="otr_total_general_ica"] span[data-role="value"]').text(totales.otros_bancos.total_general_ica == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_general_ica, 0, '.'));
+		$('td[data-role="otr_total_dist"] span[data-role="value"]').text(totales.otros_bancos.total_dist == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_dist, 0, '.'));
+		$('td[data-role="otr_total_retefuente"] span[data-role="value"]').text(totales.otros_bancos.total_retefuente == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_retefuente, 0, '.'));
+		$('td[data-role="otr_total_general_deducciones"] span[data-role="value"]').text(totales.otros_bancos.total_general_deducciones == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_general_deducciones, 0, '.'));
+		$('td[data-role="otr_total_neto_pagar"] span[data-role="value"]').text(totales.otros_bancos.total_neto_pagar == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_neto_pagar, 0, '.'));
+		$('td[data-role="otr_total_descuentos"] span[data-role="value"]').text(totales.otros_bancos.total_descuentos == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_descuentos, 0, '.'));
+
+		$('td[data-role="dav_total_pagar"] span[data-role="value"]').text(totales.davivienda.total_pagar == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_pagar, 0, '.'));
+		$('td[data-role="dav_total_pcul"] span[data-role="value"]').text(totales.davivienda.total_pcul == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_pcul, 0, '.'));
+		$('td[data-role="dav_total_ppm"] span[data-role="value"]').text(totales.davivienda.total_ppm == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_ppm, 0, '.'));
+		$('td[data-role="dav_total_general_ica"] span[data-role="value"]').text(totales.davivienda.total_general_ica == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_general_ica, 0, '.'));
+		$('td[data-role="dav_total_dist"] span[data-role="value"]').text(totales.davivienda.total_dist == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_dist, 0, '.'));
+		$('td[data-role="dav_total_retefuente"] span[data-role="value"]').text(totales.davivienda.total_retefuente == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_retefuente, 0, '.'));
+		$('td[data-role="dav_total_general_deducciones"] span[data-role="value"]').text(totales.davivienda.total_general_deducciones == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_general_deducciones, 0, '.'));
+		$('td[data-role="dav_total_neto_pagar"] span[data-role="value"]').text(totales.davivienda.total_neto_pagar == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_neto_pagar, 0, '.'));
+		$('td[data-role="dav_total_descuentos"] span[data-role="value"]').text(totales.davivienda.total_descuentos == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_descuentos, 0, '.'));
 
 		$('td[data-role="total_pagar"] span[data-role="value"]').text(total_pagar == 0 ? '--' : accounting.formatNumber(total_pagar, 0, '.'));
 		$('td[data-role="total_pcul"] span[data-role="value"]').text(total_pcul == 0 ? '--' : accounting.formatNumber(total_pcul, 0, '.'));
@@ -40,6 +130,9 @@ $(function(){
 		$('td[data-role="total_retefuente"] span[data-role="value"]').text(total_retefuente == 0 ? '--' : accounting.formatNumber(total_retefuente, 0, '.'));
 		$('td[data-role="total_general_deducciones"] span[data-role="value"]').text(total_general_deducciones == 0 ? '--' : accounting.formatNumber(total_general_deducciones, 0, '.'));
 		$('td[data-role="total_neto_pagar"] span[data-role="value"]').text(total_neto_pagar == 0 ? '--' : accounting.formatNumber(total_neto_pagar, 0, '.'));
+		$('td[data-role="total_descuentos"] span[data-role="value"]').text(total_descuentos == 0 ? '--' : accounting.formatNumber(total_descuentos, 0, '.'));
+
+		actualizar_resumenes();
 	}
 
 	$('#recursos tbody tr').each(function(i, e)
@@ -81,7 +174,8 @@ $(function(){
 					'Cod_Seven': '',
 					'Total_Deducciones': '',
 					'Declarante': '',
-					'Neto_Pagar': ''
+					'Neto_Pagar': '',
+					'Banco': '',
 				});
 			}
 		});
@@ -97,6 +191,7 @@ $(function(){
 		var recursos = (tr.data('recursos')+'').split(',');
 		var variables = (tr.data('variables')+'').split(',');
 		var total_medicina_prepagada = variables[2];
+		var banco = tr.data('banco');
 		var dias = parseInt($input_dias.val());
 
 		if($.isNumeric(dias))
@@ -280,6 +375,7 @@ $(function(){
 				recurso[0].Total_Deducciones = Total_Deducciones;
 				recurso[0].Declarante = Declarante;
 				recurso[0].Neto_Pagar = Neto_Pagar;
+				recurso[0].Banco = banco;
 			});
 
 			tr.find('td[data-role="UVT"] span[data-role="value"]').text(accounting.formatNumber(Con_VC_UVT, 2, ','));
