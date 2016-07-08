@@ -166,55 +166,9 @@ $(function(){
 		actualizar_resumenes();
 	}
 
-	$('#recursos tbody tr').each(function(i, e)
+	var calcular_totales_contratos = function(t, e)
 	{
-		var recursos = ($(e).data('recursos')+'').split(',');
-		
-		$.each(recursos, function(i, e)
-		{
-			if (e != "undefined")
-			{
-				to_sync.push({
-					'Id': e,
-					'Dias_Trabajados': '',
-					'Total_Pagar': '',
-					'Con_VC_UVT': '',
-					'EPS': '',
-					'Pension': '',
-					'ARL': '',
-					'Medicina_Prepagada': '',
-					'Hijos': '',
-					'AFC': '',
-					'Ingreso_Base_Gravado_384': '',
-					'Ingreso_Base_Gravado_1607': '',
-					'Ingreso_Base_Gravado_25': '',
-					'Base_UVR_Ley_1607': '',
-					'Base_UVR_Art_384': '',
-					'Base_ICA': '',
-					'PCUL': '',
-					'PPM': '',
-					'Total_ICA': '',
-					'DIST': '',
-					'Retefuente': '',
-					'Retefuente_1607': '',
-					'Retefuente_384': '',
-					'Otros_Descuentos_Expresion': '',
-					'Otros_Descuentos': '',
-					'Otras_Bonificaciones': '',
-					'Cod_Retef': '',
-					'Cod_Seven': '',
-					'Total_Deducciones': '',
-					'Declarante': '',
-					'Neto_Pagar': '',
-					'Banco': '',
-				});
-			}
-		});
-	});
-
-	$('input[name^="dias_"], input[name^="afc_"]').on('keyup', function(e)
-	{
-		var tr = $(this).closest('tr');
+		var tr = t.closest('tr');
 		var $input_dias = tr.find('input[name^="dias_"]');
 		var $input_afc = tr.find('input[name^="afc_"]');
 		var $input_otros_descuentos = tr.find('input[name^="otros_descuentos_"]');
@@ -261,7 +215,7 @@ $(function(){
 			var Neto_Pagar = 0;
 
 			AFC = AFC == null ? 0 : parseInt(AFC);
-			Otros_Descuentos = Otros_Descuentos == null ? 0 : parseInt(Otros_Descuentos);
+			Otros_Descuentos = Otros_Descuentos == null || Otros_Descuentos == '' ? 0 : parseInt(Otros_Descuentos);
 
 			// calculo por recursos.
 			$.each(recursos, function(i, e)
@@ -352,7 +306,7 @@ $(function(){
 			Retefuente = Math.max(Retefuente_1607, Retefuente_384);
 
 			Total_Deducciones = PCUL + PPM + Total_ICA + DIST + Retefuente;
-			Neto_Pagar = Total_Pagar - Total_Deducciones;
+			Neto_Pagar = Total_Pagar - Total_Deducciones - Otros_Descuentos;
 
 			if(Base_UVR_Ley_1607 > 95 && Base_UVR_Ley_1607 < 150.01)
 				Cod_Retef = 24360517;
@@ -433,6 +387,57 @@ $(function(){
 
 			actualizar_totales();
 		}
+	}
+
+	$('#recursos tbody tr').each(function(i, e)
+	{
+		var recursos = ($(e).data('recursos')+'').split(',');
+		
+		$.each(recursos, function(i, e)
+		{
+			if (e != "undefined")
+			{
+				to_sync.push({
+					'Id': e,
+					'Dias_Trabajados': '',
+					'Total_Pagar': '',
+					'Con_VC_UVT': '',
+					'EPS': '',
+					'Pension': '',
+					'ARL': '',
+					'Medicina_Prepagada': '',
+					'Hijos': '',
+					'AFC': '',
+					'Ingreso_Base_Gravado_384': '',
+					'Ingreso_Base_Gravado_1607': '',
+					'Ingreso_Base_Gravado_25': '',
+					'Base_UVR_Ley_1607': '',
+					'Base_UVR_Art_384': '',
+					'Base_ICA': '',
+					'PCUL': '',
+					'PPM': '',
+					'Total_ICA': '',
+					'DIST': '',
+					'Retefuente': '',
+					'Retefuente_1607': '',
+					'Retefuente_384': '',
+					'Otros_Descuentos_Expresion': '',
+					'Otros_Descuentos': '',
+					'Otras_Bonificaciones': '',
+					'Cod_Retef': '',
+					'Cod_Seven': '',
+					'Total_Deducciones': '',
+					'Declarante': '',
+					'Neto_Pagar': '',
+					'Banco': '',
+				});
+			}
+		});
+	});
+
+	$('input[name^="dias_"], input[name^="afc_"]').on('keyup', function(e)
+	{
+		calcular_totales_contratos($(this), e);
 	});
 
 	/*Otros descuentos formulación*/
@@ -454,6 +459,9 @@ $(function(){
 	    	} catch(err) {
 	    		$(this).val(0);
 	    	}
+
+			calcular_totales_contratos($(this), e);
+
 		} else {
 			$(this).val(0);
 		}
