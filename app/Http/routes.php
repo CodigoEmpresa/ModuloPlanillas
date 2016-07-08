@@ -23,6 +23,7 @@ Route::any('/', 'Planilla\PlanillasController@index');
 Route::any('/logout', 'Planilla\PlanillasController@logout');
 
 Route::group(['middleware' => ['web']], function () {
+	Route::get('/welcome', 'Planilla\PlanillasController@welcome');
 	Route::get('/planillas', 'Planilla\PlanillasController@planillas');
 	Route::get('/planillas/service/obtener/{Id_Planilla}', 'Planilla\PlanillasController@obtener');
 	Route::get('/planillas/service/rubros/{Id_Fuente}', 'Planilla\PlanillasController@rubrosFuentes');

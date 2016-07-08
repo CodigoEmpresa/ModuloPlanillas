@@ -48,7 +48,7 @@
        <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
-            <a href="#" class="navbar-brand">SIM</a>
+            <a href="{{ url('/welcome') }}" class="navbar-brand">SIM</a>
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -57,25 +57,92 @@
           </div>
           <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
+              @if(
+                $_SESSION['Usuario']['Permisos']['crear_planillas'] ||
+                $_SESSION['Usuario']['Permisos']['editar_planillas'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_planillas'] ||
+                $_SESSION['Usuario']['Permisos']['revisar_planillas']
+              )
               <li class="{{ $seccion && $seccion == 'Planillas' ? 'active' : '' }}">
                 <a href="{{ url('planillas') }}">Planillas de pago</a>
               </li>
+              @endif
+              @if(
+                $_SESSION['Usuario']['Permisos']['crear_contratos'] ||
+                $_SESSION['Usuario']['Permisos']['editar_contratos'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_contratos'] ||
+                $_SESSION['Usuario']['Permisos']['crear_contratistas'] ||
+                $_SESSION['Usuario']['Permisos']['editar_contratistas'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_contratistas']
+              )
               <li class="dropdown {{ $seccion && ($seccion == 'Contratistas' || $seccion == 'Contratos') ? 'active' : '' }}">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Contratación <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="themes">
-                  <li class="{{ $seccion && $seccion == 'Contratos' ? 'active' : '' }}"><a href="{{ url('contratos') }}">Contratos</a></li>
-                  <li class="{{ $seccion && $seccion == 'Contratistas' ? 'active' : '' }}"><a href="{{ url('contratistas') }}">Contratistas</a></li>
+                  @if(
+                    $_SESSION['Usuario']['Permisos']['crear_contratos'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_contratos'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_contratos']
+                  )
+                    <li class="{{ $seccion && $seccion == 'Contratos' ? 'active' : '' }}"><a href="{{ url('contratos') }}">Contratos</a></li>
+                  @endif
+                  @if(
+                    $_SESSION['Usuario']['Permisos']['crear_contratistas'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_contratistas'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_contratistas']  
+                  )
+                    <li class="{{ $seccion && $seccion == 'Contratistas' ? 'active' : '' }}"><a href="{{ url('contratistas') }}">Contratistas</a></li>
+                  @endif
                 </ul>
               </li>
+              @endif
+              @if (
+                $_SESSION['Usuario']['Permisos']['crear_bancos'] ||
+                $_SESSION['Usuario']['Permisos']['editar_bancos'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_bancos'] ||
+                $_SESSION['Usuario']['Permisos']['crear_fuentes'] ||
+                $_SESSION['Usuario']['Permisos']['editar_fuentes'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_fuentes'] ||
+                $_SESSION['Usuario']['Permisos']['crear_rubros'] ||
+                $_SESSION['Usuario']['Permisos']['editar_rubros'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_rubros'] ||
+                $_SESSION['Usuario']['Permisos']['crear_componentes'] ||
+                $_SESSION['Usuario']['Permisos']['editar_componentes'] ||
+                $_SESSION['Usuario']['Permisos']['eliminar_componentes']
+              )
               <li class="dropdown {{ $seccion && ($seccion == 'Bancos' || $seccion == 'Fuentes' || $seccion == 'Rubros' || $seccion == 'Componentes') ? 'active' : '' }}">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="download">Parametros <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="download">
-                  <li class="{{ $seccion && $seccion == 'Bancos' ? 'active' : '' }}"><a href="{{ url('bancos') }}">Bancos</a></li>
-                  <li class="{{ $seccion && $seccion == 'Fuentes' ? 'active' : '' }}"><a href="{{ url('fuentes') }}">Fuentes</a></li>
-                  <li class="{{ $seccion && $seccion == 'Rubros' ? 'active' : '' }}"><a href="{{ url('rubros') }}">Rubros</a></li>
-                  <li class="{{ $seccion && $seccion == 'Componentes' ? 'active' : '' }}"><a href="{{ url('componentes') }}">Componentes</a></li>
+                  @if (
+                    $_SESSION['Usuario']['Permisos']['crear_bancos'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_bancos'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_bancos']
+                  )
+                    <li class="{{ $seccion && $seccion == 'Bancos' ? 'active' : '' }}"><a href="{{ url('bancos') }}">Bancos</a></li>
+                  @endif
+                  @if (
+                    $_SESSION['Usuario']['Permisos']['crear_fuentes'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_fuentes'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_fuentes']
+                  )
+                    <li class="{{ $seccion && $seccion == 'Fuentes' ? 'active' : '' }}"><a href="{{ url('fuentes') }}">Fuentes</a></li>
+                  @endif
+                  @if (
+                    $_SESSION['Usuario']['Permisos']['crear_rubros'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_rubros'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_rubros']
+                  )
+                    <li class="{{ $seccion && $seccion == 'Rubros' ? 'active' : '' }}"><a href="{{ url('rubros') }}">Rubros</a></li>
+                  @endif
+                  @if (
+                    $_SESSION['Usuario']['Permisos']['crear_componentes'] ||
+                    $_SESSION['Usuario']['Permisos']['editar_componentes'] ||
+                    $_SESSION['Usuario']['Permisos']['eliminar_componentes']
+                  )
+                    <li class="{{ $seccion && $seccion == 'Componentes' ? 'active' : '' }}"><a href="{{ url('componentes') }}">Componentes</a></li>
+                  @endif
                 </ul>
               </li>
+              @endif
               <li class="{{ $seccion && $seccion == 'Personas' ? 'active' : '' }}">
                 <a href="{{ url('personas') }}">Administración</a>
               </li>

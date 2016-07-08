@@ -37,11 +37,39 @@ class PlanillasController extends Controller
 		{	
 			$vector = urldecode($request->input('vector_modulo'));
 			$user_array = unserialize($vector);
+			$permissions_array = $user_array;
+			array_splice($permissions_array, 1, 1);
+
+			$permisos = [
+				'crear_bancos' => intval($permissions_array[0]),
+				'editar_bancos' => intval($permissions_array[1]),
+				'eliminar_bancos' => intval($permissions_array[2]),
+				'crear_fuentes' => intval($permissions_array[3]),
+				'editar_fuentes' => intval($permissions_array[4]),
+				'eliminar_fuentes' => intval($permissions_array[5]),
+				'crear_rubros' => intval($permissions_array[6]),
+				'editar_rubros' => intval($permissions_array[7]),
+				'eliminar_rubros' => intval($permissions_array[8]),
+				'crear_componentes' => intval($permissions_array[9]),
+				'editar_componentes' => intval($permissions_array[10]),
+				'eliminar_componentes' => intval($permissions_array[11]),
+				'crear_contratos' => intval($permissions_array[12]),
+				'editar_contratos' => intval($permissions_array[13]),
+				'eliminar_contratos' => intval($permissions_array[14]),
+				'crear_contratistas' => intval($permissions_array[15]),
+				'editar_contratistas' => intval($permissions_array[16]),
+				'eliminar_contratistas' => intval($permissions_array[17]),
+				'crear_planillas' => intval($permissions_array[18]),
+				'editar_planillas' => intval($permissions_array[19]),
+				'eliminar_planillas' => intval($permissions_array[20]),
+				'revisar_planillas' => intval($permissions_array[21])
+			];
+
 			$_SESSION['Usuario'] = $user_array;
-
 			$persona = $this->repositorio_personas->obtener($_SESSION['Usuario'][0]);
-			$_SESSION['Usuario']['Persona'] = $persona;
 
+			$_SESSION['Usuario']['Persona'] = $persona;
+			$_SESSION['Usuario']['Permisos'] = $permisos;
 			$this->Usuario = $_SESSION['Usuario']; // [0]=> string(5) "71766" [1]=> string(1) "1"
 		} else {
 			if(!isset($_SESSION['Usuario']))
@@ -51,7 +79,13 @@ class PlanillasController extends Controller
 		if ($_SESSION['Usuario'] == '')
 			return redirect()->away('http://www.idrd.gov.co/SIM/Presentacion/');
 
-		return redirect('/planillas');
+		return redirect('/welcome');
+	}
+
+	public function welcome()
+	{
+		$data['seccion'] = '';
+		return view('welcome', $data);
 	}
 
 	public function planillas()
