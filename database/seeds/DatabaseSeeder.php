@@ -162,6 +162,9 @@ class Bancos extends Seeder
 			],[
 				'Codigo' => '66',
 				'Nombre' => 'BANCO COOPERATIVO COOPCENTRAL'
+			],[
+				'Codigo' => '00',
+				'Nombre' => 'PAGO CON CHEQUE'
 			]
 		]);
 	}

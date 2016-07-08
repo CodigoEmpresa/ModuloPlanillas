@@ -247,7 +247,7 @@
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
    									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado ? 'readonly' : '' }} ></td>
-								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-rubro="{{ $contrato->recursos[0]->rubro['Codigo'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="UVT" align="right">
@@ -367,6 +367,46 @@
 							</td>
 							<td></td>
 							<td align="right" data-role="otr_total_neto_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="fixed first"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td class="fixed"></td>
+							<td colspan="11">
+							</td>
+							<td>
+								<strong>SUB TOTAL CHEQUES</strong>
+							</td>
+							<td align="right" data-role="che_total_pagar">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td colspan="13">
+								
+							</td>
+							<td align="right" data-role="che_total_pcul">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="che_total_ppm">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="che_total_general_ica">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="che_total_dist">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td align="right" data-role="che_total_retefuente">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="che_total_general_deducciones">
+								<span class="pull-left">$</span><span data-role="value">--</span>
+							</td>
+							<td></td>
+							<td align="right" data-role="che_total_neto_pagar">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
 						</tr>

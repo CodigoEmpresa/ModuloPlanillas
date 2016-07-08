@@ -21,7 +21,7 @@ $(function(){
 			var sub_total = 0;
 			$('#recursos tbody td[data-role="Total_Pagar"][data-rubro="'+e+'"]').each(function(ir, er)
 			{
-				sub_total += parseInt($(er).attr('data-value'));
+				sub_total += parseInt($(er).attr('data-value') == '' ? 0 : $(er).attr('data-value'));
 			});
 
 			total += sub_total;
@@ -45,6 +45,17 @@ $(function(){
 
 		var totales = {
 			'otros_bancos': {
+				'total_pagar': 0,
+				'total_pcul': 0,
+				'total_ppm': 0,
+				'total_general_ica': 0,
+				'total_dist': 0,
+				'total_retefuente': 0,
+				'total_general_deducciones': 0,
+				'total_neto_pagar': 0,
+				'total_descuentos': 0
+			},
+			'cheques': {
 				'total_pagar': 0,
 				'total_pcul': 0,
 				'total_ppm': 0,
@@ -80,6 +91,15 @@ $(function(){
 				totales.davivienda.total_retefuente += e.Retefuente;
 				totales.davivienda.total_general_deducciones += e.Total_Deducciones;
 				totales.davivienda.total_neto_pagar += e.Neto_Pagar;
+			} else if(e.Banco == '00') {
+				totales.cheques.total_pagar += e.Total_Pagar;
+				totales.cheques.total_pcul += e.PCUL;
+				totales.cheques.total_ppm += e.PPM;
+				totales.cheques.total_general_ica += e.Total_ICA;
+				totales.cheques.total_dist += e.DIST;
+				totales.cheques.total_retefuente += e.Retefuente;
+				totales.cheques.total_general_deducciones += e.Total_Deducciones;
+				totales.cheques.total_neto_pagar += e.Neto_Pagar;
 			} else {
 				totales.otros_bancos.total_pagar += e.Total_Pagar;
 				totales.otros_bancos.total_pcul += e.PCUL;
@@ -92,14 +112,14 @@ $(function(){
 			}
 		});
 
-		total_pagar = totales.davivienda.total_pagar + totales.otros_bancos.total_pagar;
-		total_pcul = totales.davivienda.total_pcul + totales.otros_bancos.total_pcul;
-		total_ppm = totales.davivienda.total_ppm + totales.otros_bancos.total_ppm;
-		total_general_ica = totales.davivienda.total_general_ica + totales.otros_bancos.total_general_ica;
-		total_dist = totales.davivienda.total_dist + totales.otros_bancos.total_dist;
-		total_retefuente = totales.davivienda.total_retefuente + totales.otros_bancos.total_retefuente;
-		total_general_deducciones = totales.davivienda.total_general_deducciones + totales.otros_bancos.total_general_deducciones;
-		total_neto_pagar = totales.davivienda.total_neto_pagar + totales.otros_bancos.total_neto_pagar;
+		total_pagar = totales.davivienda.total_pagar + totales.cheques.total_pagar + totales.otros_bancos.total_pagar;
+		total_pcul = totales.davivienda.total_pcul + totales.cheques.total_pcul + totales.otros_bancos.total_pcul;
+		total_ppm = totales.davivienda.total_ppm + totales.cheques.total_ppm + totales.otros_bancos.total_ppm;
+		total_general_ica = totales.davivienda.total_general_ica + totales.cheques.total_general_ica + totales.otros_bancos.total_general_ica;
+		total_dist = totales.davivienda.total_dist + totales.cheques.total_dist + totales.otros_bancos.total_dist;
+		total_retefuente = totales.davivienda.total_retefuente + totales.cheques.total_retefuente + totales.otros_bancos.total_retefuente;
+		total_general_deducciones = totales.davivienda.total_general_deducciones + totales.cheques.total_general_deducciones + totales.otros_bancos.total_general_deducciones;
+		total_neto_pagar = totales.davivienda.total_neto_pagar + totales.cheques.total_neto_pagar + totales.otros_bancos.total_neto_pagar;
 
 		total_descuentos = total_pcul + total_ppm + total_general_ica + total_dist + total_retefuente + total_general_deducciones;
 
@@ -112,6 +132,16 @@ $(function(){
 		$('td[data-role="otr_total_general_deducciones"] span[data-role="value"]').text(totales.otros_bancos.total_general_deducciones == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_general_deducciones, 0, '.'));
 		$('td[data-role="otr_total_neto_pagar"] span[data-role="value"]').text(totales.otros_bancos.total_neto_pagar == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_neto_pagar, 0, '.'));
 		$('td[data-role="otr_total_descuentos"] span[data-role="value"]').text(totales.otros_bancos.total_descuentos == 0 ? '--' : accounting.formatNumber(totales.otros_bancos.total_descuentos, 0, '.'));
+
+		$('td[data-role="che_total_pagar"] span[data-role="value"]').text(totales.cheques.total_pagar == 0 ? '--' : accounting.formatNumber(totales.cheques.total_pagar, 0, '.'));
+		$('td[data-role="che_total_pcul"] span[data-role="value"]').text(totales.cheques.total_pcul == 0 ? '--' : accounting.formatNumber(totales.cheques.total_pcul, 0, '.'));
+		$('td[data-role="che_total_ppm"] span[data-role="value"]').text(totales.cheques.total_ppm == 0 ? '--' : accounting.formatNumber(totales.cheques.total_ppm, 0, '.'));
+		$('td[data-role="che_total_general_ica"] span[data-role="value"]').text(totales.cheques.total_general_ica == 0 ? '--' : accounting.formatNumber(totales.cheques.total_general_ica, 0, '.'));
+		$('td[data-role="che_total_dist"] span[data-role="value"]').text(totales.cheques.total_dist == 0 ? '--' : accounting.formatNumber(totales.cheques.total_dist, 0, '.'));
+		$('td[data-role="che_total_retefuente"] span[data-role="value"]').text(totales.cheques.total_retefuente == 0 ? '--' : accounting.formatNumber(totales.cheques.total_retefuente, 0, '.'));
+		$('td[data-role="che_total_general_deducciones"] span[data-role="value"]').text(totales.cheques.total_general_deducciones == 0 ? '--' : accounting.formatNumber(totales.cheques.total_general_deducciones, 0, '.'));
+		$('td[data-role="che_total_neto_pagar"] span[data-role="value"]').text(totales.cheques.total_neto_pagar == 0 ? '--' : accounting.formatNumber(totales.cheques.total_neto_pagar, 0, '.'));
+		$('td[data-role="che_total_descuentos"] span[data-role="value"]').text(totales.cheques.total_descuentos == 0 ? '--' : accounting.formatNumber(totales.cheques.total_descuentos, 0, '.'));
 
 		$('td[data-role="dav_total_pagar"] span[data-role="value"]').text(totales.davivienda.total_pagar == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_pagar, 0, '.'));
 		$('td[data-role="dav_total_pcul"] span[data-role="value"]').text(totales.davivienda.total_pcul == 0 ? '--' : accounting.formatNumber(totales.davivienda.total_pcul, 0, '.'));
@@ -193,7 +223,7 @@ $(function(){
 		var variables = (tr.data('variables')+'').split(',');
 		var total_medicina_prepagada = variables[2];
 		var banco = tr.data('banco');
-		var dias = parseInt($input_dias.val());
+		var dias = parseInt($input_dias.val() == '' ? 0 : $input_dias.val());
 
 		if($.isNumeric(dias))
 		{
