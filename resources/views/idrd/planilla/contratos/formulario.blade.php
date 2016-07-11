@@ -346,7 +346,9 @@
 					@if(!$contrato || ($contrato && $contrato->Estado != 'finalizado'))
 						<input type="submit" class="btn btn-primary" value="Guardar">
 						@if($contrato)
-							<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
+							@if ($_SESSION['Usuario']['Permisos']['eliminar_contratos'])
+								<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
+							@endif
 						@endif
 					@endif
 					<a href="{{ Session::has('back') ? Session::get('back') : url('contratistas/'.$contratista['Id_Contratista'].'/contratos') }}" class="btn btn-default">Cerrar</a>
@@ -373,7 +375,7 @@
 		    		Realmente desea eliminar el contrato N° {{ $contrato['Numero'] }}
 	      		</div>
 	      		<div class="modal-footer">
-	        		<a href="{{ url('contratos/'.$contrato['Id_Contrato'].'/eliminar') }}" class="btn btn-danger">Eliminar</a>
+		        	<a href="{{ url('contratos/'.$contrato['Id_Contrato'].'/eliminar') }}" class="btn btn-danger">Eliminar</a>
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	      		</div>
 	    	</div>

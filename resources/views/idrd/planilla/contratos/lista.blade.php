@@ -22,7 +22,9 @@
         </div>
 	</div>
 	<div class="col-xs-12">
-		<a href="{{ url('contratos/'.$contratista['Id_Contratista'].'/crear') }}" class="btn btn-primary">Crear contrato</a>
+		@if ($_SESSION['Usuario']['Permisos']['crear_contratos'])
+			<a href="{{ url('contratos/'.$contratista['Id_Contratista'].'/crear') }}" class="btn btn-primary">Crear contrato</a>
+		@endif
 		<a href="{{ url('contratistas') }}" class="btn btn-default">Volver</a>
 	</div>
 	<div class="col-xs-12">
@@ -37,9 +39,11 @@
 				<li class="list-group-item">
 	                <h5 class="list-group-item-heading">
 	                    Contrato N° {{ $contrato['Numero'] }}
-	                    <a href="{{ url('contratos/'.$contrato['Id_Contratista'].'/editar/'.$contrato['Id_Contrato']) }}" class="pull-right btn btn-primary btn-xs">
-	                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-	                    </a>
+						@if ($_SESSION['Usuario']['Permisos']['editar_contratos'])
+		                    <a href="{{ url('contratos/'.$contrato['Id_Contratista'].'/editar/'.$contrato['Id_Contrato']) }}" class="pull-right btn btn-primary btn-xs">
+		                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+		                    </a>
+		                @endif
 	                </h5>
 	                <p class="list-group-item-text">
                         <div class="row">

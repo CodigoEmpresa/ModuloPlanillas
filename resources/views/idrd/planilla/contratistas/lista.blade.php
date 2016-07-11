@@ -25,9 +25,11 @@
 	<div class="col-xs-12">
 		<hr>
 	</div>
-	<div class="col-xs-12">
-		<button id="crear" data-role="crear" class="btn btn-primary" type="button">Crear contratista</button>
-	</div>
+	@if ($_SESSION['Usuario']['Permisos']['crear_contratistas'])
+		<div class="col-xs-12">
+			<button id="crear" data-role="crear" class="btn btn-primary" type="button">Crear contratista</button>
+		</div>
+	@endif
 	<div class="col-xs-12">
 		<br>
 	</div>
@@ -40,9 +42,12 @@
 				<li class="list-group-item">
 	                <h5 class="list-group-item-heading">
 	                    {{ strtoupper($contratista['Nombre']) }}
-	                    <a data-role="editar" data-rel="{{ $contratista['Id_Contratista'] }}" class="pull-right btn btn-primary btn-xs">
-	                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-	                    </a>
+
+						@if ($_SESSION['Usuario']['Permisos']['editar_contratistas'])
+		                    <a data-role="editar" data-rel="{{ $contratista['Id_Contratista'] }}" class="pull-right btn btn-primary btn-xs">
+		                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+		                    </a>
+                        @endif
 	                </h5>
 	                <p class="list-group-item-text">
                         <div class="row">
