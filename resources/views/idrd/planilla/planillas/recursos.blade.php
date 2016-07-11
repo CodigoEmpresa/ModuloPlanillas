@@ -618,20 +618,24 @@
 			<div class="col-xs-12">
 				<br>
 			</div>
-			<div class="col-xs-12 col-md-2 form-group">
-				<label for="estado">Estado de la planilla: </label>
-				<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
-					<option value="">Seleccionar</option>
-					<option value="1">Edición</option>
-					<option value="2">Validación</option>
-					<option value="3">Aprobada</option>
-				</select>
-			</div>
+			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
+				<div class="col-xs-12 col-md-2 form-group">
+					<label for="estado">Estado de la planilla: </label>
+					<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+						<option value="">Seleccionar</option>
+						<option value="1">Edición</option>
+						<option value="2">Validación</option>
+						<option value="3">Aprobada</option>
+					</select>
+				</div>
+			@endif
 			<div class="col-xs-12">
 				<hr>
 			</div>
 			<div class="col-xs-12">
-				<input type="submit" class="btn btn-primary" value="Guardar">
+				@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
+					<input type="submit" class="btn btn-primary" value="Guardar">
+				@endif
 				<a href="#" class="btn btn-default close_tab" data-title="¿Realmente desea abandonar la edición de la planilla?">Cerrar</a>
 			</div>
 		</form>

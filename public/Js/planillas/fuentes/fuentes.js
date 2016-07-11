@@ -9,7 +9,7 @@ $(function(){
 		$('input[name="Nombre"]').val(data['Nombre']);
 
 		$('#modal_main_form').modal('show');
-		$('#eliminar').attr('data-rel', '').fadeOut();
+		$('#eliminar').attr('data-rel', '').hide();
 	};
 
 	var popular_errores_modal = function(data)
@@ -48,9 +48,10 @@ $(function(){
 					
 					if(contratos == 0)
 					{
-						$('#eliminar').attr('data-rel', data.Id_Fuente).fadeIn();
+						$('#eliminar').attr('data-rel', data.Id_Fuente).show();
+						$('#mensaje_no_eliminar').hide();
 					} else {
-						$('#mensaje_no_eliminar').fadeIn();
+						$('#mensaje_no_eliminar').show();
 					}
 				}
 			},
@@ -66,6 +67,7 @@ $(function(){
 			Nombre: ''
 		}
 
+		$('#mensaje_no_eliminar').hide();
 		popular_modal_principal(data);
 	});
 

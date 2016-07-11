@@ -17,6 +17,8 @@ class CrearTablaPlanillas extends Migration
             $table->increments('Id_Planilla');
             $table->integer('Id_Fuente')->unsigned();
             $table->bigInteger('Usuario')->unsigned();
+            $table->bigInteger('Verificador')->unsigned()->nullable();
+            $table->bigInteger('Aprobador')->unsigned()->nullable();
             $table->integer('Numero')->unsigned();
             $table->string('Titulo')->nullable();
             $table->string('Colectiva')->nullable();

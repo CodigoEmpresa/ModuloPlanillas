@@ -1,4 +1,4 @@
-@section('script')
+.@section('script')
 	@parent
 
     <script src="{{ asset('public/Js/planillas/contratos/buscador.js') }}"></script>	
@@ -19,9 +19,11 @@
 	<div class="col-xs-12">
 		<hr>
 	</div>
-	<div class="col-xs-12">
-		<a href="{{ url('/contratistas') }}" class="btn btn-primary">Crear contrato</a>
-	</div>
+	@if ($_SESSION['Usuario']['Permisos']['crear_contratos'])
+		<div class="col-xs-12">
+			<a href="{{ url('/contratistas') }}" class="btn btn-primary">Crear contrato</a>
+		</div>
+	@endif
 	<div class="col-xs-12">
 		<br>
 	</div>
@@ -34,9 +36,12 @@
 				<li class="list-group-item">
 					<h5 class="list-group-item-heading">
 						Contrato N° {{ $contrato['Numero'] }}
-						<a href="{{ url('contratos/'.$contrato['Id_Contratista'].'/editar/'.$contrato['Id_Contrato']) }}" class="pull-right btn btn-primary btn-xs">
-							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-						</a>
+
+						@if ($_SESSION['Usuario']['Permisos']['editar_contratos'])
+							<a href="{{ url('contratos/'.$contrato['Id_Contratista'].'/editar/'.$contrato['Id_Contrato']) }}" class="pull-right btn btn-primary btn-xs">
+								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</a>
+						@endif
 					</h5>
 					<p class="list-group-item-text">
 						<div class="row">

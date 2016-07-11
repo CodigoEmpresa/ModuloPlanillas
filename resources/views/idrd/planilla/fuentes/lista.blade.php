@@ -16,9 +16,11 @@
 	<div class="col-xs-12">
 		<hr>
 	</div>
-	<div class="col-xs-12">
-		<button id="crear" class="btn btn-primary">Crear fuente</button>
-	</div>
+	@if ($_SESSION['Usuario']['Permisos']['crear_fuentes'])
+		<div class="col-xs-12">
+			<button id="crear" class="btn btn-primary">Crear fuente</button>
+		</div>
+	@endif
 	<div class="col-xs-12">
 		<br>	
 	</div>
@@ -31,9 +33,11 @@
 				<li class="list-group-item">
 				    <h5 class="list-group-item-heading">
 				        {{ $elemento['Codigo'].' '.$elemento['Nombre'] }}
-				        <a data-role="editar" data-rel="{{ $elemento['Id_Fuente'] }}" data-contratos="{{ count($elemento->recursos) }}" class="pull-right btn btn-primary btn-xs">
-	                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-	                    </a>
+						@if ($_SESSION['Usuario']['Permisos']['editar_fuentes'])
+					        <a data-role="editar" data-rel="{{ $elemento['Id_Fuente'] }}" data-contratos="{{ count($elemento->recursos) }}" class="pull-right btn btn-primary btn-xs">
+		                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+		                    </a>
+						@endif
 				    </h5>
 				    <p class="list-group-item-text">
 				    	<div class="row">
@@ -92,7 +96,9 @@
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id_Fuente" value="0">
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-	        		<button type="button" id="eliminar" class="btn btn-danger oculto" data-rel="">Eliminar</button>
+	        		@if ($_SESSION['Usuario']['Permisos']['eliminar_fuentes'])
+	        			<button type="button" id="eliminar" class="btn btn-danger oculto" data-rel="">Eliminar</button>
+	        		@endif
 	        		<button type="submit" class="btn btn-primary">Guardar</button>
 	      		</div>
 	    	</div>

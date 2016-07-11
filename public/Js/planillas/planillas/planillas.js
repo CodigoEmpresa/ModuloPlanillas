@@ -120,6 +120,7 @@ $(function(){
 			{	
 				if(data)
 				{
+					$('#eliminar').attr('data-rel', id).show();
 					popular_modal_principal(data);
 				}
 			},
@@ -143,7 +144,29 @@ $(function(){
 			Id_Planilla: '0',
 		}
 
+		$('#eliminar').attr('data-rel', '').hide();
 		popular_modal_principal(data);
+	});
+
+	$('#eliminar').on('click', function(e)
+	{
+		if ($(this).data('rel') != '')
+		{
+			$.get(
+				URL+'/service/delete/'+$(this).data('rel'),
+				{},
+				function(data)
+				{
+					$('#alerta').show();
+					$('#modal_main_form').modal('hide');
+
+					window.location.reload();
+				},
+				'json'
+			);
+
+			e.preventDefault();
+		}
 	});
 
 	$('#main_form').on('submit', function(e){

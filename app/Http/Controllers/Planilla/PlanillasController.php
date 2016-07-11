@@ -37,11 +37,38 @@ class PlanillasController extends Controller
 		{	
 			$vector = urldecode($request->input('vector_modulo'));
 			$user_array = unserialize($vector);
+			$permissions_array = $user_array;
+
+			$permisos = [
+				'crear_bancos' => intval($permissions_array[1]),
+				'editar_bancos' => intval($permissions_array[2]),
+				'eliminar_bancos' => intval($permissions_array[3]),
+				'crear_fuentes' => intval($permissions_array[4]),
+				'editar_fuentes' => intval($permissions_array[5]),
+				'eliminar_fuentes' => intval($permissions_array[6]),
+				'crear_rubros' => intval($permissions_array[7]),
+				'editar_rubros' => intval($permissions_array[8]),
+				'eliminar_rubros' => intval($permissions_array[9]),
+				'crear_componentes' => intval($permissions_array[10]),
+				'editar_componentes' => intval($permissions_array[11]),
+				'eliminar_componentes' => intval($permissions_array[12]),
+				'crear_contratos' => intval($permissions_array[13]),
+				'editar_contratos' => intval($permissions_array[14]),
+				'eliminar_contratos' => intval($permissions_array[15]),
+				'crear_contratistas' => intval($permissions_array[16]),
+				'editar_contratistas' => intval($permissions_array[17]),
+				'eliminar_contratistas' => intval($permissions_array[18]),
+				'crear_planillas' => intval($permissions_array[19]),
+				'editar_planillas' => intval($permissions_array[20]),
+				'eliminar_planillas' => intval($permissions_array[21]),
+				'revisar_planillas' => intval($permissions_array[22])
+			];
+
 			$_SESSION['Usuario'] = $user_array;
-
 			$persona = $this->repositorio_personas->obtener($_SESSION['Usuario'][0]);
-			$_SESSION['Usuario']['Persona'] = $persona;
 
+			$_SESSION['Usuario']['Persona'] = $persona;
+			$_SESSION['Usuario']['Permisos'] = $permisos;
 			$this->Usuario = $_SESSION['Usuario']; // [0]=> string(5) "71766" [1]=> string(1) "1"
 		} else {
 			if(!isset($_SESSION['Usuario']))
@@ -51,14 +78,27 @@ class PlanillasController extends Controller
 		if ($_SESSION['Usuario'] == '')
 			return redirect()->away('http://www.idrd.gov.co/SIM/Presentacion/');
 
-		return redirect('/planillas');
+		return redirect('/welcome');
+	}
+
+	public function welcome()
+	{
+		$data['seccion'] = '';
+		return view('welcome', $data);
 	}
 
 	public function planillas()
 	{
 		$perPage = 10;
 
-		$elementos = Planilla::with('recursos', 'fuente', 'rubros')
+		// Se cargan las planillas dependiendo del perfil del usuario
+		if($_SESSION['Usuario']['Permisos']['revisar_planillas'])
+			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
+							->where('Estado', '2')
+							->orWhere('Estado', '3')
+							->paginate($perPage);
+		else
+			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
 							->where('Usuario', $this->Usuario[0])
 							->orderBy('created_at', 'DESC')
 							->paginate($perPage);
@@ -89,7 +129,7 @@ class PlanillasController extends Controller
 							->where('Usuario', $this->Usuario[0])
 							->find($Id_Planilla);
 
-		return $planilla;	
+		return  response()->json($planilla);	
 	}
 
 	public function procesar(Request $request)
@@ -152,7 +192,7 @@ class PlanillasController extends Controller
 				$contrato = $recurso->contrato;
 				
 				//aqui validaciones de contrato
-				if($contrato->estado == 'finalizado')
+				if($contrato->Estado == 'finalizado')
 					continue;
 
 				$to_sync[] = $recurso['Id'];
@@ -277,7 +317,6 @@ class PlanillasController extends Controller
 		$estado_anterior = $planilla->Estado;
 
 		$planilla->Estado = $request->input('Estado') != '' ? $request->input('Estado') : '1';
-		$planilla->save();
 
 		$recursos = json_decode($request->input('_planilla'));
 
@@ -337,6 +376,7 @@ class PlanillasController extends Controller
 					$planilla->saldos()->delete();
 				break;
 			case '3': //En ejecución
+					$planilla->Verificador = $this->Usuario[0]; 
 					$saldos = [];
 					$planilla->saldos()->delete();
 					foreach ($contratos_en_recursos as $id_contrato) 
@@ -364,6 +404,8 @@ class PlanillasController extends Controller
 			default:
 				break;
 		}
+
+		$planilla->save();
 
 		//finalizar contratos ejecutados...
 		foreach ($contratos_en_recursos as $id_contrato) 
@@ -393,6 +435,11 @@ class PlanillasController extends Controller
 
 		return redirect()->to('planillas/'.$planilla['Id_Planilla'].'/recursos')
 						->with('status', 'success');
+	}
+
+	public function eliminar(Request $request, $Id_Planilla)
+	{
+		return response()->json(array('status' => 'ok'));
 	}
 
 	public function logout()

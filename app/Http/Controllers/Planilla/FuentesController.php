@@ -10,6 +10,15 @@ use Validator;
 
 class FuentesController extends Controller
 {
+
+	protected $Usuario;
+
+    public function __construct()
+    {
+        if (isset($_SESSION['Usuario']))
+            $this->Usuario = $_SESSION['Usuario'];
+    }
+    
     public function index()
 	{
 		$perPage = 10;

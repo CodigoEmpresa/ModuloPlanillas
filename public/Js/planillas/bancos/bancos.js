@@ -9,7 +9,7 @@ $(function(){
 		$('input[name="Nombre"]').val(data['Nombre']);
 
 		$('#modal_main_form').modal('show');
-		$('#eliminar').attr('data-rel', '').fadeOut();
+		$('#eliminar').attr('data-rel', '').hide();
 	};
 
 	var popular_errores_modal = function(data)
@@ -47,9 +47,10 @@ $(function(){
 					popular_modal_principal(data);
 					if(contratistas == 0)
 					{
-						$('#eliminar').attr('data-rel', data.Id_Banco).fadeIn();
+						$('#eliminar').attr('data-rel', data.Id_Banco).show();
+						$('#mensaje_no_eliminar').hide();
 					} else {
-						$('#mensaje_no_eliminar').fadeIn();
+						$('#mensaje_no_eliminar').show();
 					}
 				}
 			},
@@ -65,6 +66,7 @@ $(function(){
 			Nombre: ''
 		}
 
+		$('#mensaje_no_eliminar').hide();
 		popular_modal_principal(data);
 	});
 
