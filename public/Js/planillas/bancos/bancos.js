@@ -48,6 +48,7 @@ $(function(){
 					if(contratistas == 0)
 					{
 						$('#eliminar').attr('data-rel', data.Id_Banco).fadeIn();
+						$('#mensaje_no_eliminar').fadeOut();
 					} else {
 						$('#mensaje_no_eliminar').fadeIn();
 					}

@@ -49,6 +49,7 @@ $(function(){
 					if(contratos == 0)
 					{
 						$('#eliminar').attr('data-rel', data.Id_Fuente).fadeIn();
+						$('#mensaje_no_eliminar').fadeOut();
 					} else {
 						$('#mensaje_no_eliminar').fadeIn();
 					}
