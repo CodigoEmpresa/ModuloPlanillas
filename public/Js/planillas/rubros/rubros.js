@@ -9,7 +9,7 @@ $(function(){
 		$('input[name="Nombre"]').val(data['Nombre']);
 
 		$('#modal_main_form').modal('show');
-		$('#eliminar').attr('data-rel', '').show();
+		$('#eliminar').attr('data-rel', '').hide();
 	};
 
 	var popular_errores_modal = function(data)

@@ -28,6 +28,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/planillas/service/obtener/{Id_Planilla}', 'Planilla\PlanillasController@obtener');
 	Route::get('/planillas/service/rubros/{Id_Fuente}', 'Planilla\PlanillasController@rubrosFuentes');
 	Route::post('/planillas/service/procesar', 'Planilla\PlanillasController@procesar');
+	Route::get('/planillas/service/delete/{Id_Planilla}', 'Planilla\PlanillasController@eliminar');
 	Route::get('/planillas/{Id_Planilla}/recursos', 'Planilla\PlanillasController@recursos');
 	Route::post('/planillas/recursos', 'Planilla\PlanillasController@sincronizarRecursos');
 

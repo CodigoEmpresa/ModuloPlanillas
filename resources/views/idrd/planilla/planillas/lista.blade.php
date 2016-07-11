@@ -19,14 +19,16 @@
 	<div class="col-xs-12">
 		<hr>
 	</div>
-	<div class="col-xs-12">
-		<button id="crear" class="btn btn-primary">Crear planilla</button>
-	</div>
+	@if ($_SESSION['Usuario']['Permisos']['crear_planillas'])
+		<div class="col-xs-12">
+			<button id="crear" class="btn btn-primary">Crear planilla</button>
+		</div>
+	@endif
 	<div class="col-xs-12">
 		<br>
 	</div>
 	<div class="col-xs-12">
-		@if(count($elementos) == 0)
+		@if(count($elementos) == 0 && $_SESSION['Usuario']['Permisos']['crear_planillas'])
 			No se ha creado ninguna planilla haga click en el boton "Crear planilla".
 		@endif
 		<ul class="list-group" id="lista">
@@ -54,9 +56,12 @@
 									break;
 							}
 						?>
-						<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
-							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-						</a>
+
+						@if ($_SESSION['Usuario']['Permisos']['editar_planillas'])
+							<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
+								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</a>
+						@endif
 					</h5>
 					<p class="list-group-item-text">
 						<div class="row">
@@ -75,9 +80,11 @@
 									<br><br>
 								</small>
 							</div>
-							<div class="col-xs-12">
-								<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>
-							</div>
+							@if ($_SESSION['Usuario']['Permisos']['editar_planillas'] || $_SESSION['Usuario']['Permisos']['revisar_planillas'])
+								<div class="col-xs-12">
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>
+								</div>
+							@endif
 						</div>
 					</p>
 				</li>
@@ -160,6 +167,9 @@
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="Id_Planilla" value="0">
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		@if ($_SESSION['Usuario']['Permisos']['eliminar_planillas'])
+	        			<button type="button" id="eliminar" class="btn btn-danger oculto" data-rel="">Eliminar</button>  		
+					@endif
 	        		<button type="submit" class="btn btn-primary">Guardar</button>
 	      		</div>
 	    	</div>
