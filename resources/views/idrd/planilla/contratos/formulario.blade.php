@@ -434,7 +434,7 @@
 			    			<input type="text" class="form-control" value="" name="Valor_CRP" placeholder="$" data-number data-currency>
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
-			    			<label for="Expresion">Expresión (ej crp/12)</label>
+			    			<label for="Expresion">Forma de pago (ej crp/12)</label>
 			    			<input type="text" class="form-control" value="" id="Expresion" name="Expresion" placeholder="=">
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">

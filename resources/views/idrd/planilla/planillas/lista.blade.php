@@ -9,14 +9,6 @@
 		<h4>{{ $titulo }}</h4>
 	</div>
 	<div class="col-xs-12">
-		<div class="input-group">
-			<input name="buscador" type="text" class="form-control" placeholder="Buscar">
-			<span class="input-group-btn">
-				<button id="buscar" data-role="buscar" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-			</span>
-		</div>
-	</div>
-	<div class="col-xs-12">
 		<hr>
 	</div>
 	@if ($_SESSION['Usuario']['Permisos']['crear_planillas'])
@@ -30,6 +22,8 @@
 	<div class="col-xs-12">
 		@if(count($elementos) == 0 && $_SESSION['Usuario']['Permisos']['crear_planillas'])
 			No se ha creado ninguna planilla haga click en el boton "Crear planilla".
+		@elseif(count($elementos) == 0 && $_SESSION['Usuario']['Permisos']['revisar_planillas'])
+			No se han enviado planillas para revisar en el momento.
 		@endif
 		<ul class="list-group" id="lista">
 			@foreach($elementos as $planilla)
@@ -133,6 +127,10 @@
 		        		<div class="col-xs-12 form-group">
 	        				<label for="Descripcion" class="control-label">Descripción</label>
 	        				<textarea name="Descripcion" class="form-control"></textarea>
+		        		</div>
+		        		<div class="col-xs-12 form-group">
+	        				<label for="Observaciones" class="control-label">Observaciones</label>
+	        				<textarea name="Observaciones" class="form-control"></textarea>
 		        		</div>
         				<div class="col-xs-12 col-md-6 form-group">
     						<label for="Desde" class="control-label">* Desde</label>

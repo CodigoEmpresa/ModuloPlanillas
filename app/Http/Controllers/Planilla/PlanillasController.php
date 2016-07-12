@@ -168,6 +168,7 @@ class PlanillasController extends Controller
        	$planilla['Titulo'] = $request->input('Titulo');
        	$planilla['Colectiva'] = $request->input('Colectiva');
        	$planilla['Descripcion'] = $request->input('Descripcion');
+       	$planilla['Observaciones'] = $request->input('Observaciones');
 		$planilla['Desde'] = $request->input('Desde');
 		$planilla['Hasta'] = $request->input('Hasta');
 
@@ -314,10 +315,6 @@ class PlanillasController extends Controller
 		$planilla = Planilla::with('recursos')
 						->find($request->input('Id_Planilla'));
 
-		$estado_anterior = $planilla->Estado;
-
-		$planilla->Estado = $request->input('Estado') != '' ? $request->input('Estado') : '1';
-
 		$recursos = json_decode($request->input('_planilla'));
 
 		$to_sync = [];
@@ -369,16 +366,19 @@ class PlanillasController extends Controller
 				$contratos_en_recursos[] = $recurso['Id_Contrato'];
 		}
 
-		switch ($planilla->Estado) 
+		switch ($request->input('Estado')) 
 		{
 			case '1': //Edición
 			case '2': //Verificación
+					$planilla->Estado = $request->input('Estado');
 					$planilla->saldos()->delete();
 				break;
 			case '3': //En ejecución
+					$planilla->Estado = $request->input('Estado');
 					$planilla->Verificador = $this->Usuario[0]; 
 					$saldos = [];
 					$planilla->saldos()->delete();
+					
 					foreach ($contratos_en_recursos as $id_contrato) 
 					{
 						$Fecha_Registro = date('Y-m-d');
@@ -439,6 +439,9 @@ class PlanillasController extends Controller
 
 	public function eliminar(Request $request, $Id_Planilla)
 	{
+		$planilla = Planilla::find($Id_Planilla);
+		$planilla->delete();
+
 		return response()->json(array('status' => 'ok'));
 	}
 
