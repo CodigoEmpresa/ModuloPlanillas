@@ -438,13 +438,9 @@
 			    			<input type="text" class="form-control" value="" id="Expresion" name="Expresion" placeholder="=">
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
-			    			<label for="Saldo_CRP">Saldo CRP</label>
-			    			<input type="text" class="form-control" value="" name="Saldo_CRP" placeholder="$" data-number data-currency>
-			    		</div>
-			    		<div class="col-xs-12 col-md-6 form-group">
 			    			<label for="Saldo_Calculado">Saldo calculado:</label>
 			    			<br>
-			    			<p class="form-control-static" data-role="Saldo_Calculado"><span>$</span><span data-role="value"></span></p>
+			    			<p class="form-control-static pull-right" data-role="Saldo_Calculado"><span>$</span><span data-role="value"></span></p>
 			    		</div>
 			    		<div class="col-xs-12 col-md-6 form-group">
 			    			<label for="Pago_Mensual">Pago mensual</label>
@@ -453,6 +449,7 @@
 		        	</fieldset>
 	      		</div>
 	      		<div class="modal-footer">
+			    	<input type="hidden" value="" name="Saldo_CRP">
 	      			<input type="hidden" name="Id" value="0">
 	      			<input type="hidden" name="Unique" value="">
 	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

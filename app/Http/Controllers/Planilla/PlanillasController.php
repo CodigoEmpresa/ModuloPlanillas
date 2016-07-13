@@ -92,13 +92,19 @@ class PlanillasController extends Controller
 		$perPage = 10;
 
 		// Se cargan las planillas dependiendo del perfil del usuario
-		if($_SESSION['Usuario']['Permisos']['revisar_planillas'])
+		if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
 			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
-							->where('Estado', '2')
-							->orWhere('Estado', '3')
+							->where('Id_Planilla', '<>', '0')
+							->where(function($query)
+							{
+								$query->where('Estado', '2')
+									->orWhere('Estado', '3');
+							})
+							->orderBy('created_at', 'DESC')
 							->paginate($perPage);
 		else
 			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
+							->where('Id_Planilla', '<>', '0')
 							->where('Usuario', $this->Usuario[0])
 							->orderBy('created_at', 'DESC')
 							->paginate($perPage);

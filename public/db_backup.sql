@@ -132,7 +132,7 @@ CREATE TABLE `Fuentes` (
 
 /*Data for the table `Fuentes` */
 
-insert  into `Fuentes`(`Id_Fuente`,`Nombre`,`Codigo`,`deleted_at`,`created_at`,`updated_at`) values (1,'ESPECTÁCULOS PÚBLICOS Y FONDO DE POBRES','1101197',NULL,'2016-07-12 13:58:50','2016-07-12 13:58:50');
+insert  into `Fuentes`(`Id_Fuente`,`Nombre`,`Codigo`,`deleted_at`,`created_at`,`updated_at`) values (0,'FUENTES ANTERIORES','0000000',NULL,'2016-07-13 08:10:21','2016-07-13 08:10:21'),(1,'ESPECTÁCULOS PÚBLICOS Y FONDO DE POBRES','1101197',NULL,'2016-07-12 13:58:50','2016-07-12 13:58:50');
 
 /*Table structure for table `Planillas` */
 
@@ -161,6 +161,8 @@ CREATE TABLE `Planillas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `Planillas` */
+
+insert  into `Planillas`(`Id_Planilla`,`Id_Fuente`,`Usuario`,`Verificador`,`Aprobador`,`Numero`,`Titulo`,`Colectiva`,`Descripcion`,`Observaciones`,`Desde`,`Hasta`,`Estado`,`deleted_at`,`created_at`,`updated_at`) values (0,0,0,0,0,0,'PLANILLA SALDOS ANTERIORES','NP','NP','NP','2016-07-13','2016-07-13','3',NULL,'2016-07-13 08:17:02','2016-07-13 08:17:02');
 
 /*Table structure for table `PlanillasRecursos` */
 
@@ -275,7 +277,7 @@ CREATE TABLE `Rubros` (
 
 /*Data for the table `Rubros` */
 
-insert  into `Rubros`(`Id_Rubro`,`Nombre`,`Codigo`,`deleted_at`,`created_at`,`updated_at`) values (1,'JORNADA ESCOLAR 40 HORAS SEMANALES','3311401030928',NULL,'2016-07-12 13:59:28','2016-07-12 16:17:27');
+insert  into `Rubros`(`Id_Rubro`,`Nombre`,`Codigo`,`deleted_at`,`created_at`,`updated_at`) values (0,'RUBROS ANTERIORES','0000000000000',NULL,'2016-07-13 08:14:34','2016-07-13 08:14:34'),(1,'JORNADA ESCOLAR 40 HORAS SEMANALES','3311401030928',NULL,'2016-07-12 13:59:28','2016-07-12 16:17:27');
 
 /*Table structure for table `Saldos` */
 
@@ -299,9 +301,11 @@ CREATE TABLE `Saldos` (
   CONSTRAINT `saldos_id_contrato_foreign` FOREIGN KEY (`Id_Contrato`) REFERENCES `Contratos` (`Id_Contrato`) ON DELETE CASCADE,
   CONSTRAINT `saldos_id_planilla_foreign` FOREIGN KEY (`Id_Planilla`) REFERENCES `Planillas` (`Id_Planilla`) ON DELETE CASCADE,
   CONSTRAINT `saldos_id_recurso_foreign` FOREIGN KEY (`Id_Recurso`) REFERENCES `Recursos` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `Saldos` */
+
+insert  into `Saldos`(`Id`,`Id_Planilla`,`Id_Contrato`,`Id_Recurso`,`Fecha_Registro`,`Total_Pagado`,`operacion`,`deleted_at`,`created_at`,`updated_at`) values (1,0,7,7,'2016-07-13',2665889,'sumar',NULL,'2016-07-13 08:41:17','2016-07-13 08:41:17');
 
 /*Table structure for table `Suspenciones` */
 

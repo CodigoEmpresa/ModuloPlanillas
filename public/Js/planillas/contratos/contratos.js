@@ -36,18 +36,11 @@ $(function()
 			$('.errores ul').append('<li>El campo numero de registro es requerido</li>');
 		}
 
-		if(rubro.Valor_CRP == '')
+		if(rubro.Valor_CRP == '' || rubro.Valor_CRP == null || rubro.Valor_CRP == 0)
 		{
 			errores = true;
 			$('#modal_form_rubro input[name="Valor_CRP"]').closest('.form-group').addClass('has-error');
 			$('#modal_form_rubro .errores ul').append('<li>El campo valor crp es requerido</li>');
-		}
-
-		if(rubro.Saldo_CRP == '')
-		{
-			errores = true;
-			$('#modal_form_rubro input[name="Saldo_CRP"]').closest('.form-group').addClass('has-error');
-			$('#modal_form_rubro .errores ul').append('<li>El campo saldo crp es requerido</li>');
 		}
 
 		if(rubro.Expresion == '')
@@ -403,7 +396,7 @@ $(function()
 				"valor": $('#modal_form_rubro select[name="Componente"] option:selected').text()
 			},
 			"Valor_CRP": $('#modal_form_rubro input[name="Valor_CRP"]').inputmask('unmaskedvalue'),
-			"Saldo_CRP": $('#modal_form_rubro input[name="Saldo_CRP"]').inputmask('unmaskedvalue'),
+			"Saldo_CRP": $('#modal_form_rubro input[name="Valor_CRP"]').inputmask('unmaskedvalue'),
 			"Saldo_Acumulado": 0,
 			"Expresion": $('#modal_form_rubro input[name="Expresion"]').val(),
 			"Pago_Mensual": $('#modal_form_rubro input[name="Pago_Mensual"]').inputmask('unmaskedvalue')
