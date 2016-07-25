@@ -92,13 +92,19 @@ class PlanillasController extends Controller
 		$perPage = 10;
 
 		// Se cargan las planillas dependiendo del perfil del usuario
-		if($_SESSION['Usuario']['Permisos']['revisar_planillas'])
+		if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
 			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
-							->where('Estado', '2')
-							->orWhere('Estado', '3')
+							->where('Id_Planilla', '<>', '0')
+							->where(function($query)
+							{
+								$query->where('Estado', '2')
+									->orWhere('Estado', '3');
+							})
+							->orderBy('created_at', 'DESC')
 							->paginate($perPage);
 		else
 			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
+							->where('Id_Planilla', '<>', '0')
 							->where('Usuario', $this->Usuario[0])
 							->orderBy('created_at', 'DESC')
 							->paginate($perPage);
@@ -168,6 +174,7 @@ class PlanillasController extends Controller
        	$planilla['Titulo'] = $request->input('Titulo');
        	$planilla['Colectiva'] = $request->input('Colectiva');
        	$planilla['Descripcion'] = $request->input('Descripcion');
+       	$planilla['Observaciones'] = $request->input('Observaciones');
 		$planilla['Desde'] = $request->input('Desde');
 		$planilla['Hasta'] = $request->input('Hasta');
 
@@ -314,10 +321,6 @@ class PlanillasController extends Controller
 		$planilla = Planilla::with('recursos')
 						->find($request->input('Id_Planilla'));
 
-		$estado_anterior = $planilla->Estado;
-
-		$planilla->Estado = $request->input('Estado') != '' ? $request->input('Estado') : '1';
-
 		$recursos = json_decode($request->input('_planilla'));
 
 		$to_sync = [];
@@ -369,16 +372,19 @@ class PlanillasController extends Controller
 				$contratos_en_recursos[] = $recurso['Id_Contrato'];
 		}
 
-		switch ($planilla->Estado) 
+		switch ($request->input('Estado')) 
 		{
 			case '1': //Edición
 			case '2': //Verificación
+					$planilla->Estado = $request->input('Estado');
 					$planilla->saldos()->delete();
 				break;
 			case '3': //En ejecución
+					$planilla->Estado = $request->input('Estado');
 					$planilla->Verificador = $this->Usuario[0]; 
 					$saldos = [];
 					$planilla->saldos()->delete();
+					
 					foreach ($contratos_en_recursos as $id_contrato) 
 					{
 						$Fecha_Registro = date('Y-m-d');
@@ -439,6 +445,9 @@ class PlanillasController extends Controller
 
 	public function eliminar(Request $request, $Id_Planilla)
 	{
+		$planilla = Planilla::find($Id_Planilla);
+		$planilla->delete();
+
 		return response()->json(array('status' => 'ok'));
 	}
 
