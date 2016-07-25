@@ -57,7 +57,6 @@ class ContratistasController extends Controller
 				'Hijos' => 'required|in:0,1',
 				'Declarante' => 'required|in:0,1',
 				'Medicina_Prepagada' => 'required|in:0,1',
-				'Hijos_Cantidad' => 'required_if:Hijos,1',
 				'Medicina_Prepagada_Cantidad' => 'required_if:Medicina_Prepagada,1',
 				'Nivel_Riesgo_ARL' => 'required'
         	],
@@ -74,7 +73,6 @@ class ContratistasController extends Controller
 				'Declarante.required' => 'El campo declarante es requerido',
 				'Medicina_Prepagada.required' => 'El campo medicina prepagada es requerido',
 				'Nivel_Riesgo_ARL.required' => 'El campo nivel de riesgo es requerido',
-				'Hijos_Cantidad.required_if' => 'El campo número de hijos es requerido cuando el campo hijos es igual a "Si"',
 				'Medicina_Prepagada_Cantidad.required_if' => 'El campo total pagado medicina prepagada es requerido cuando el campo medicina prepagada es igual a "Si"'
         	]
         );

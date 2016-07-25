@@ -8,6 +8,7 @@ $(function(){
 		$('input[name="Titulo"]').val(data.Titulo);
 		$('input[name="Colectiva"]').val(data.Colectiva);
 		$('textarea[name="Descripcion"]').val(data.Descripcion);
+		$('textarea[name="Observaciones"]').val(data.Observaciones);
 		$('input[name="Desde"]').val(data.Desde);
 		$('input[name="Hasta"]').val(data.Hasta);
 		$('select[name="Id_Fuente"]').selectpicker('val', data.Id_Fuente);
@@ -137,6 +138,7 @@ $(function(){
 			Titulo: '',
 			Colectiva: '',
 			Descripcion: '',
+			Observaciones: '',
 			Desde: '',
 			Hasta: '',
 			Id_Fuente: '',

@@ -10,4 +10,9 @@ class Persona extends MPersona
 	{
 		return $this->hasMany('App\Modulos\Planilla\Modelos\Planilla', 'Usuario');
 	}
+
+	public function planillasAproboadas()
+	{
+		return $this->hasMany('App\Modulos\Planilla\Modelos\Planilla', 'Verificador');
+	}
 }

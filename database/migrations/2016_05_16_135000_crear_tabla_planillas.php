@@ -42,9 +42,6 @@ class CrearTablaPlanillas extends Migration
 
             $table->foreign('Id_Planilla')->references('Id_Planilla')->on('Planillas')->onDelete('cascade');
             $table->foreign('Id_Rubro')->references('Id_Rubro')->on('Rubros')->onDelete('cascade');
-
-            $table->softDeletes();
-            $table->timestamps();
         });
 
         Schema::create('PlanillasRecursos', function($table)
@@ -85,9 +82,6 @@ class CrearTablaPlanillas extends Migration
 
             $table->foreign('Id_Planilla')->references('Id_Planilla')->on('Planillas')->onDelete('cascade');
             $table->foreign('Id_Recurso')->references('Id')->on('Recursos')->onDelete('cascade');
-
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 

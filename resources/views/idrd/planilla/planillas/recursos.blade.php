@@ -618,21 +618,52 @@
 			<div class="col-xs-12">
 				<br>
 			</div>
-			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
-				<div class="col-xs-12 col-md-2 form-group">
-					<label for="estado">Estado de la planilla: </label>
-					<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
-						<option value="">Seleccionar</option>
-						<option value="1">Edición</option>
-						<option value="2">Validación</option>
-						<option value="3">Aprobada</option>
-					</select>
-				</div>
-			@endif
+			<div class="col-md-2">
+				<span>
+					{{ $planilla->usuario ? $planilla->usuario['Primer_Nombre'].' '.$planilla->usuario['Primer_Apellido'] : '' }}
+				</span><br>
+				<small class="text-mutted">Quien revisa</small>
+			</div>
+			<div class="col-md-2">
+				<span>
+					{{ $planilla->verificador ? $planilla->verificador['Primer_Nombre'].' '.$planilla->verificador['Primer_Apellido'] : '' }}
+				</span><br>
+				<small class="text-mutted">Ordenador del pago</small>
+			</div>
+			<div class="col-md-8">
+				<small class="text-muted">
+					<strong>NOTA:</strong> 
+					EN CUMPLIMIENTO DEL DECRETO 2271 DEL 18 DE JUNIO DE 2009 Y CONCEPTO 1195 DEL 03 DE AGOSTO DE 2009 EXPEDIDO POR LA SECRETARÍA DISTRITAL DE HACIENDA, PARA TENER DERECHO A DISMINUIR LA BASE DE LIQUIDACION DEL ICA, EL CONTRATISTA DEBERA ANEXAR DECLARACION JURAMENTADAS SOBRE EL PAGO DEL VALOR CORRESPONDIENTE A LOS APORTES EN SALUD Y PENSION. QUIEN NO LA PRESENTE O LA PRESENTE DILIGENCIADA ERRADAMENTE, NO TENDRA DERECHO AL BENEFICIO DE DISMINUCION DE LA BASE DE LIQUIDACION DE DICHO IMPUESTO EN EL PERIODO A QUE SE REFIERE EL PRESENTE PAGO. ES ENTENDIDO QUE EL DILIGENCIAMIENTO Y PRESENTACION ES DE UNICA Y EXCLUSIVA RESPONSABILIDAD DEL CONTRATISTA. 
+				</small>
+				<br>
+				<br>
+				<small class="text-muted">
+					<strong>OBSERVACIONES:</strong>  
+					Certifico  que de acuerdo con la información suministrada por el supervisor de cada contrato, me permito ordenar el pago de esta planilla.
+				</small>
+			</div>
 			<div class="col-xs-12">
 				<hr>
 			</div>
-			<div class="col-xs-12">
+			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
+				@if($planilla->Estado == '3' &&  $_SESSION['Usuario']['Permisos']['editar_planillas'])
+					<input type="hidden" name="Estado" value="4">
+				@else
+					<div class="col-xs-12 col-md-2 form-group">
+						<label for="estado">Estado de la planilla: </label>
+						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+							<option value="">Seleccionar</option>
+							<option value="1">Edición</option>
+							<option value="2">Validación</option>
+							@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
+								<option value="3">Aprobada</option>
+							@endif
+						</select>
+					</div>
+				@endif
+			@endif
+			<div class="col-xs-12 col-md-8" style="padding-top: 4px;">
+				<br>
 				@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
 					<input type="submit" class="btn btn-primary" value="Guardar">
 				@endif
