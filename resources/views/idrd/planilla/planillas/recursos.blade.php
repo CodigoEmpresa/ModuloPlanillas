@@ -619,12 +619,14 @@
 				<br>
 			</div>
 			<div class="col-md-2">
+				<img src="{{ asset('public/Firmas/'.$planilla->usuario->configuracion['Firma']) }}" width="100px" alt=""><br>
 				<span>
 					{{ $planilla->usuario ? $planilla->usuario['Primer_Nombre'].' '.$planilla->usuario['Primer_Apellido'] : '' }}
 				</span><br>
 				<small class="text-mutted">Quien revisa</small>
 			</div>
 			<div class="col-md-2">
+				<img src="{{ asset('public/Firmas/'.$planilla->verificador->configuracion['Firma']) }}" width="100px" alt=""><br>
 				<span>
 					{{ $planilla->verificador ? $planilla->verificador['Primer_Nombre'].' '.$planilla->verificador['Primer_Apellido'] : '' }}
 				</span><br>

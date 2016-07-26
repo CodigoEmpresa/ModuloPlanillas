@@ -394,7 +394,7 @@ class PlanillasController extends Controller
 						{
 							if ($recurso['Id_Contrato'] == $id_contrato)
 							{
-								$saldo = new Saldo([
+								$saldo = new Saldo ([
 									'Id_Contrato' => $id_contrato,
 									'Id_Recurso' => $recurso['Id'],
 									'Fecha_Registro' => $Fecha_Registro,

@@ -154,6 +154,9 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $_SESSION['Usuario']['Persona']['Primer_Apellido'].' '.$_SESSION['Usuario']['Persona']['Primer_Nombre'] }}<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li>
+                      <a href="{{ url('personas/'.$_SESSION['Usuario'][0].'/editar') }}">Editar</a>
+                    </li>
+                    <li>
                       <a href="{{ url('logout') }}">Cerrar sesión</a>
                     </li>
                 </ul>

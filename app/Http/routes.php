@@ -66,4 +66,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/componentes/service/obtener/{Id_Rubro}', 'Planilla\ComponentesController@obtener');
 	Route::get('/componentes/service/delete/{Id_Rubro}', 'Planilla\ComponentesController@eliminar');
 	Route::post('/componentes/service/procesar', 'Planilla\ComponentesController@procesar');
+
+	Route::get('/personas/{Id_Persona}/editar', 'Planilla\ConfiguracionController@index');
+	Route::post('/configuracion', 'Planilla\ConfiguracionController@store');
 });
