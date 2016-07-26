@@ -226,6 +226,8 @@ $(function(){
 				});
 
 				var Valor_CRP = $('td[data-recurso="'+e+'"][data-role="Valor_CRP"]').data('value');
+				var Saldo_CRP = $('td[data-recurso="'+e+'"][data-role="Saldo_CRP"]').data('value');
+
 				Pago_Mensual = $('td[data-recurso="'+e+'"][data-role="Pago_Mensual"]').data('value');
 				
 				switch(formaPago)
@@ -238,6 +240,13 @@ $(function(){
 						Pago_Recurso = Math.round(Pago_Mensual * dias);
 					break;
 				}
+
+				console.log(Pago_Recurso+'>'+Saldo_CRP);
+				
+				if (Pago_Recurso > Saldo_CRP)
+					$input_dias.addClass('danger');
+				else
+					$input_dias.removeClass('danger');
 
 				Total_Pagar += Pago_Recurso;
 				Total_Pago_Mensual += Pago_Mensual;

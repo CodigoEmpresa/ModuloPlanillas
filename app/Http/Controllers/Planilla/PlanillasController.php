@@ -425,15 +425,13 @@ class PlanillasController extends Controller
 					break;
 				case '3': //En ejecución
 						if ($contrato->Tipo_Modificacion == 'terminado')
-						$contrato->Estado = 'finalizado';
+							$contrato->Estado = 'finalizado';
+
+						if ($total_saldo >= $contrato->recursos()->sum('Saldo_CRP'))
+							$contrato->Estado = 'finalizado';
 					break;
 				default:
 					break;
-			}
-
-			if ($total_saldo >= $contrato->Total_Contrato)
-			{
-				$contrato->Estado = 'finalizado';
 			}
 
 			$contrato->save();

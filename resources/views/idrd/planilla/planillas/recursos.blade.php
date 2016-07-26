@@ -239,14 +239,15 @@
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[0]['Valor_CRP'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Valor_CRP'], 0, '.', '.') }}
 								</td>
-								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[0]['Saldo_CRP'] }}" width="120" align="right"> 
+								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[0]['Saldo_CRP'] - $contrato->recursos[0]['saldo'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Saldo_CRP'] - $contrato->recursos[0]['saldo'], 0, '.', '.') }}
 								</td>
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[0]['Pago_Mensual'] }}" width="120" align="right"> 
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
-   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado ? 'readonly' : '' }} ></td>
+   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado || $planilla->Estado == 3 ? 'readonly' : '' }} >
+   								</td>
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-rubro="{{ $contrato->recursos[0]->rubro['Codigo'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
 								</td>
@@ -321,7 +322,7 @@
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Codigo" width="80"> {{ substr($contrato->recursos[$j]->rubro['Codigo'], -3) }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Numero_Registro" width="80"> {{ $contrato->recursos[$j]['Numero_Registro'] }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Valor_CRP" data-value="{{ $contrato->recursos[$j]['Valor_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Valor_CRP'], 0, '.', '.') }} </td>
-										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[$j]['Saldo_CRP'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Saldo_CRP'] - $contrato->recursos[$j]['saldo'], 0, '.', '.') }} </td>
+										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Saldo_CRP" data-value="{{ $contrato->recursos[$j]['Saldo_CRP'] - $contrato->recursos[$j]['saldo'] }}" width="120" align="right"> <span class="pull-left">$</span> {{ number_format($contrato->recursos[$j]['Saldo_CRP'] - $contrato->recursos[$j]['saldo'], 0, '.', '.') }} </td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-role="Pago_Mensual" data-value="{{ $contrato->recursos[$j]['Pago_Mensual'] }}" width="120" align="right"> <span class="pull-left">$</span>{{ number_format($contrato->recursos[$j]['Pago_Mensual'], 0, '.', '.') }}</td>
 										<td class="vcenter" data-recurso="{{ $contrato->recursos[$j]['Id'] }}" data-rubro="{{ $contrato->recursos[$j]->rubro['Codigo'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right"><span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[$j]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span></td>
 									</tr>
@@ -619,14 +620,14 @@
 				<br>
 			</div>
 			<div class="col-md-2">
-				<img src="{{ asset('public/Firmas/'.$planilla->usuario->configuracion['Firma']) }}" width="100px" alt=""><br>
+				<img src="{{ $planilla->usuario ? asset('public/Firmas/'.$planilla->usuario->configuracion['Firma']) : '' }}" width="100px" alt=""><br>
 				<span>
 					{{ $planilla->usuario ? $planilla->usuario['Primer_Nombre'].' '.$planilla->usuario['Primer_Apellido'] : '' }}
 				</span><br>
 				<small class="text-mutted">Quien revisa</small>
 			</div>
 			<div class="col-md-2">
-				<img src="{{ asset('public/Firmas/'.$planilla->verificador->configuracion['Firma']) }}" width="100px" alt=""><br>
+				<img src="{{ $planilla->verificador ? asset('public/Firmas/'.$planilla->verificador->configuracion['Firma']) : '' }}" width="100px" alt=""><br>
 				<span>
 					{{ $planilla->verificador ? $planilla->verificador['Primer_Nombre'].' '.$planilla->verificador['Primer_Apellido'] : '' }}
 				</span><br>

@@ -52,6 +52,21 @@ CREATE TABLE `Componentes` (
 
 insert  into `Componentes`(`Id_Componente`,`Nombre`,`Codigo`,`deleted_at`,`created_at`,`updated_at`) values (1,'Honorarios','3110203',NULL,'2016-07-12 14:05:29','2016-07-12 14:05:29');
 
+/*Table structure for table `Configuracion` */
+
+DROP TABLE IF EXISTS `Configuracion`;
+
+CREATE TABLE `Configuracion` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Usuario` bigint(20) unsigned NOT NULL,
+  `Firma` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+/*Data for the table `Configuracion` */
+
+insert  into `Configuracion`(`Id`,`Usuario`,`Firma`) values (1,71766,'img_579770cbd61d2.png'),(2,64630,'img_57977194ac82a.png');
+
 /*Table structure for table `Contratistas` */
 
 DROP TABLE IF EXISTS `Contratistas`;

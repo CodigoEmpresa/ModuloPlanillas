@@ -24,7 +24,7 @@
 			<br>
 		</div>
 		<div class="col-xs-12 col-md-6" class="form-group">
-			<label for="">Firma</label>
+			<label for="">Firma (400 * 200)</label>
 			<div id="drawingboard" style="width: 400px; height: 200px;"></div>
 		</div>
 		<div class="col-xs-12 col-md-6" class="form-group">

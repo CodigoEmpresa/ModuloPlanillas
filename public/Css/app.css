@@ -79,6 +79,12 @@ div.separador {
 	color: #333;
 }
 
+.important.danger
+{
+  background-color: #FFA4A4 !important;
+  color: #333;
+}
+
 .important:read-only { background-color: rgba(250,250,250,0.94) !important; }
 
 .important:-moz-read-only { background-color: rgba(250,250,250,0.94) !important; }
