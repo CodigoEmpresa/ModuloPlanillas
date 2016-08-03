@@ -18,13 +18,29 @@
 					switch ($planilla->Estado) 
 					{
 						case '1':
-							echo '<small class="text-muted"> (En proceso de edición) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						case '2':
-							echo '<small class="text-warning"> (En proceso de Validación) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						case '3':
-							echo '<small class="text-success"> (Aprobada) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							break;
+						case '4':
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							break;
+						case '5':
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalización" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						default:
 							# code...
@@ -113,7 +129,7 @@
 				@if(count($elementos) == 0)
 					No se registro ningún contrato para esta planilla.
 				@endif
-				<table id="recursos" class="table table-min table-bordered table-planilla">
+				<table id="recursos" class="table table-min table-bordered table-planilla" data-estado="{{ $planilla->Estado }}">
 					<thead>
 						<tr>
 							<th class="fixed first" width="30"></th>
@@ -648,28 +664,48 @@
 			<div class="col-xs-12">
 				<hr>
 			</div>
-			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
-				@if($planilla->Estado == '3' &&  $_SESSION['Usuario']['Permisos']['editar_planillas'])
-					<input type="hidden" name="Estado" value="4">
-				@else
-					<div class="col-xs-12 col-md-2 form-group">
-						<label for="estado">Estado de la planilla: </label>
-						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
-							<option value="">Seleccionar</option>
-							<option value="1">Edición</option>
-							<option value="2">Validación</option>
-							@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
-								<option value="3">Aprobada</option>
-							@endif
-						</select>
-					</div>
-				@endif
+			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || 
+				 $_SESSION['Usuario']['Permisos']['editar_planillas'] || 
+				 $_SESSION['Usuario']['Permisos']['asignar_bitacora'] || 
+				 $_SESSION['Usuario']['Permisos']['generar_archivo_plano'])
+			 	<div class="col-xs-12 col-md-2 form-group">
+					<label for="estado">Estado de la planilla: </label>
+					<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+						<option value="">Seleccionar</option>
+						
+						@if ($_SESSION['Usuario']['Permisos']['editar_planillas'])
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+						@elseif ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+						@elseif ($_SESSION['Usuario']['Permisos']['asignar_bitacora'])
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+							<option value="4">Asignar bitacora</option>
+						@elseif ($_SESSION['Usuario']['Permisos']['generar_archivo_plano'])
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+							<option value="4">Asignar bitacora</option>
+							<option value="5">Finalizar</option>
+						@endif
+					</select>
+				</div>
 			@endif
 			<div class="col-xs-12 col-md-8" style="padding-top: 4px;">
 				<br>
-				@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
+				@if (
+						($_SESSION['Usuario']['Permisos']['editar_planillas'] && $planilla->Estado < 3) || 
+						($_SESSION['Usuario']['Permisos']['revisar_planillas'] && $planilla->Estado < 4) || 
+						($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado < 5) ||
+						($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado < 6)
+					)
 					<input type="submit" class="btn btn-primary" value="Guardar">
 				@endif
+				
 				<a href="#" class="btn btn-default close_tab" data-title="¿Realmente desea abandonar la edición de la planilla?">Cerrar</a>
 			</div>
 		</form>

@@ -37,13 +37,29 @@
 							switch ($planilla->Estado) 
 							{
 								case '1':
-									echo '<small class="text-muted"> (En proceso de edición) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								case '2':
-									echo '<small class="text-warning"> (En proceso de validación) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								case '3':
-									echo '<small class="text-success"> (Aprobada) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									break;
+								case '4':
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									break;
+								case '5':
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalización" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								default:
 									# code...

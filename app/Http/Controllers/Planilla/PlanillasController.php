@@ -61,7 +61,9 @@ class PlanillasController extends Controller
 				'crear_planillas' => intval($permissions_array[19]),
 				'editar_planillas' => intval($permissions_array[20]),
 				'eliminar_planillas' => intval($permissions_array[21]),
-				'revisar_planillas' => intval($permissions_array[22])
+				'revisar_planillas' => intval($permissions_array[22]),
+				'asignar_bitacora' => intval($permissions_array[23]),
+				'generar_archivo_plano' => intval($permissions_array[24])
 			];
 
 			$_SESSION['Usuario'] = $user_array;
@@ -90,22 +92,10 @@ class PlanillasController extends Controller
 	public function planillas()
 	{
 		$perPage = 10;
+		$estados = [];
 
-		// Se cargan las planillas dependiendo del perfil del usuario
-		if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
-			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
+		$elementos = Planilla::with('recursos', 'fuente', 'rubros')
 							->where('Id_Planilla', '<>', '0')
-							->where(function($query)
-							{
-								$query->where('Estado', '2')
-									->orWhere('Estado', '3');
-							})
-							->orderBy('created_at', 'DESC')
-							->paginate($perPage);
-		else
-			$elementos = Planilla::with('recursos', 'fuente', 'rubros')
-							->where('Id_Planilla', '<>', '0')
-							->where('Usuario', $this->Usuario[0])
 							->orderBy('created_at', 'DESC')
 							->paginate($perPage);
 
@@ -135,7 +125,7 @@ class PlanillasController extends Controller
 							->where('Usuario', $this->Usuario[0])
 							->find($Id_Planilla);
 
-		return  response()->json($planilla);	
+		return  response()->json($planilla);
 	}
 
 	public function procesar(Request $request)
@@ -379,7 +369,7 @@ class PlanillasController extends Controller
 					$planilla->Estado = $request->input('Estado');
 					$planilla->saldos()->delete();
 				break;
-			case '3': //En ejecución
+			case '3': //Aprobar
 					$planilla->Estado = $request->input('Estado');
 					$planilla->Verificador = $this->Usuario[0]; 
 					$saldos = [];
@@ -406,6 +396,12 @@ class PlanillasController extends Controller
 							}
 						}
 					}
+				break;
+			case '4':
+				$planilla->Estado = $request->input('Estado');
+				break;
+			case '5':
+				$planilla->Estado = $request->input('Estado');
 				break;
 			default:
 				break;

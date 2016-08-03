@@ -14,6 +14,8 @@ $(function(){
 
   $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 
+  $('[data-toggle="tooltip"]').tooltip()
+
   $('input[data-role="datepicker"]').datepicker({
       dateFormat: 'yy-mm-dd',
       yearRange: "-100:+100",
