@@ -203,82 +203,33 @@ class PlanillasController extends Controller
 
 	public function recursos(Request $request, $Id_Planilla)
 	{
-		$planilla = Planilla::with('recursos')
-						->find($Id_Planilla);
-		$recursos = $planilla->recursos;
-		$contratos_en_recursos = [];
-		foreach ($recursos as $recurso) 
-		{
-			if (!in_array($recurso['Id_Contrato'], $contratos_en_recursos))
-				$contratos_en_recursos[] = $recurso['Id_Contrato'];
-		}
-
-		$contratos = Contrato::with('contratista', 'contratista.tipoDocumento', 'contratista.banco')
-							->join('Contratistas', 'Contratos.Id_Contratista', '=', 'Contratistas.Id_Contratista')
-							->whereIn('Id_Contrato', $contratos_en_recursos)
-							->orderBy('Contratistas.Id_Banco')
-							->get();
-
-		foreach ($contratos as $key => $contrato) 
-		{
-			$recursos_contratos = Recurso::with('rubro', 'saldos', 'fuente', 'componente')
-										->whereIn('Id', $recursos->lists('Id'))
-										->where('Id_Contrato', $contrato['Id_Contrato'])
-										->get();
-
-			foreach ($recursos_contratos as $key_2 => $recurso_2) 
-			{
-				$pivote_en_planilla = $recursos->filter(function($item) use ($recurso_2)
-				{
-					return $item['Id'] == $recurso_2['Id'];
-				});
-
-				$temp = $pivote_en_planilla->first();
-				
-				$recursos_contratos[$key_2]['planillado'] = [
-					'Dias_Trabajados' => $temp->pivot['Dias_Trabajados'],
-					'Total_Pagar' => $temp->pivot['Total_Pagar'],
-					'UVT' => $temp->pivot['UVT'],
-					'EPS' => $temp->pivot['EPS'],
-					'Pension' => $temp->pivot['Pension'],
-					'ARL' => $temp->pivot['ARL'],
-					'Medicina_Prepagada' => $temp->pivot['Medicina_Prepagada'],
-					'Hijos' => $temp->pivot['Hijos'],
-					'AFC' => $temp->pivot['AFC'],
-					'Ingreso_Base_Gravado_384' => $temp->pivot['Ingreso_Base_Gravado_384'],
-					'Ingreso_Base_Gravado_1607' => $temp->pivot['Ingreso_Base_Gravado_1607'],
-					'Ingreso_Base_Gravado_25' => $temp->pivot['Ingreso_Base_Gravado_25'],
-					'Base_UVR_Ley_1607' => $temp->pivot['Base_UVR_Ley_1607'],
-					'Base_UVR_Art_384' => $temp->pivot['Base_UVR_Art_384'],
-					'Base_ICA' => $temp->pivot['Base_ICA'],
-					'PCUL' => $temp->pivot['PCUL'],
-					'PPM' => $temp->pivot['PPM'],
-					'Total_ICA' => $temp->pivot['Total_ICA'],
-					'DIST' => $temp->pivot['DIST'],
-					'Retefuente' => $temp->pivot['Retefuente'],
-					'Retefuente_1607' => $temp->pivot['Retefuente_1607'],
-					'Retefuente_384' => $temp->pivot['Retefuente_384'],
-					'Otros_Descuentos_Expresion' => $temp->pivot['Otros_Descuentos_Expresion'],
-					'Otros_Descuentos' => $temp->pivot['Otros_Descuentos'],
-					'Otras_Bonificaciones' => $temp->pivot['Otras_Bonificaciones'],
-					'Cod_Retef' => $temp->pivot['Cod_Retef'],
-					'Cod_Seven' => $temp->pivot['Cod_Seven'],
-					'Total_Deducciones' => $temp->pivot['Total_Deducciones'],
-					'Declarante' => $temp->pivot['Declarante'],
-					'Neto_Pagar' => $temp->pivot['Neto_Pagar']
-				];
-
-				$recursos_contratos[$key_2]['saldo'] = $recurso_2->saldos()->sum('Total_Pagado');
-			}
-
-			$contratos[$key]['recursos'] = $recursos_contratos;
-		}
-
+		$planilla = Planilla::find($Id_Planilla);
+		$contratos = $this->popularRecursos($Id_Planilla);
 		$lista = [
 			'titulo' => 'Editar planilla',
 			'title' => 'Planilla N° '.$planilla['Numero'],
 			'config' => config('planillas.'.date('Y')),
 			'planilla' => $planilla,
+			'bitacora' => false,
+	        'elementos' => $contratos,
+	        'documentos' => Documento::all(),
+	        'bancos' => Banco::all(),
+            'status' => session('status'),
+		];
+
+		return view('idrd.planilla.planillas.recursos', $lista);
+	}
+
+	public function bitacora(Request $request, $Id_Planilla)
+	{
+		$planilla = Planilla::find($Id_Planilla);
+		$contratos = $this->popularRecursos($Id_Planilla);
+		$lista = [
+			'titulo' => 'Editar planilla',
+			'title' => 'Planilla N° '.$planilla['Numero'],
+			'config' => config('planillas.'.date('Y')),
+			'planilla' => $planilla,
+			'bitacora' => true,
 	        'elementos' => $contratos,
 	        'documentos' => Documento::all(),
 	        'bancos' => Banco::all(),
@@ -311,6 +262,7 @@ class PlanillasController extends Controller
 		$planilla = Planilla::with('recursos')
 						->find($request->input('Id_Planilla'));
 
+		$bitacora = $request->input('_bitacora') == '1' ? true : false;
 		$recursos = json_decode($request->input('_planilla'));
 
 		$to_sync = [];
@@ -348,6 +300,9 @@ class PlanillasController extends Controller
 				'Declarante' => $recurso->Declarante,
 				'Neto_Pagar' => $recurso->Neto_Pagar
 			];
+
+			if ($bitacora)
+				$to_sync[$recurso->Id]['Bitacora'] = $recurso->Bitacora;
 		}
 
 		$planilla->recursos()->sync($to_sync);
@@ -433,7 +388,8 @@ class PlanillasController extends Controller
 			$contrato->save();
 		}
 
-		return redirect()->to('planillas/'.$planilla['Id_Planilla'].'/recursos')
+
+		return redirect()->to('planillas/'.$planilla['Id_Planilla'].($bitacora ? '/bitacora' : '/recursos' ))
 						->with('status', 'success');
 	}
 
@@ -445,11 +401,140 @@ class PlanillasController extends Controller
 		return response()->json(array('status' => 'ok'));
 	}
 
+	public function generarArchivoPlano(Request $request, $Id_Planilla)
+	{
+		$data = [
+			'Estado_Actualizacion' => '',
+			'Usuario_que_Actualiza' => '',
+			'Fecha_Actualizacion' => '',
+			'Codigo_Empresa' => '',
+			'Codigo_Tipo_de_Operacion' => '',
+			'Numero_Factura' => '',
+			'Año_Proceso' => '',
+			'Mes_Proceso' => '',
+			'Dia_Proceso' => '',
+			'Codigo_Arbol_Sucursal' => '',
+			'Codigo_Proveedor' => '',
+			'Codigo_Detalle_de_Proveedor' => '',
+			'Codigo_del_contacto_detalle_proveedor' => '',
+			'Codigo_de_la_actividad_del_proveedor' => '',
+			'Codigo_Moneda' => '',
+			'Valor_de_la_Tasa' => '',
+			'Año_Tasa' => '',
+			'Mes_Tasa' => '',
+			'Dia_Tasa' => '',
+			'Descripcion_Factura' => '',
+			'Prefijo_Factura' => '',
+			'Número_de_factura' => '',
+			'Tipo_de_Documento' => '',
+			'Valor_Total' => '',
+			'Consecutivo_Detalle_Factura' => '',
+			'Codigo_Producto' => '',
+			'Codigo_Bodega' => '',
+			'Codigo_Unidad_Medida' => '',
+			'Cantidad' => '',
+			'Valor' => '',
+			'Tipo_descuento' => '',
+			'Porcentaje_o_valor_descuento' => '',
+			'Descripcion_Detalle' => '',
+			'Codigo_Tipo_de_Arbol' => '',
+			'Codigo_Arbol' => '',
+			'Tipo_Distribucion' => '',
+			'Valor_Distribucion' => '',
+			'Porcentaje_Distribucion' => '',
+			'Destino_del_producto' => '',
+			'Fecha_Prestacion_de_servicio' => '',
+			'Año_de_radicación_de_factura' => '',
+			'Mes_de_radicación_de_factura' => '',
+			'Día_de_radicación_de_factura' => '',
+			'Autorizado_por' => '',
+			'Numero_Bitacora_de_Radicacion' => ''
+		];
+	}
+
 	public function logout()
 	{
 		$_SESSION['Usuario'] = '';
 		Session::set('Usuario', ''); 
 
 		return redirect()->to('/');
+	}
+
+	private function popularRecursos($Id_Planilla)
+	{
+
+		$planilla = Planilla::with('recursos')->find($Id_Planilla);
+		$recursos = $planilla->recursos;
+		$contratos_en_recursos = [];
+
+		foreach ($recursos as $recurso) 
+		{
+			if (!in_array($recurso['Id_Contrato'], $contratos_en_recursos))
+				$contratos_en_recursos[] = $recurso['Id_Contrato'];
+		}
+
+		$contratos = Contrato::with('contratista', 'contratista.tipoDocumento', 'contratista.banco')
+							->join('Contratistas', 'Contratos.Id_Contratista', '=', 'Contratistas.Id_Contratista')
+							->whereIn('Id_Contrato', $contratos_en_recursos)
+							->orderBy('Contratistas.Id_Banco')
+							->get();
+
+		foreach ($contratos as $key => $contrato) 
+		{
+			$recursos_contratos = Recurso::with('rubro', 'saldos', 'fuente', 'componente')
+										->whereIn('Id', $recursos->lists('Id'))
+										->where('Id_Contrato', $contrato['Id_Contrato'])
+										->get();
+
+			foreach ($recursos_contratos as $key_2 => $recurso_2) 
+			{
+				$pivote_en_planilla = $recursos->filter(function($item) use ($recurso_2)
+				{
+					return $item['Id'] == $recurso_2['Id'];
+				});
+
+				$temp = $pivote_en_planilla->first();
+				
+				$recursos_contratos[$key_2]['planillado'] = [
+					'Dias_Trabajados' => $temp->pivot['Dias_Trabajados'],
+					'Total_Pagar' => $temp->pivot['Total_Pagar'],
+					'UVT' => $temp->pivot['UVT'],
+					'EPS' => $temp->pivot['EPS'],
+					'Pension' => $temp->pivot['Pension'],
+					'ARL' => $temp->pivot['ARL'],
+					'Medicina_Prepagada' => $temp->pivot['Medicina_Prepagada'],
+					'Hijos' => $temp->pivot['Hijos'],
+					'AFC' => $temp->pivot['AFC'],
+					'Ingreso_Base_Gravado_384' => $temp->pivot['Ingreso_Base_Gravado_384'],
+					'Ingreso_Base_Gravado_1607' => $temp->pivot['Ingreso_Base_Gravado_1607'],
+					'Ingreso_Base_Gravado_25' => $temp->pivot['Ingreso_Base_Gravado_25'],
+					'Base_UVR_Ley_1607' => $temp->pivot['Base_UVR_Ley_1607'],
+					'Base_UVR_Art_384' => $temp->pivot['Base_UVR_Art_384'],
+					'Base_ICA' => $temp->pivot['Base_ICA'],
+					'PCUL' => $temp->pivot['PCUL'],
+					'PPM' => $temp->pivot['PPM'],
+					'Total_ICA' => $temp->pivot['Total_ICA'],
+					'DIST' => $temp->pivot['DIST'],
+					'Retefuente' => $temp->pivot['Retefuente'],
+					'Retefuente_1607' => $temp->pivot['Retefuente_1607'],
+					'Retefuente_384' => $temp->pivot['Retefuente_384'],
+					'Otros_Descuentos_Expresion' => $temp->pivot['Otros_Descuentos_Expresion'],
+					'Otros_Descuentos' => $temp->pivot['Otros_Descuentos'],
+					'Otras_Bonificaciones' => $temp->pivot['Otras_Bonificaciones'],
+					'Cod_Retef' => $temp->pivot['Cod_Retef'],
+					'Cod_Seven' => $temp->pivot['Cod_Seven'],
+					'Total_Deducciones' => $temp->pivot['Total_Deducciones'],
+					'Declarante' => $temp->pivot['Declarante'],
+					'Neto_Pagar' => $temp->pivot['Neto_Pagar'],
+					'Bitacora' => $temp->pivot['Bitacora'],
+				];
+
+				$recursos_contratos[$key_2]['saldo'] = $recurso_2->saldos()->sum('Total_Pagado');
+			}
+
+			$contratos[$key]['recursos'] = $recursos_contratos;
+		}
+
+		return $contratos;
 	}
 }

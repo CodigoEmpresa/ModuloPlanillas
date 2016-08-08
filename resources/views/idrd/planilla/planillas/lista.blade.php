@@ -52,13 +52,13 @@
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
-									echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								case '5':
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
-									echo '<small data-toggle="tooltip" data-placement="bottom" title="Asignación de bitacora" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalización" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								default:
@@ -66,12 +66,9 @@
 									break;
 							}
 						?>
-
-						@if ($_SESSION['Usuario']['Permisos']['editar_planillas'])
-							<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
-								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-							</a>
-						@endif
+						<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+						</a>
 					</h5>
 					<p class="list-group-item-text">
 						<div class="row">
@@ -90,11 +87,14 @@
 									<br><br>
 								</small>
 							</div>
-							@if ($_SESSION['Usuario']['Permisos']['editar_planillas'] || $_SESSION['Usuario']['Permisos']['revisar_planillas'])
-								<div class="col-xs-12">
-									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>
-								</div>
-							@endif
+							<div class="col-xs-12">
+								@if ($_SESSION['Usuario']['Permisos']['editar_planillas'] || $_SESSION['Usuario']['Permisos']['revisar_planillas'])
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>	
+								@endif
+								@if ($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado > 2)
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/bitacora') }}" class="btn btn-default btn-xs" target="_blank">Bitácora</a>
+								@endif
+							</div>
 						</div>
 					</p>
 				</li>
