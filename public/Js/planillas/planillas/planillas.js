@@ -171,11 +171,29 @@ $(function(){
 		}
 	});
 
-	$('#main_form').on('submit', function(e){
+	$('a[data-role="export"]').on('click', function(e)
+	{
+		var rel = $(this).data('rel')
+		if (rel != '')
+		{
+			$('#print_form').find('input[name="Id_Planilla"]').val(rel);
+			$('#modal_print_form').modal('show');
+		}
+		e.preventDefault();
+	});
+
+	$('#print_form').on('submit', function(e)
+	{
+		$('#modal_print_form').modal('hide');
+	});
+
+	$('#main_form').on('submit', function(e)
+	{
 		$.post(
 			URL+'/service/procesar',
 			$(this).serialize(),
-			function(data){
+			function(data)
+			{
 				if(data.status == 'error')
 				{
 					popular_errores_modal(data.errors);

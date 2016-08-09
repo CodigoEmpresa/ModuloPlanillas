@@ -74,12 +74,14 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<small>
-									<strong>{{ $planilla['Titulo'] }}</strong><br>
+									<strong>{{ $planilla['Titulo'].' - '.$planilla['Colectiva'] }}</strong><br>
 									{{ $planilla['Descripcion'] }}<br><br>
 								</small>
 							</div>
 							<div class="col-xs-12">
 								<small>
+									<strong>Periodo</strong>: 
+									{{ Carbon::createFromFormat('Y-m-d', $planilla['Desde'])->format('d/m/Y') }} - {{  Carbon::createFromFormat('Y-m-d', $planilla['Hasta'])->format('d/m/Y') }} <br>
 									<strong>Fuente</strong>:
 									{{ $planilla->fuente['Codigo'].' '.$planilla->fuente['Nombre'] }} <br>
 									<strong>Rubros</strong>:
@@ -95,7 +97,7 @@
 									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/bitacora') }}" class="btn btn-default btn-xs" target="_blank">Bitácora</a>
 								@endif
 								@if ($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado > 3)
-									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/archivo') }}" class="btn btn-default btn-xs" target="_blank">Exportar</a>
+									<a data-rel="{{ $planilla['Id_Planilla'] }}" href="#" data-role="export" class="btn btn-default btn-xs">Exportar</a>
 								@endif
 							</div>
 						</div>
@@ -191,5 +193,38 @@
 	      		</div>
 	    	</div>
 		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_print_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<form action="{{ url('/planillas/archivo') }}" id="print_form">
+			<div class="modal-content">
+				<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	    			<h4 class="modal-title" id="myModalLabel">Generar archivo plano.</h4>
+	  			</div>
+	  			<div class="modal-body">
+		      		<fieldset>
+		      			<div class="col-xs-12 col-md-6 from-group">
+		      				<label for="">Subdirección</label>
+		      				<select name="Subdireccion" class="form-control">
+		      					<option value="100,2414">Administrativa y financiera</option>
+		      					<option value="300,2420">Construcciones</option>
+		      					<option value="200,2418">Deportes y recreación</option>
+		      					<option value="400,2419">Parques</option>
+		      				</select>
+		      			</div>
+		      		</fieldset>
+		      	</div>
+		      	<div class="modal-footer">
+		      		<input type="hidden" name="_method" value="GET">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+	      			<input type="hidden" name="Id_Planilla" value="0">
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		<button type="submit" class="btn btn-primary">Exportar</button>
+	      		</div>
+	  		</div>
+	  	</form>
 	</div>
 </div>

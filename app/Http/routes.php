@@ -31,7 +31,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/planillas/service/delete/{Id_Planilla}', 'Planilla\PlanillasController@eliminar');
 	Route::get('/planillas/{Id_Planilla}/recursos', 'Planilla\PlanillasController@recursos');
 	Route::get('/planillas/{Id_Planilla}/bitacora', 'Planilla\PlanillasController@bitacora');
-	Route::get('/planillas/{Id_Planilla}/archivo', 'Planilla\PlanillasController@generarArchivoPlano');
+	Route::get('/planillas/archivo', 'Planilla\PlanillasController@generarArchivoPlano');
 	Route::post('/planillas/recursos', 'Planilla\PlanillasController@sincronizarRecursos');
 
 	Route::get('/contratistas', 'Planilla\ContratistasController@index');

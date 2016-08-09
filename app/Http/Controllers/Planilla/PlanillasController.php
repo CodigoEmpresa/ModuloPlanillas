@@ -125,7 +125,6 @@ class PlanillasController extends Controller
 	public function obtener(Request $request, $Id_Planilla)
 	{
 		$planilla = Planilla::with('recursos', 'fuente', 'rubros')
-							->where('Usuario', $this->Usuario[0])
 							->find($Id_Planilla);
 
 		return  response()->json($planilla);
@@ -404,8 +403,10 @@ class PlanillasController extends Controller
 		return response()->json(array('status' => 'ok'));
 	}
 
-	public function generarArchivoPlano(Request $request, $Id_Planilla)
+	public function generarArchivoPlano(Request $request)
 	{
+		$Id_Planilla = $request->input('Id_Planilla');
+		list($codigo_bodega, $codigo_operacion) = explode(',', $request->input('Subdireccion'));
 		$planilla = Planilla::find($Id_Planilla);
 		$contratos = $this->popularRecursos($Id_Planilla);
 		$planilla->Estado = 5;
@@ -429,11 +430,11 @@ class PlanillasController extends Controller
 						'Usuario_que_Actualiza' => $this->Usuario['Persona']->Primer_Apellido.' '.$this->Usuario['Persona']->Primer_Nombre,
 						'Fecha_Actualizacion' => date('d/m/Y'),
 						'Codigo_Empresa' => '2',
-						'Codigo_Tipo_de_Operacion' => '',
+						'Codigo_Tipo_de_Operacion' => $codigo_operacion,
 						'Numero_Factura' => $recurso->planillado['Bitacora'],
 						'Año_Proceso' => date('Y'),
-						'Mes_Proceso' => date('m'),
-						'Dia_Proceso' => date('d'),
+						'Mes_Proceso' => date('n'),
+						'Dia_Proceso' => date('j'),
 						'Codigo_Arbol_Sucursal' => '',
 						'Codigo_Proveedor' => $contrato->contratista['Cedula'],
 						'Codigo_Detalle_de_Proveedor' => '1',
@@ -442,8 +443,8 @@ class PlanillasController extends Controller
 						'Codigo_Moneda' => '1',
 						'Valor_de_la_Tasa' => '1',
 						'Año_Tasa' => date('Y'),
-						'Mes_Tasa' => date('m'),
-						'Dia_Tasa' => date('d'),
+						'Mes_Tasa' => date('n'),
+						'Dia_Tasa' => date('j'),
 						'Descripcion_Factura' => $contrato['Objeto'],
 						'Prefijo_Factura' => '.',
 						'Número_de_factura' => $recurso->planillado['Bitacora'],
@@ -451,7 +452,7 @@ class PlanillasController extends Controller
 						'Valor_Total' => $recurso->planillado['Total_Pagar'],
 						'Consecutivo_Detalle_Factura' => '1',
 						'Codigo_Producto' => '460005',
-						'Codigo_Bodega' => '',
+						'Codigo_Bodega' => $codigo_bodega,
 						'Codigo_Unidad_Medida' => '1',
 						'Cantidad' => '1',
 						'Valor' => $recurso->planillado['Total_Pagar'],
@@ -466,8 +467,8 @@ class PlanillasController extends Controller
 						'Destino_del_producto' => '114',
 						'Fecha_Prestacion_de_servicio' =>  Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('dmY'),
 						'Año_de_radicación_de_factura' => date('Y'),
-						'Mes_de_radicación_de_factura' => date('m'),
-						'Día_de_radicación_de_factura' => date('d'),
+						'Mes_de_radicación_de_factura' => date('n'),
+						'Día_de_radicación_de_factura' => date('j'),
 						'Autorizado_por' => '0',
 						'Numero_Bitacora_de_Radicacion' => $recurso->planillado['Bitacora']
 					];
