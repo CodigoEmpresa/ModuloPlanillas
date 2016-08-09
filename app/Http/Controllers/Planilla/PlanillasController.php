@@ -12,10 +12,13 @@ use App\Modulos\Planilla\Modelos\Recurso;
 use App\Modulos\Planilla\Modelos\Fuente;
 use App\Modulos\Planilla\Modelos\Rubro;
 use App\Modulos\Planilla\Modelos\Saldo;
+use Idrd\Usuarios\Repo\PersonaInterface;
 use Illuminate\Http\Request;
 use Session;
 use Validator;
-use Idrd\Usuarios\Repo\PersonaInterface;
+use Carbon;
+use PHPExcel; 
+use PHPExcel_IOFactory;
 
 class PlanillasController extends Controller
 {
@@ -403,53 +406,83 @@ class PlanillasController extends Controller
 
 	public function generarArchivoPlano(Request $request, $Id_Planilla)
 	{
-		$data = [
-			'Estado_Actualizacion' => '',
-			'Usuario_que_Actualiza' => '',
-			'Fecha_Actualizacion' => '',
-			'Codigo_Empresa' => '',
-			'Codigo_Tipo_de_Operacion' => '',
-			'Numero_Factura' => '',
-			'Año_Proceso' => '',
-			'Mes_Proceso' => '',
-			'Dia_Proceso' => '',
-			'Codigo_Arbol_Sucursal' => '',
-			'Codigo_Proveedor' => '',
-			'Codigo_Detalle_de_Proveedor' => '',
-			'Codigo_del_contacto_detalle_proveedor' => '',
-			'Codigo_de_la_actividad_del_proveedor' => '',
-			'Codigo_Moneda' => '',
-			'Valor_de_la_Tasa' => '',
-			'Año_Tasa' => '',
-			'Mes_Tasa' => '',
-			'Dia_Tasa' => '',
-			'Descripcion_Factura' => '',
-			'Prefijo_Factura' => '',
-			'Número_de_factura' => '',
-			'Tipo_de_Documento' => '',
-			'Valor_Total' => '',
-			'Consecutivo_Detalle_Factura' => '',
-			'Codigo_Producto' => '',
-			'Codigo_Bodega' => '',
-			'Codigo_Unidad_Medida' => '',
-			'Cantidad' => '',
-			'Valor' => '',
-			'Tipo_descuento' => '',
-			'Porcentaje_o_valor_descuento' => '',
-			'Descripcion_Detalle' => '',
-			'Codigo_Tipo_de_Arbol' => '',
-			'Codigo_Arbol' => '',
-			'Tipo_Distribucion' => '',
-			'Valor_Distribucion' => '',
-			'Porcentaje_Distribucion' => '',
-			'Destino_del_producto' => '',
-			'Fecha_Prestacion_de_servicio' => '',
-			'Año_de_radicación_de_factura' => '',
-			'Mes_de_radicación_de_factura' => '',
-			'Día_de_radicación_de_factura' => '',
-			'Autorizado_por' => '',
-			'Numero_Bitacora_de_Radicacion' => ''
-		];
+		$planilla = Planilla::find($Id_Planilla);
+		$contratos = $this->popularRecursos($Id_Planilla);
+		$planilla->Estado = 5;
+		$planilla->save();
+
+		foreach ($contratos as $contrato) 
+		{
+			foreach ($contrato->recursos as $recurso) 
+			{
+				for($i=1; $i<4; $i++)
+				{
+					$codigo_arbol = [
+						0 => '',
+						1 => $planilla->fuente['Codigo'],
+						2 => '99',
+						3 => '99'
+					];
+
+					$data[] = [
+						'Estado_Actualizacion' => 'A',
+						'Usuario_que_Actualiza' => $this->Usuario['Persona']->Primer_Apellido.' '.$this->Usuario['Persona']->Primer_Nombre,
+						'Fecha_Actualizacion' => date('d/m/Y'),
+						'Codigo_Empresa' => '2',
+						'Codigo_Tipo_de_Operacion' => '',
+						'Numero_Factura' => $recurso->planillado['Bitacora'],
+						'Año_Proceso' => date('Y'),
+						'Mes_Proceso' => date('m'),
+						'Dia_Proceso' => date('d'),
+						'Codigo_Arbol_Sucursal' => '',
+						'Codigo_Proveedor' => $contrato->contratista['Cedula'],
+						'Codigo_Detalle_de_Proveedor' => '1',
+						'Codigo_del_contacto_detalle_proveedor' => '1',
+						'Codigo_de_la_actividad_del_proveedor' => '9609',
+						'Codigo_Moneda' => '1',
+						'Valor_de_la_Tasa' => '1',
+						'Año_Tasa' => date('Y'),
+						'Mes_Tasa' => date('m'),
+						'Dia_Tasa' => date('d'),
+						'Descripcion_Factura' => $contrato['Objeto'],
+						'Prefijo_Factura' => '.',
+						'Número_de_factura' => $recurso->planillado['Bitacora'],
+						'Tipo_de_Documento' => 'F',
+						'Valor_Total' => $recurso->planillado['Total_Pagar'],
+						'Consecutivo_Detalle_Factura' => '1',
+						'Codigo_Producto' => '460005',
+						'Codigo_Bodega' => '',
+						'Codigo_Unidad_Medida' => '1',
+						'Cantidad' => '1',
+						'Valor' => $recurso->planillado['Total_Pagar'],
+						'Tipo_descuento' => 'P',
+						'Porcentaje_o_valor_descuento' => '0',
+						'Descripcion_Detalle' => $contrato['Objeto'],
+						'Codigo_Tipo_de_Arbol' => $i,
+						'Codigo_Arbol' =>$codigo_arbol[$i],
+						'Tipo_Distribucion' => 'P',
+						'Valor_Distribucion' => '0',
+						'Porcentaje_Distribucion' => '100',
+						'Destino_del_producto' => '114',
+						'Fecha_Prestacion_de_servicio' =>  Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('dmY'),
+						'Año_de_radicación_de_factura' => date('Y'),
+						'Mes_de_radicación_de_factura' => date('m'),
+						'Día_de_radicación_de_factura' => date('d'),
+						'Autorizado_por' => '0',
+						'Numero_Bitacora_de_Radicacion' => $recurso->planillado['Bitacora']
+					];
+				}
+			}
+		}
+
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getActiveSheet()->fromArray($data, null, 'A1');
+		$objPHPExcel->getActiveSheet()->setTitle('Planilla');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        
+		header('Content-type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment; filename="archivo.xls"');
+        $objWriter->save('php://output');
 	}
 
 	public function logout()

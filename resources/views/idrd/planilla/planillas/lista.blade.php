@@ -59,7 +59,7 @@
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
 									echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
-									echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalización" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalizada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								default:
 									# code...
@@ -93,6 +93,9 @@
 								@endif
 								@if ($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado > 2)
 									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/bitacora') }}" class="btn btn-default btn-xs" target="_blank">Bitácora</a>
+								@endif
+								@if ($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado > 3)
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/archivo') }}" class="btn btn-default btn-xs" target="_blank">Exportar</a>
 								@endif
 							</div>
 						</div>

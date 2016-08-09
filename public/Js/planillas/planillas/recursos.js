@@ -525,11 +525,6 @@ $(function(){
 		}
 	});
 
-	$('body .bitacora').on('blur', function(e)
-	{
-		calcular_bitacoras($(this));
-	});
-
 	$('#recursos').tableHeadFixer({"head" : true, "left" : 5});
 
 	$('#formulario').on('submit', function(e)

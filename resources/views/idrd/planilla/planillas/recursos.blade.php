@@ -40,7 +40,7 @@
 							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
 							echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
-							echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalización" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalizada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						default:
 							# code...
@@ -688,7 +688,7 @@
 							<option value="2">Validar</option>
 							<option value="3">Aprobar</option>
 							<option value="4">Bitácora asignada</option>
-							<option value="5">Finalizar</option>
+							<option value="5">Finalizada</option>
 						</select>
 					@elseif ($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado < 5)
 						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
