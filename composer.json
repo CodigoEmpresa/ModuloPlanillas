@@ -10,7 +10,8 @@
         "iatstuti/laravel-cascade-soft-deletes": "1.0.*",
         "nesbot/carbon": "~1.14",
         "cossou/jasperphp": "~2",
-        "idrd/usuarios": "dev-master"
+        "idrd/usuarios": "dev-master",
+        "phpoffice/phpexcel": " 1.8.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

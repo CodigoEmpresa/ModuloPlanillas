@@ -18,13 +18,29 @@
 					switch ($planilla->Estado) 
 					{
 						case '1':
-							echo '<small class="text-muted"> (En proceso de edición) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						case '2':
-							echo '<small class="text-warning"> (En proceso de Validación) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						case '3':
-							echo '<small class="text-success"> (Aprobada) </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							break;
+						case '4':
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							break;
+						case '5':
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+							echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalizada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 							break;
 						default:
 							# code...
@@ -113,11 +129,14 @@
 				@if(count($elementos) == 0)
 					No se registro ningún contrato para esta planilla.
 				@endif
-				<table id="recursos" class="table table-min table-bordered table-planilla">
+				<table id="recursos" class="table table-min table-bordered table-planilla" data-estado="{{ $planilla->Estado }}">
 					<thead>
 						<tr>
 							<th class="fixed first" width="30"></th>
 							<th class="fixed" width="30">N°</th>
+							@if ($bitacora)
+								<th class="fixed" width="120">Bitacora</th>
+							@endif
 							<th class="fixed" width="210">Nombre contratista</th>
 							<th class="fixed" width="120">Número cedula</th>
 							<th width="100">Número cuenta</th>
@@ -200,7 +219,6 @@
 									$total_deducciones = $recurso->planillado['Total_Deducciones'];
 									$declarante = $recurso->planillado['Declarante'];
 									$neto_pagar = $recurso->planillado['Neto_Pagar'];
-
 									$total_pagar += $recurso->planillado['Total_Pagar'];
 								}
 								
@@ -226,6 +244,11 @@
 									<a href="" data-role="detail" tabindex="-1"><span class="glyphicon glyphicon-info-sign"></span></a>
 								</td>
 								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="center">{{ ++$i }}</td>
+								@if ($bitacora)
+									<td class="input" rowspan="{{ $rowspan }}">
+	   									<input type="text" class="important bitacora" name="bitacora_{{ $contrato['Id_Contrato'] }}" value="{{ $contrato->recursos[0]->planillado['Bitacora'] }}">
+	   								</td>
+								@endif
 								<td class="fixed vcenter uppercase" rowspan="{{ $rowspan }}">{{ $contrato->contratista['Nombre'] }}</td>
 								<td class="fixed vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Cedula'] }}</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" align="right">{{ $contrato->contratista['Numero_Cta'] }}</td>
@@ -246,7 +269,7 @@
 									<span class="pull-left">$</span> {{ number_format($contrato->recursos[0]['Pago_Mensual'], 0, '.', '.') }}
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}">
-   									<input type="text" class="important" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado || $planilla->Estado == 3 ? 'readonly' : '' }} >
+   									<input type="text" class="important {{ $terminado || $planilla->Estado >= 3 ? 'readonly' : '' }}" name="dias_{{ $contrato['Id_Contrato'] }}" data-tipo="{{ $contrato['Tipo_Pago'] }}" title="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha o evento') Fecha @endif" placeholder="@if($contrato['Tipo_Pago'] == 'Mes') Mes @elseif($contrato['Tipo_Pago'] == 'Dia') Dia @elseif($contrato['Tipo_Pago'] == 'Fecha') Fecha @endif" value="{{ $terminado ? $saldo_a_favor : $contrato->recursos[0]->planillado['Dias_Trabajados'] }}" autocomplete="off" {{ $terminado || $planilla->Estado >= 3 ? 'readonly tabindex="-1"' : '' }} >
    								</td>
 								<td class="vcenter" data-recurso="{{ $contrato->recursos[0]['Id'] }}" data-rubro="{{ $contrato->recursos[0]->rubro['Codigo'] }}" data-role="Total_Pagar" data-value="0" width="120" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $contrato->recursos[0]->planillado['Total_Pagar'] ? number_format($contrato->recursos[0]->planillado['Total_Pagar'], 0, '', '.') : '--' }}</span>
@@ -270,7 +293,8 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $hijos > 0 ? number_format($hijos, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="AFC" align="right">
-									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" tabindex="-1" data-currency></td>
+									<input type="text" class="important currency readonly" name="afc_{{ $contrato['Id_Contrato'] }}" value="{{ $afc }}" autocomplete="off" tabindex="-1" data-currency>
+								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Ingreso_Base_Gravado_384" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $ingreso_base_gravado_384 > 0 ? number_format($ingreso_base_gravado_384, 0, '.', '.') : '--' }}</span>
 								</td>
@@ -305,12 +329,13 @@
 									<span class="pull-left">$</span><span data-role="value">{{ $retefuente > 0 ? number_format($retefuente, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="input" rowspan="{{ $rowspan }}" data-role="Otros_Descuentos">
-									<input type="text" class="important readonly expresion" data-expresion="{{ $otros_descuentos_expresion }}" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" tabindex="-1"></td>
+									<input type="text" class="important readonly expresion" data-expresion="{{ $otros_descuentos_expresion }}" name="otros_descuentos_{{ $contrato['Id_Contrato'] }}" value="{{ $otros_descuentos }}" autocomplete="off" tabindex="-1">
+								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Total_Deducciones" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $total_deducciones > 0 ? number_format($total_deducciones, 0, '.', '.') : '--' }}</span>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Declarante" align="center">
-									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}"  onclick="return false;" onkeydown="return false;" {{ $contrato->contratista['Declarante'] ? 'checked' : '' }} tabindex="-1">
+									<input type="checkbox" name="declarante_{{ $contrato['Id_Contrato'] }}"  onclick="return false;" onkeydown="return false;" {{ $contrato->contratista['Declarante'] ? 'checked' : '' }} tabindex="-1" readonly>
 								</td>
 								<td class="vcenter" rowspan="{{ $rowspan }}" data-role="Neto_Pagar" align="right">
 									<span class="pull-left">$</span><span data-role="value">{{ $neto_pagar > 0 ? number_format($neto_pagar, 0, '.', '.') : '--' }}</span>
@@ -333,20 +358,20 @@
 					<tfoot>
 						<tr>
 							<td class="fixed first"></td>
+							@if ($bitacora)
+								<td class="fixed"></td>
+							@endif
 							<td class="fixed"></td>
 							<td class="fixed"></td>
 							<td class="fixed"></td>
-							<td colspan="11">
-							</td>
+							<td colspan="11"></td>
 							<td>
 								<strong>SUB TOTAL OTROS BANCOS</strong>
 							</td>
 							<td align="right" data-role="otr_total_pagar">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
-							<td colspan="13">
-								
-							</td>
+							<td colspan="13"></td>
 							<td align="right" data-role="otr_total_pcul">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
@@ -373,20 +398,20 @@
 						</tr>
 						<tr>
 							<td class="fixed first"></td>
+							@if ($bitacora)
+								<td class="fixed"></td>
+							@endif
 							<td class="fixed"></td>
 							<td class="fixed"></td>
 							<td class="fixed"></td>
-							<td colspan="11">
-							</td>
+							<td colspan="11"></td>
 							<td>
 								<strong>SUB TOTAL CHEQUES</strong>
 							</td>
 							<td align="right" data-role="che_total_pagar">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
-							<td colspan="13">
-								
-							</td>
+							<td colspan="13"></td>
 							<td align="right" data-role="che_total_pcul">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
@@ -413,20 +438,20 @@
 						</tr>
 						<tr>
 							<td class="fixed first"></td>
+							@if ($bitacora)
+								<td class="fixed"></td>
+							@endif
 							<td class="fixed"></td>
 							<td class="fixed"></td>
 							<td class="fixed"></td>
-							<td colspan="11">
-							</td>
+							<td colspan="11"></td>
 							<td>
 								<strong>SUB TOTAL DAVIVIENDA</strong>
 							</td>
 							<td align="right" data-role="dav_total_pagar">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
-							<td colspan="13">
-								
-							</td>
+							<td colspan="13"></td>
 							<td align="right" data-role="dav_total_pcul">
 								<span class="pull-left">$</span><span data-role="value">--</span>
 							</td>
@@ -453,20 +478,20 @@
 						</tr>
 						<tr>
 							<td class="fixed first"></td>
+							@if ($bitacora)
+								<td class="fixed"></td>
+							@endif
 							<td class="fixed"></td>
 							<td class="fixed"></td>
 							<td class="fixed"></td>
-							<td colspan="11">
-							</td>
+							<td colspan="11"></td>
 							<td>
 								<strong>TOTAL F.F.</strong>
 							</td>
 							<td align="right" data-role="total_pagar">
 								<span class="pull-left">$</span><span data-role="value">{{ $total_pagar > 0 ? number_format($total_pagar, 0, '.', '.') : '--' }}</span>
 							</td>
-							<td colspan="13">
-								
-							</td>
+							<td colspan="13"></td>
 							<td align="right" data-role="total_pcul">
 								<span class="pull-left">$</span><span data-role="value">{{ $total_pcul > 0 ? number_format($total_pcul, 0, '.', '.') : '--' }}</span>
 							</td>
@@ -496,6 +521,7 @@
 				<input type="hidden" name="_method" value="POST">
 				<input type="hidden" name="_planilla" value="">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="hidden" name="_bitacora" value="{{ $bitacora ? 1 : 0 }}">
 				<input type="hidden" name="Id_Planilla" value="{{ $planilla['Id_Planilla'] }}">
 				<input type="hidden" name="uvt" value="{{ $config['uvt'] }}">
 				<input type="hidden" name="sm" value="{{ $config['sm'] }}">
@@ -642,34 +668,87 @@
 				<br>
 				<small class="text-muted">
 					<strong>OBSERVACIONES:</strong>  
-					Certifico  que de acuerdo con la información suministrada por el supervisor de cada contrato, me permito ordenar el pago de esta planilla.
+					Certifico que de acuerdo con la información suministrada por el supervisor de cada contrato, me permito ordenar el pago de esta planilla.
 				</small>
 			</div>
 			<div class="col-xs-12">
 				<hr>
 			</div>
-			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
-				@if($planilla->Estado == '3' &&  $_SESSION['Usuario']['Permisos']['editar_planillas'])
-					<input type="hidden" name="Estado" value="4">
-				@else
-					<div class="col-xs-12 col-md-2 form-group">
-						<label for="estado">Estado de la planilla: </label>
+			@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || 
+				 $_SESSION['Usuario']['Permisos']['editar_planillas'] || 
+				 $_SESSION['Usuario']['Permisos']['asignar_bitacora'] || 
+				 $_SESSION['Usuario']['Permisos']['generar_archivo_plano'])
+			 	<div class="col-xs-12 col-md-2 form-group">
+					<label for="estado">Estado de la planilla: </label>
+
+					@if ($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado < 6)
 						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
 							<option value="">Seleccionar</option>
-							<option value="1">Edición</option>
-							<option value="2">Validación</option>
-							@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'])
-								<option value="3">Aprobada</option>
-							@endif
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+							<option value="4">Bitácora asignada</option>
+							<option value="5">Finalizada</option>
 						</select>
-					</div>
-				@endif
+					@elseif ($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado < 5)
+						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+							<option value="">Seleccionar</option>
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+							<option value="4">Bitácora asignada</option>
+						</select>
+					@elseif ($_SESSION['Usuario']['Permisos']['revisar_planillas'] && $planilla->Estado < 4)
+						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+							<option value="">Seleccionar</option>
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+							<option value="3">Aprobar</option>
+						</select>
+					@elseif ($_SESSION['Usuario']['Permisos']['editar_planillas'] && $planilla->Estado < 3)
+						<select name="Estado" id="Estado" class="form-control" data-value="{{ $planilla->Estado }}">
+							<option value="1">Editar</option>
+							<option value="2">Validar</option>
+						</select>
+					@else
+						<p class="form-control-static">
+							<?php 
+								switch ($planilla->Estado) 
+								{
+									case 1:
+										echo 'Edición';
+										break;
+									case 2:
+										echo 'Validación';
+										break;
+									case 3:
+										echo 'Aprobada';
+										break;
+									case 4:
+										echo 'Bitacora asignada';
+										break;
+									case 5:
+										echo 'Finalizada';
+										break;
+									default:
+										break;
+								}
+							?>
+						</p>
+					@endif
+				</div>
 			@endif
 			<div class="col-xs-12 col-md-8" style="padding-top: 4px;">
 				<br>
-				@if ($_SESSION['Usuario']['Permisos']['revisar_planillas'] || $_SESSION['Usuario']['Permisos']['editar_planillas'])
+				@if (
+						($_SESSION['Usuario']['Permisos']['editar_planillas'] && $planilla->Estado < 3) || 
+						($_SESSION['Usuario']['Permisos']['revisar_planillas'] && $planilla->Estado < 4) || 
+						($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado < 5) ||
+						($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado < 6)
+					)
 					<input type="submit" class="btn btn-primary" value="Guardar">
 				@endif
+				
 				<a href="#" class="btn btn-default close_tab" data-title="¿Realmente desea abandonar la edición de la planilla?">Cerrar</a>
 			</div>
 		</form>

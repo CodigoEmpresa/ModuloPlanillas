@@ -8,6 +8,7 @@ $(function(){
 	var BASE = SM * 100 / 40;
 	var URL = $('#main_list').data('url');
 	var URL_CONTRATOs = $('#main_list').data('url-contratos');
+	var ESTADO = parseInt($('#recursos').data('estado'));
 
 	var actualizar_resumenes = function()
 	{
@@ -169,6 +170,7 @@ $(function(){
 	var calcular_totales_contratos = function(t, e)
 	{
 		var tr = t.closest('tr');
+		var $input_bitacora = tr.find('input[name^="bitacora_"]');
 		var $input_dias = tr.find('input[name^="dias_"]');
 		var $input_afc = tr.find('input[name^="afc_"]');
 		var $input_otros_descuentos = tr.find('input[name^="otros_descuentos_"]');
@@ -213,6 +215,7 @@ $(function(){
 			var Total_Deducciones = 0;
 			var Declarante = $input_declarante.is(':checked') ? 1 : 0;
 			var Neto_Pagar = 0;
+			var Bitacora = $input_bitacora.val();
 
 			AFC = AFC == null ? 0 : parseInt(AFC);
 			Otros_Descuentos = Otros_Descuentos == null || Otros_Descuentos == '' ? 0 : parseInt(Otros_Descuentos);
@@ -240,13 +243,14 @@ $(function(){
 						Pago_Recurso = Math.round(Pago_Mensual * dias);
 					break;
 				}
-
-				console.log(Pago_Recurso+'>'+Saldo_CRP);
 				
-				if (Pago_Recurso > Saldo_CRP)
-					$input_dias.addClass('danger');
-				else
-					$input_dias.removeClass('danger');
+				if(ESTADO < 3)
+				{
+					if (Pago_Recurso > Saldo_CRP)
+						$input_dias.addClass('danger');
+					else
+						$input_dias.removeClass('danger');
+				}
 
 				Total_Pagar += Pago_Recurso;
 				Total_Pago_Mensual += Pago_Mensual;
@@ -370,6 +374,7 @@ $(function(){
 				recurso[0].Declarante = Declarante;
 				recurso[0].Neto_Pagar = Neto_Pagar;
 				recurso[0].Banco = banco;
+				recurso[0].Bitacora = Bitacora;
 			});
 
 			tr.find('td[data-role="UVT"] span[data-role="value"]').text(accounting.formatNumber(Con_VC_UVT, 2, ','));
@@ -396,6 +401,25 @@ $(function(){
 
 			actualizar_totales();
 		}
+	}
+
+	var calcular_bitacoras = function(t, e)
+	{
+		var value = parseInt(t.val());
+		var bitacoras = $('.bitacora');
+		var activo = false;
+
+		$.each(bitacoras, function(index, element)
+		{				
+			if(activo)
+			{
+				value ++;
+				$(element).val(value);
+			}
+
+			if(t.is($(element))) 
+				activo = true;
+		});
 	}
 
 	$('#recursos tbody tr').each(function(i, e)
@@ -439,6 +463,7 @@ $(function(){
 					'Declarante': '',
 					'Neto_Pagar': '',
 					'Banco': '',
+					'Bitacora': ''
 				});
 			}
 		});
@@ -487,10 +512,20 @@ $(function(){
 			e.preventDefault();
 			return false;
 		}
-		
 	});
 
-	$('#recursos').tableHeadFixer({"head" : true, "left" : 4});
+	$('body .bitacora').on('keydown', function(e)
+	{
+		if(e.which === 13)
+		{
+			$(this).blur();
+			calcular_bitacoras($(this));
+			e.preventDefault();
+			return false;
+		}
+	});
+
+	$('#recursos').tableHeadFixer({"head" : true, "left" : 5});
 
 	$('#formulario').on('submit', function(e)
 	{
@@ -498,7 +533,8 @@ $(function(){
 		$('input[name="_planilla"]').val(JSON.stringify(to_sync));
 	});
 
-	$('a[data-role="detail"]').on('click', function(e){
+	$('a[data-role="detail"]').on('click', function(e)
+	{
 		var tr = $(this).closest('tr');
 		var id = tr.data('contrato');
 
@@ -640,7 +676,6 @@ $(function(){
 });
 
 //http://stackoverflow.com/questions/1009808/enter-key-press-behaves-like-a-tab-in-javascript}
-
 $(document).keydown(function(e) {
 
   // Set self as the current item in focus

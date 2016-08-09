@@ -26,7 +26,18 @@ class CrearTablaPlanillas extends Migration
             $table->text('Observaciones')->nullable();
             $table->date('Desde');
             $table->date('Hasta');
-            $table->enum('Estado', ['1', '2', '3', '4']);
+            $table->enum('Estado', ['1', '2', '3', '4', '5', '6']);
+            /*
+            Estados
+
+            [1]Edicion
+            [2]Validacion
+            [3]Aprobación
+            [4]Asignación de bitacora
+            [5]Finalización
+            [6]Finalizada
+
+            */
 
             $table->foreign('Id_Fuente')->references('Id_Fuente')->on('Fuentes')->onDelete('cascade');
 

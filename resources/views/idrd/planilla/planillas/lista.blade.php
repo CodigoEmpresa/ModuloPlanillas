@@ -37,36 +37,51 @@
 							switch ($planilla->Estado) 
 							{
 								case '1':
-									echo '<small class="text-muted"> (En proceso de edición) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								case '2':
-									echo '<small class="text-warning"> (En proceso de validación) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								case '3':
-									echo '<small class="text-success"> (Aprobada) </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									break;
+								case '4':
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-danger"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-warning"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									break;
+								case '5':
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Edición" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Validación" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Aprobada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small> &nbsp;';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Bitácora asignada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
+									echo '<small data-toggle="tooltip" data-placement="bottom" title="Finalizada" class="text-success"> <span class="glyphicon glyphicon-ok-circle"></span> </small>';
 									break;
 								default:
 									# code...
 									break;
 							}
 						?>
-
-						@if ($_SESSION['Usuario']['Permisos']['editar_planillas'])
-							<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
-								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-							</a>
-						@endif
+						<a data-role="editar" data-rel="{{ $planilla['Id_Planilla'] }}" class="pull-right btn btn-primary btn-xs">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+						</a>
 					</h5>
 					<p class="list-group-item-text">
 						<div class="row">
 							<div class="col-xs-12">
 								<small>
-									<strong>{{ $planilla['Titulo'] }}</strong><br>
+									<strong>{{ $planilla['Titulo'].' - '.$planilla['Colectiva'] }}</strong><br>
 									{{ $planilla['Descripcion'] }}<br><br>
 								</small>
 							</div>
 							<div class="col-xs-12">
 								<small>
+									<strong>Periodo</strong>: 
+									{{ Carbon::createFromFormat('Y-m-d', $planilla['Desde'])->format('d/m/Y') }} - {{  Carbon::createFromFormat('Y-m-d', $planilla['Hasta'])->format('d/m/Y') }} <br>
 									<strong>Fuente</strong>:
 									{{ $planilla->fuente['Codigo'].' '.$planilla->fuente['Nombre'] }} <br>
 									<strong>Rubros</strong>:
@@ -74,11 +89,17 @@
 									<br><br>
 								</small>
 							</div>
-							@if ($_SESSION['Usuario']['Permisos']['editar_planillas'] || $_SESSION['Usuario']['Permisos']['revisar_planillas'])
-								<div class="col-xs-12">
-									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>
-								</div>
-							@endif
+							<div class="col-xs-12">
+								@if ($_SESSION['Usuario']['Permisos']['editar_planillas'] || $_SESSION['Usuario']['Permisos']['revisar_planillas'])
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/recursos') }}" class="btn btn-default btn-xs" target="_blank">Consultar</a>	
+								@endif
+								@if ($_SESSION['Usuario']['Permisos']['asignar_bitacora'] && $planilla->Estado > 2)
+									<a href="{{ url('planillas/'.$planilla['Id_Planilla'].'/bitacora') }}" class="btn btn-default btn-xs" target="_blank">Bitácora</a>
+								@endif
+								@if ($_SESSION['Usuario']['Permisos']['generar_archivo_plano'] && $planilla->Estado > 3)
+									<a data-rel="{{ $planilla['Id_Planilla'] }}" href="#" data-role="export" class="btn btn-default btn-xs">Exportar</a>
+								@endif
+							</div>
 						</div>
 					</p>
 				</li>
@@ -172,5 +193,38 @@
 	      		</div>
 	    	</div>
 		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_print_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<form action="{{ url('/planillas/archivo') }}" id="print_form">
+			<div class="modal-content">
+				<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	    			<h4 class="modal-title" id="myModalLabel">Generar archivo plano.</h4>
+	  			</div>
+	  			<div class="modal-body">
+		      		<fieldset>
+		      			<div class="col-xs-12 col-md-6 from-group">
+		      				<label for="">Subdirección</label>
+		      				<select name="Subdireccion" class="form-control">
+		      					<option value="100,2414">Administrativa y financiera</option>
+		      					<option value="300,2420">Construcciones</option>
+		      					<option value="200,2418">Deportes y recreación</option>
+		      					<option value="400,2419">Parques</option>
+		      				</select>
+		      			</div>
+		      		</fieldset>
+		      	</div>
+		      	<div class="modal-footer">
+		      		<input type="hidden" name="_method" value="GET">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+	      			<input type="hidden" name="Id_Planilla" value="0">
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        		<button type="submit" class="btn btn-primary">Exportar</button>
+	      		</div>
+	  		</div>
+	  	</form>
 	</div>
 </div>
