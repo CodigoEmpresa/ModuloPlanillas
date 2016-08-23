@@ -407,6 +407,7 @@ class PlanillasController extends Controller
 	{
 		$Id_Planilla = $request->input('Id_Planilla');
 		list($codigo_bodega, $codigo_operacion) = explode(',', $request->input('Subdireccion'));
+		$destino_del_producto = $request->input('Destino');
 		$planilla = Planilla::find($Id_Planilla);
 		$contratos = $this->popularRecursos($Id_Planilla);
 		$planilla->Estado = 5;
@@ -435,7 +436,7 @@ class PlanillasController extends Controller
 						'Año_Proceso' => date('Y'),
 						'Mes_Proceso' => date('n'),
 						'Dia_Proceso' => date('j'),
-						'Codigo_Arbol_Sucursal' => '',
+						'Codigo_Arbol_Sucursal' => '6',
 						'Codigo_Proveedor' => $contrato->contratista['Cedula'],
 						'Codigo_Detalle_de_Proveedor' => '1',
 						'Codigo_del_contacto_detalle_proveedor' => '1',
@@ -464,7 +465,7 @@ class PlanillasController extends Controller
 						'Tipo_Distribucion' => 'P',
 						'Valor_Distribucion' => '0',
 						'Porcentaje_Distribucion' => '100',
-						'Destino_del_producto' => '114',
+						'Destino_del_producto' => $destino_del_producto,
 						'Fecha_Prestacion_de_servicio' =>  Carbon::createFromFormat('Y-m-d', $planilla->Hasta)->format('dmY'),
 						'Año_de_radicación_de_factura' => date('Y'),
 						'Mes_de_radicación_de_factura' => date('n'),
@@ -496,7 +497,6 @@ class PlanillasController extends Controller
 
 	private function popularRecursos($Id_Planilla)
 	{
-
 		$planilla = Planilla::with('recursos')->find($Id_Planilla);
 		$recursos = $planilla->recursos;
 		$contratos_en_recursos = [];
@@ -562,10 +562,8 @@ class PlanillasController extends Controller
 					'Neto_Pagar' => $temp->pivot['Neto_Pagar'],
 					'Bitacora' => $temp->pivot['Bitacora'],
 				];
-
 				$recursos_contratos[$key_2]['saldo'] = $recurso_2->saldos()->sum('Total_Pagado');
 			}
-
 			$contratos[$key]['recursos'] = $recursos_contratos;
 		}
 

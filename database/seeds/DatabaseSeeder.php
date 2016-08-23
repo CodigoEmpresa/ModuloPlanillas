@@ -11,16 +11,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+    	DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call(Bancos::class);
         $this->command->info('Tabla de Bancos alimentada satisfactoriamente');
-        /*
-        $this->call(Fuentes::class);
-        $this->command->info('Tabla de Fuentes alimentada satisfactoriamente');
-        $this->call(Rubros::class);
-        $this->command->info('Tabla de Rubros alimentada satisfactoriamente');
-        $this->call(Componentes::class);
-        $this->command->info('Tabla de Componentes alimentada satisfactoriamente');
-        */
+	        
+	        $this->call(Fuentes::class);
+	        $this->command->info('Tabla de Fuentes alimentada satisfactoriamente');
+	        $this->call(Rubros::class);
+	        $this->command->info('Tabla de Rubros alimentada satisfactoriamente');
+	        $this->call(Componentes::class);
+	        $this->command->info('Tabla de Componentes alimentada satisfactoriamente');
+	        $this->call(Planillas::class);
+	        $this->command->info('Tabla de planillas alimentada satisfactoriamente');
+	        
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
 
@@ -29,6 +33,9 @@ class Fuentes extends Seeder
 	public function run()
 	{
 		DB::table('Fuentes')->delete();
+		DB::statement('INSERT INTO Fuentes(Id_Fuente, Nombre, Codigo, deleted_at, created_at, updated_at) VALUE (0, "FUENTES ANTERIORES", "0000000", NULL, NOW(), NOW())');
+		DB::statement('ALTER TABLE Fuentes AUTO_INCREMENT = 1');
+
 		DB::table('Fuentes')->insert([
 			[
 				'Nombre' => 'Otros distritos',
@@ -46,6 +53,9 @@ class Rubros extends Seeder
 	public function run()
 	{
 		DB::table('Rubros')->delete();
+		DB::statement('INSERT INTO Rubros(Id_Rubro, Nombre, Codigo, deleted_at, created_at, updated_at) VALUE (0, "RUBROS ANTERIORES", "0000000000000", NULL, NOW(), NOW())');
+		DB::statement('ALTER TABLE Rubros AUTO_INCREMENT = 1');
+
 		DB::table('Rubros')->insert([
 			[
 				'Nombre' => 'Bogotá es mi parche',
@@ -66,6 +76,7 @@ class Componentes extends Seeder
 	public function run()
 	{
 		DB::table('Componentes')->delete();
+		DB::statement('ALTER TABLE Componentes AUTO_INCREMENT = 1');
 		DB::table('Componentes')->insert([
 			[
 				'Nombre' => 'Honorarios',
@@ -86,6 +97,7 @@ class Bancos extends Seeder
 	public function run()
 	{
 		DB::table('Bancos')->delete();
+		DB::statement('ALTER TABLE Bancos AUTO_INCREMENT = 1');
 		DB::table('Bancos')->insert([
 			[
 				'Codigo' => '51',
@@ -167,5 +179,15 @@ class Bancos extends Seeder
 				'Nombre' => 'PAGO CON CHEQUE'
 			]
 		]);
+	}
+}
+
+class Planillas extends Seeder
+{
+	public function run()
+	{
+		DB::table('Planillas')->delete();
+		DB::statement('INSERT INTO Planillas(Id_Planilla, Id_Fuente, Usuario, Verificador, Aprobador, Numero, Titulo, Colectiva, Descripcion, Observaciones, Desde, Hasta, Estado, deleted_at, created_at, updated_at) VALUE (0, 0, 0, 0, 0, 0, "PLANILLA SALDOS ANTERIORES", "NP", "NP", "NP", CURDATE(), CURDATE(), 6, NULL, NOW(), NOW())');
+		DB::statement('ALTER TABLE Bancos AUTO_INCREMENT = 1');
 	}
 }

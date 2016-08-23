@@ -215,6 +215,33 @@
 		      					<option value="400,2419">Parques</option>
 		      				</select>
 		      			</div>
+		      			<div class="col-xs-12 col-md-6 form-group">
+		      				<label for="">Destinos de producto</label>
+		      				<select name="Destino" class="form-control">
+		      					<option value="111">111 - Tiempo Libre Tiempo Activo</option>
+								<option value="112">112 - Construccion y Adecuacion de Parques y E</option>
+								<option value="113">113 - Bogota Participativa</option>
+								<option value="114">114 - Bogota Forjador de Campeones</option>
+								<option value="115">115 - Parques Inclusivos</option>
+								<option value="116">116 - Acciones Metropolitanas para la Conviven</option>
+								<option value="117">117 - Bogota es mi Parche</option>
+								<option value="118">118 - Corredores Vitales</option>
+								<option value="119">119 - Parques para la Revitalizacion del Centr</option>
+								<option value="120">120 - Pedalea por Bogota</option>
+								<option value="121">121 - Fortalecimiento Institucional</option>
+								<option value="140">140 - Probidad y Transparencia en el IDRD</option>
+								<option value="134">134 - Jornada Escolar 40 Horas</option>
+								<option value="174">174 - Deporte Mejor para Todos</option>
+								<option value="175">175 - Rendimiento Deportivo 100 X 100</option>
+								<option value="176">176 - Tiempo Escolar y Complementario</option>
+								<option value="177">177 - Sostenibilidad y Mejoramiento de Parques</option>
+								<option value="178">178 - Construccion y Adecuacion de Parques y E</option>
+								<option value="179">179 - Recreacion Activa 35</option>
+								<option value="180">180 - Fortalecimeinto de la gestion Institucio</option>
+								<option value="181">181 - Modernizacion Administrativa</option>
+								<option value="182">182 - Mejoramiento de las Tecnologia de la Información</option>
+		      				</select>
+		      			</div>
 		      		</fieldset>
 		      	</div>
 		      	<div class="modal-footer">
