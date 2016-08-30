@@ -21,7 +21,7 @@
 	</div>
 	<div class="col-xs-12">
 		@if(count($elementos) == 0 && $_SESSION['Usuario']['Permisos']['crear_planillas'])
-			No se ha creado ninguna planilla haga click en el boton "Crear planilla".
+			No se ha creado ninguna planilla haga click en el botón "Crear planilla".
 		@elseif(count($elementos) == 0 && $_SESSION['Usuario']['Permisos']['revisar_planillas'])
 			No se han enviado planillas para revisar en el momento.
 		@endif

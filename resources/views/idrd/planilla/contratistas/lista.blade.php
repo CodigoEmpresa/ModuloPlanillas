@@ -124,7 +124,7 @@
 		        		</div>
 		        		<div class="col-xs-12 col-md-6">
 		        			<div class="form-group">
-		        				<label class="control-label" for="Numero_Cta">* Cuenta </label>
+		        				<label class="control-label" for="Numero_Cta">* Número de cuenta </label>
 		        				<input type="text" name="Numero_Cta" class="form-control">
 		        			</div>
 		        		</div>

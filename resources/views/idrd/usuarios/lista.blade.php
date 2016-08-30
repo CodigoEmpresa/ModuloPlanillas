@@ -121,7 +121,7 @@
 		        		</div>
 		        		<div class="col-xs-12 col-md-6">
 		        			<div class="form-group">
-			        			<label class="control-label" for="Id_Genero">* Genero</label><br>
+			        			<label class="control-label" for="Id_Genero">* Género</label><br>
 				        		<div class="btn-group" data-toggle="buttons">
 									<label class="btn btn-default">
 										<input type="radio" name="Id_Genero" value="1" autocomplete="off"> <span class="text-success">M</span>
