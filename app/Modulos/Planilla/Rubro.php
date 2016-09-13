@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,11 +17,11 @@ class Rubro extends Model
 
     public function recursos()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Recurso', 'Id_Rubro');
+        return $this->hasMany('App\Modulos\Planilla\Recurso', 'Id_Rubro');
     }
 
     public function planillas()
     {
-    	return $this->belongsToMany('App\Modulos\Planilla\Modelos\Planilla', 'PlanillasRubros', 'Id_Rubro', 'Id_Planilla');
+    	return $this->belongsToMany('App\Modulos\Planilla\Planilla', 'PlanillasRubros', 'Id_Rubro', 'Id_Planilla');
     }
 }

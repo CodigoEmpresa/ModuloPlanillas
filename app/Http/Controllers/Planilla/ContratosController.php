@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Planilla;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modulos\Personas\Documento;
-use App\Modulos\Planilla\Modelos\Contrato;
-use App\Modulos\Planilla\Modelos\Contratista;
-use App\Modulos\Planilla\Modelos\Fuente;
-use App\Modulos\Planilla\Modelos\Rubro;
-use App\Modulos\Planilla\Modelos\Componente;
-use App\Modulos\Planilla\Modelos\Recurso;
-use App\Modulos\Planilla\Modelos\Suspencion;
+use App\Modulos\Planilla\Contrato;
+use App\Modulos\Planilla\Contratista;
+use App\Modulos\Planilla\Fuente;
+use App\Modulos\Planilla\Rubro;
+use App\Modulos\Planilla\Componente;
+use App\Modulos\Planilla\Recurso;
+use App\Modulos\Planilla\Suspencion;
 use Carbon\Carbon;
 use Session;
 use Validator;
@@ -238,6 +238,8 @@ class ContratosController extends Controller{
         $contrato['Tipo_Pago'] = $request->input('Tipo_Pago');
         $contrato['Dias_Trabajados'] = 0;
         $contrato['Id_Contratista'] = $request->input('Id_Contratista');
+        $contrato['Cedido'] = $request->input('Id_Contratista_Que_Cede') ? 1 : 0;
+        $contrato['Id_Contratista_Que_Cede'] = $request->input('Id_Contratista_Que_Cede');
 
         //si se esta editando el contrato
         if($request->input('Id_Contrato') !== '0')

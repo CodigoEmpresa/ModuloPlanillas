@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +14,6 @@ class Banco extends Model
 
     public function contratistas()
     {
-    	return $this->hasMany('App\Modulos\Planilla\Modelos\Contratista', 'Id_Banco');
+    	return $this->hasMany('App\Modulos\Planilla\Contratista', 'Id_Banco');
     }
 }

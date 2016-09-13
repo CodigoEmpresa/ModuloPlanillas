@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +17,6 @@ class Suspencion extends Model
 
     public function contrato()
     {
-        return $this->balongsTo('App\Modulos\Planilla\Modelos\Contrato', 'Id_Contrato');
+        return $this->balongsTo('App\Modulos\Planilla\Contrato', 'Id_Contrato');
     }
 }

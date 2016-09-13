@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,21 +17,21 @@ class Contrato extends Model
 
     public function contratista()
     {
-    	return $this->belongsTo('App\Modulos\Planilla\Modelos\Contratista', 'Id_Contratista');
+    	return $this->belongsTo('App\Modulos\Planilla\Contratista', 'Id_Contratista');
     }
 
     public function recursos()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Recurso', 'Id_Contrato');
+        return $this->hasMany('App\Modulos\Planilla\Recurso', 'Id_Contrato');
     }
 
     public function saldos()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Saldo', 'Id_Contrato');
+        return $this->hasMany('App\Modulos\Planilla\Saldo', 'Id_Contrato');
     }
 
     public function suspenciones()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Suspencion', 'Id_Contrato');
+        return $this->hasMany('App\Modulos\Planilla\Suspencion', 'Id_Contrato');
     }
 }

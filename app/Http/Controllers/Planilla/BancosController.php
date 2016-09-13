@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Planilla;
 
 use App\Http\Requests;
-use App\Modulos\Planilla\Modelos\Banco;
+use App\Modulos\Planilla\Banco;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +17,6 @@ class Componente extends Model
 
     public function recursos()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Recurso', 'Id_Componente');
+        return $this->hasMany('App\Modulos\Planilla\Recurso', 'Id_Componente');
     }
 }

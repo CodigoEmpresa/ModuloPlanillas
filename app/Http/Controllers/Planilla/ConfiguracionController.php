@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modulos\Personas\Documento;
 use App\Modulos\Personas\Pais;
 use App\Modulos\Personas\Etnia;
-use App\Modulos\Planilla\Modelos\Configuracion;
+use App\Modulos\Planilla\Configuracion;
 use Illuminate\Http\Request;
 use Validator;
 

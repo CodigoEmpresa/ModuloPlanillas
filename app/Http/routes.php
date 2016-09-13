@@ -36,7 +36,7 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/contratistas', 'Planilla\ContratistasController@index');
 	Route::get('/contratistas/service/obtener/{id}', 'Planilla\ContratistasController@obtener');
-	Route::get('/contratistas/service/buscar/{key}', 'Planilla\ContratistasController@buscar');
+	Route::get('/contratistas/service/buscar/{term}', 'Planilla\ContratistasController@buscar');
 	Route::post('/contratistas/service/procesar', 'Planilla\ContratistasController@procesar');
 	Route::get('/contratistas/{Id_Contratista}/contratos', 'Planilla\ContratosController@obtenerPorContratista');
 

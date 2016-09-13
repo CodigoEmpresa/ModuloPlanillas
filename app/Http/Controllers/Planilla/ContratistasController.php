@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Planilla;
 
 use App\Http\Controllers\Controller;
 use App\Modulos\Personas\Documento;
-use App\Modulos\Planilla\Modelos\Banco;
-use App\Modulos\Planilla\Modelos\Contratista;
+use App\Modulos\Planilla\Banco;
+use App\Modulos\Planilla\Contratista;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -111,11 +111,11 @@ class ContratistasController extends Controller
 		return response()->json($contratista);
 	}
 
-	public function buscar(Request $request, $key)
+	public function buscar(Request $request, $term)
 	{
 		$contratistas = Contratista::with('tipoDocumento')
-								->where('Nombre', 'LIKE', '%'.$key.'%')
-								->orWhere('Cedula', 'LIKE', '%'.$key.'%')
+								->where('Nombre', 'LIKE', '%'.$term.'%')
+								->orWhere('Cedula', 'LIKE', '%'.$term.'%')
 								->get();
 
 		return response()->json($contratistas);

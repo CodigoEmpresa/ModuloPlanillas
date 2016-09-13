@@ -3,6 +3,7 @@ $(function()
 	var rubros = [];
 	var suspenciones = [];
 	var duracion = 0;
+	var ID_CONTRATISTA = $('input[name="Id_Contratista"]').val();
 
 	// actualizar totales
 	var actualizarTotales = function()
@@ -284,6 +285,35 @@ $(function()
 		}
     });
 
+    $('#buscador_contratistas').autocomplete({
+    	source: function (request, response) {
+            $.ajax({
+                url: "../../../contratistas/service/buscar/"+$('#buscador_contratistas').val(),
+                dataType: "json",
+                success: function (data) {
+	                response($.map(data, function(v,i){
+					    return {
+			                label: v.Nombre,
+			                value: v.Id_Contratista
+		               	};
+					}));
+				}
+            });
+        },
+        select: function( event, ui ) {
+			event.preventDefault();
+			$('#buscador_contratistas').val(ui.item.label);
+			$('input[name="Id_Contratista"]').val(ui.item.value);
+			$('input[name="Id_Contratista_Que_Cede"]').val(ID_CONTRATISTA);
+		},
+		focus: function (event, ui) {
+			event.preventDefault();
+			$('#buscador_contratistas').val(ui.item.label);
+			$('input[name="Id_Contratista"]').val(ui.item.value);
+			$('input[name="Id_Contratista_Que_Cede"]').val(ID_CONTRATISTA);
+		}
+	});
+
     //popular modales
     $('#rubros tbody').delegate('tr', 'click', function(e)
     {
@@ -307,7 +337,7 @@ $(function()
 
     	if(suspencion)
     		popularModalSuspencion(suspencion[0]);
-    });
+    }); 
 
     //boton agregar nuevos elementos
     $('#agregar_rubro').on('click', function(e)

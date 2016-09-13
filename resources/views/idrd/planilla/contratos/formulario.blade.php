@@ -5,7 +5,7 @@
 @stop
 <div id="main_list" class="row" data-url="{{ url('contratos') }}">
 	<div class="col-xs-12">
-		<h4>Crear/Editar contrato</h4>
+		<h4>Crear / Editar contrato</h4>
 	</div>
 	@if($status == 'success')
 	<div id="alerta" class="col-xs-12">
@@ -224,14 +224,28 @@
 		    		</table>
 	    		</div>
 	    	</div>
-	    	<div class="row">
+	    	<div class="row" style="{{ $contrato ? '' : 'display: none' }}">
 	    		<div class="col-xs-12">
 	    			<hr>
 	    		</div>
-	    	</div>
-	    	<div class="row">
+	    		<div class="col-xs-12">
+	    			<div id="ceder-contrato">
+	    				<div class="row">
+		    				<div class="col-xs-12">
+					    		<span class="label-form-section">Ceder contrato: <br></span>
+					    	</div>
+					    	<div class="col-xs-12 form-group">
+								<label for="">Contratista</label>
+								<input type="text" class="form-control" id="buscador_contratistas" placeholder="Contratista">
+							</div>
+				    	</div>
+	    			</div>
+	    		</div>
+	    		<div class="col-xs-12">
+	    			<hr>
+	    		</div>
 	    		<div class="col-xs-6">
-			    	<div id="suspender-contrato" style="{{ $contrato ? '' : 'display: none' }}">
+			    	<div id="suspender-contrato">
 			    		<div class="row">
 					    	<div class="col-xs-12">
 					    		<span class="label-form-section">Suspender contrato: <br></span>
@@ -255,7 +269,7 @@
 		    							$r_temp['Fecha_Terminacion'] = $r['Fecha_Terminacion'];
 										array_push($suspenciones_contrato, $r_temp);
 		    						}
-		    					} else if($temp) {
+		    					} else if ($temp) {
 		    						foreach ($temp as $r) 
 		    						{
 		    							$r_temp = [];
@@ -294,7 +308,7 @@
 			    	</div>
 		    	</div>
 				<div class="col-xs-6">
-			    	<div id="finalizar-contrato" style="{{ $contrato ? '' : 'display: none' }}">
+			    	<div id="finalizar-contrato">
 						<div class="row">
 					    	<div class="col-xs-12">
 					    		<span class="label-form-section label-form-section-alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> Terminar contrato: <br></span>
@@ -343,9 +357,10 @@
 					<input type="hidden" name="_suspenciones" value="{{ old('_suspenciones') }}">
 					<input type="hidden" name="Id_Contrato" value="{{ $contrato ? $contrato['Id_Contrato'] : 0 }}">
 					<input type="hidden" name="Id_Contratista" value="{{ $contratista['Id_Contratista'] }}">
-					@if(!$contrato || ($contrato && $contrato->Estado != 'finalizado'))
+					<input type="hidden" name="Id_Contratista_Que_Cede" value="{{  $contrato ? $contrato['Id_Contratista_Que_Cede'] : 0 }}">
+					@if (!$contrato || ($contrato && $contrato->Estado != 'finalizado'))
 						<input type="submit" class="btn btn-primary" value="Guardar">
-						@if($contrato)
+						@if ($contrato)
 							@if ($_SESSION['Usuario']['Permisos']['eliminar_contratos'])
 								<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal_eliminar_contrato">Eliminar</a>
 							@endif

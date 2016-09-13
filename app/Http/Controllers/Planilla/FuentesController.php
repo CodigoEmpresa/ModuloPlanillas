@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Planilla;
 
 use App\Http\Requests;
-use App\Modulos\Planilla\Modelos\Fuente;
+use App\Modulos\Planilla\Fuente;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;

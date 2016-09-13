@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,11 +17,11 @@ class Fuente extends Model
     
     public function recursos()
     {
-        return $this->hasMany('App\Modulos\Planilla\Modelos\Recurso', 'Id_Fuente');
+        return $this->hasMany('App\Modulos\Planilla\Recurso', 'Id_Fuente');
     }
 
     public function planillas()
     {
-    	return $this->hasMany('App\Modulos\Planilla\Modelos\Planilla', 'Id_Fuente');
+    	return $this->hasMany('App\Modulos\Planilla\Planilla', 'Id_Fuente');
     }
 }

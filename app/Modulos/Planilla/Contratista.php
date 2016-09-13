@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modulos\Planilla\Modelos;
+namespace App\Modulos\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +17,7 @@ class Contratista extends Model
 
     public function banco()
     {
-        return $this->belongsTo('App\Modulos\Planilla\Modelos\Banco', 'Id_Banco');
+        return $this->belongsTo('App\Modulos\Planilla\Banco', 'Id_Banco');
     }
 
     public function tipoDocumento()
