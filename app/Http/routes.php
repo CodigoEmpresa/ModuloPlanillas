@@ -11,8 +11,6 @@ session_start();
 |
 */
 
-use JasperPHP\JasperPHP as JasperPHP;
-
 Route::get('/personas', '\Idrd\Usuarios\Controllers\PersonaController@index');
 Route::get('/personas/service/obtener/{id}', '\Idrd\Usuarios\Controllers\PersonaController@obtener');
 Route::get('/personas/service/buscar/{key}', '\Idrd\Usuarios\Controllers\PersonaController@buscar');

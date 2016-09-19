@@ -1,4 +1,4 @@
-.@section('script')
+@section('script')
 	@parent
 
     <script src="{{ asset('public/Js/planillas/contratos/buscador.js') }}"></script>	
